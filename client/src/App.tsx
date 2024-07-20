@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { ThemeProvider } from "@/components/theme-provider"
 import axios from 'axios';
-import Landing from './components/Landing';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import Home from './components/Home';
+import Landing from './pages/Landing';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
+import Home from './pages/Home';
 
 const App: React.FC = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -34,6 +35,7 @@ const App: React.FC = () => {
   };
 
   return (
+     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
     <Router>
       <Routes>
         <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Landing />} />
@@ -42,6 +44,7 @@ const App: React.FC = () => {
         <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} /> : <Navigate to="/" />} />
       </Routes>
     </Router>
+    </ThemeProvider>
   );
 };
 
