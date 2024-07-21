@@ -3,14 +3,16 @@ import { Navbar } from '@/components/navbar';
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { MovingCards } from '@/components/moving-cards';
 import { FeaturesSectionDemo } from '@/components/features';
+import { DrawerDemo } from '@/components/drawer';
 
 const Landing: React.FC = () => {
   return (
-    <div className="mt-[10rem] w-full rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden">
+    <div className="w-full rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-black bg-white  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] items-center justify-center" >
+      <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
 
       <Navbar />
 
-      <div className="p-4 max-w-7xl mx-auto relative z-10 w-full pt-20 md:pt-0 flex flex-col items-center">
+      <div className="mt-[10rem] p-4 max-w-7xl mx-auto relative z-10 w-full pt-20 md:pt-0 flex flex-col items-center">
         <button className="bg-slate-800 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-900 rounded-full p-px text-xs font-semibold leading-6 text-white inline-block mb-8">
           <span className="absolute inset-0 overflow-hidden rounded-full">
             <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -43,6 +45,11 @@ const Landing: React.FC = () => {
       </div>
       <FeaturesSectionDemo /> 
       <MovingCards />
+      
+      <div className='mb-10 p-4 max-w-3xl mx-auto relative z-10 w-full pt-20 md:pt-0 flex flex-col items-center'>
+        <DrawerDemo />
+      </div>
+      
     </div>
   );
 };
