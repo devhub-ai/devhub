@@ -7,22 +7,6 @@ import { UserAuthForm } from "@/components/user-auth-form-signup"
 export default function AuthenticationPage() {
   return (
     <>
-      <div className="md:hidden">
-        <img
-          src="/examples/authentication-light.png"
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="block dark:hidden"
-        />
-        <img
-          src="/examples/authentication-dark.png"
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="hidden dark:block"
-        />
-      </div>
       <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           to="/login"

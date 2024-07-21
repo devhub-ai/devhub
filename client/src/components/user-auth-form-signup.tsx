@@ -1,6 +1,9 @@
+"use client"
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Ensure this is imported
+import { toast } from "sonner"; // Import sonner toast
 
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/ui/icons";
@@ -8,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,9 +26,33 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     try {
       await axios.post('http://localhost:5000/signup', { username, email, password });
+      toast.success("Signup successful", {
+        description: "You can now log in with your new account.",
+        action: {
+          label: "Login",
+          onClick: () => navigate('/login'),
+        },
+      });
       navigate('/login'); // Redirect to login page on successful signup
-    } catch (error) {
-      console.error('Error during signup:', error);
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        toast.error(err.response.data.message, {
+          description: "Please check your details and try again.",
+          action: {
+            label: "Try again",
+            onClick: () => console.log("Try again clicked"),
+          },
+        });
+      } else {
+        toast.error("Signup failed", {
+          description: "There was a problem with your request.",
+          action: {
+            label: "Try again",
+            onClick: () => console.log("Try again clicked"),
+          },
+        });
+      }
+      console.error('Error during signup:', err);
     } finally {
       setIsLoading(false);
     }
@@ -92,24 +119,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </Button>
         </div>
       </form>
-      {/* <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        GitHub
-      </Button> */}
     </div>
   );
 }

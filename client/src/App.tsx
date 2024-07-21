@@ -6,6 +6,7 @@ import Landing from './pages/Landing';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import { Toaster } from "@/components/ui/sonner"
 
 const App: React.FC = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -35,16 +36,19 @@ const App: React.FC = () => {
   };
 
   return (
-     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-    <Router>
-      <Routes>
-        <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Landing />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login onLoginSuccess={() => setAuthenticated(true)} />} />
-        <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} /> : <Navigate to="/" />} />
-      </Routes>
-    </Router>
-    </ThemeProvider>
+    
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <Router>
+          <Routes>
+            <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Landing />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login onLoginSuccess={() => setAuthenticated(true)} />} />
+            <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} /> : <Navigate to="/" />} />
+          </Routes>
+        </Router> 
+      <Toaster />
+      </ThemeProvider>
+   
   );
 };
 
