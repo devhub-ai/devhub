@@ -37,22 +37,19 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         >
           Signup
         </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-          <div className="absolute inset-0 bg-zinc-900" />
+        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1616440537338-1d04df3987f7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", backgroundSize: 'cover' }}>
           <div className="relative z-20 flex items-center text-lg font-medium">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mr-2 h-6 w-6"
-            >
-              <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-            </svg>
-            DevHub
+            <Link to="/" className="text-white">
+              DevHub
+            </Link>
+          </div>
+          <div className="relative z-20 mt-auto">
+            <blockquote className="space-y-2">
+              <p className="text-lg">
+                Contributing to community feels like we are useful to others.
+              </p>
+              <footer className="text-sm">Deepraj</footer>
+            </blockquote>
           </div>
         </div>
         <div className="lg:p-8">
