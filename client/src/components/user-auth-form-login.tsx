@@ -36,7 +36,7 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.message) {
         toast.error(err.response.data.message, {
-          description: "There was a problem with your request.",
+          description: "Please check your details and try again.",
           action: {
             label: "Try again",
             onClick: () => console.log("Try again clicked"),

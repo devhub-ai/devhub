@@ -36,19 +36,19 @@ const App: React.FC = () => {
   };
 
   return (
-    
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Router>
-          <Routes>
-            <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Landing />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login onLoginSuccess={() => setAuthenticated(true)} />} />
-            <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} /> : <Navigate to="/" />} />
-          </Routes>
-        </Router> 
+
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Router>
+        <Routes>
+          <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Landing />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login onLoginSuccess={() => setAuthenticated(true)} />} />
+          <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} /> : <Navigate to="/" />} />
+        </Routes>
+      </Router>
       <Toaster />
-      </ThemeProvider>
-   
+    </ThemeProvider>
+
   );
 };
 

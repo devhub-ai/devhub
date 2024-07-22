@@ -1,12 +1,32 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { UserAuthForm } from "@/components/user-auth-form-login"
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { UserAuthForm } from "@/components/user-auth-form-login";
 
+interface LoginProps {
+  onLoginSuccess: () => void;
+}
 
-export default function AuthenticationPage() {
+const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   return (
     <>
+      <div className="md:hidden">
+        <img
+          src="/examples/authentication-light.png"
+          width={1280}
+          height={843}
+          alt="Authentication"
+          className="block dark:hidden"
+        />
+        <img
+          src="/examples/authentication-dark.png"
+          width={1280}
+          height={843}
+          alt="Authentication"
+          className="hidden dark:block"
+        />
+      </div>
       <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           to="/signup"
@@ -34,14 +54,6 @@ export default function AuthenticationPage() {
             </svg>
             DevHub
           </div>
-          {/* <div className="relative z-20 mt-auto">
-            <blockquote className="space-y-2">
-              <p className="text-lg">
-                Contributing to community feels like we are useful to others.
-              </p>
-              <footer className="text-sm">Deepraj</footer>
-            </blockquote>
-          </div> */}
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -53,7 +65,7 @@ export default function AuthenticationPage() {
                 Enter your details below to Login to your account
               </p>
             </div>
-            <UserAuthForm />
+            <UserAuthForm onLoginSuccess={onLoginSuccess} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
@@ -75,5 +87,7 @@ export default function AuthenticationPage() {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
+
+export default Login;
