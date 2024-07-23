@@ -17,7 +17,7 @@ python -m venv venv
 
 pip install -r requirements.txt
 
-flask run or python app.py
+flask run or python server.py
 
 ## 2nd terminal for client
 

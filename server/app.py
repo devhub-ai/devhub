@@ -9,8 +9,8 @@ def create_app():
     
     db.init_app(app)
     bcrypt.init_app(app)
-    # Configure CORS with credentials - to be migratred to consts.py
-    cors.init_app(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:5173"}})
+
+    cors.init_app(app, supports_credentials=True, resources={r"/*": {"origins": ["http://localhost:5173", "https://devhub-ai.vercel.app"]}})
 
     logging.basicConfig(level=logging.DEBUG)
 
