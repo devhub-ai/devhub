@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onLoginSuccess?: () => void;
 }
@@ -26,7 +28,7 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/login', { username, password }, { withCredentials: true });
+      const response = await axios.post(`${backendUrl}/login`, { username, password }, { withCredentials: true });
       if (response.status === 200) {
         if (onLoginSuccess) {
           onLoginSuccess();

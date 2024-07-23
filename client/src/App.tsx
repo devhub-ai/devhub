@@ -8,13 +8,15 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import { Toaster } from "@/components/ui/sonner"
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 const App: React.FC = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/check_auth', { withCredentials: true });
+        const response = await axios.get(`${backendUrl}/check_auth`, { withCredentials: true });
         setAuthenticated(response.data.authenticated);
       } catch (error) {
         console.error('Failed to check authentication status:', error);
@@ -26,7 +28,7 @@ const App: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/logout', { withCredentials: true });
+      const response = await axios.get(`${backendUrl}/logout`, { withCredentials: true });
       if (response.data.message === 'Logout successful') {
         setAuthenticated(false);
       }

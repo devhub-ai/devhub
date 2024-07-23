@@ -13,6 +13,8 @@ import { Label } from "@/components/ui/label";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
@@ -25,7 +27,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const checkUsernameAvailability = async () => {
       if (username) {
         try {
-          const response = await axios.get('http://localhost:5000/check_username', {
+          const response = await axios.get(`${backendUrl}/check_username`, {
             params: { username }
           });
           setIsUsernameAvailable(response.data.available);
@@ -49,7 +51,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/signup', { username, email, password });
+      await axios.post(`${backendUrl}/signup`, { username, email, password });
       toast.success("Signup successful", {
         description: "You can now log in with your new account.",
         action: {
