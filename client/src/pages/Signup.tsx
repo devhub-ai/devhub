@@ -16,10 +16,10 @@ export default function AuthenticationPage() {
         >
           Login
         </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1616440537338-1d04df3987f7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", backgroundSize: 'cover' }}>
+        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1590212151175-e58edd96185b?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", backgroundSize: 'cover' }}>
           <div className="relative z-20 flex items-center text-lg font-medium">
             <Link to="/" className="text-white">
-            DevHub
+              <span style={{ fontSize: '4rem' }}>dh</span>
             </Link>
           </div>
           <div className="relative z-20 mt-auto">
@@ -27,7 +27,7 @@ export default function AuthenticationPage() {
               <p className="text-lg">
                 Contributing to community feels like we are useful to others.
               </p>
-              <footer className="text-sm">Deepraj</footer>
+              <footer className="text-sm">DevHub</footer>
             </blockquote>
           </div>
         </div>

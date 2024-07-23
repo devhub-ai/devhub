@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Ensure this is imported
 import { toast } from "sonner"; // Import sonner toast
@@ -16,9 +16,33 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState<boolean | null>(null);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate(); // Hook for navigation
+
+  useEffect(() => {
+    const checkUsernameAvailability = async () => {
+      if (username) {
+        try {
+          const response = await axios.get('http://localhost:5000/check_username', {
+            params: { username }
+          });
+          setIsUsernameAvailable(response.data.available);
+        } catch (error) {
+          console.error('Error checking username availability:', error);
+        }
+      } else {
+        setIsUsernameAvailable(null);
+      }
+    };
+
+    const delayDebounceFn = setTimeout(() => {
+      checkUsernameAvailability();
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [username]);
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -78,6 +102,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
+            {isUsernameAvailable === false && (
+              <p className="text-red-500">Username is not available</p>
+            )}
+            {isUsernameAvailable === true && (
+              <p className="text-green-500">Username is available</p>
+            )}
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -111,7 +141,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               required
             />
           </div>
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading || isUsernameAvailable === false}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}

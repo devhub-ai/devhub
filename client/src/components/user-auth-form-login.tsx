@@ -17,7 +17,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/login', { email, password }, { withCredentials: true });
+      const response = await axios.post('http://localhost:5000/login', { username, password }, { withCredentials: true });
       if (response.status === 200) {
         if (onLoginSuccess) {
           onLoginSuccess();
@@ -62,19 +62,19 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
+            <Label className="sr-only" htmlFor="username">
+              Username
             </Label>
             <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
+              id="username"
+              placeholder="Username"
+              type="text"
               autoCapitalize="none"
-              autoComplete="email"
+              autoComplete="username"
               autoCorrect="off"
               disabled={isLoading}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="grid gap-1">

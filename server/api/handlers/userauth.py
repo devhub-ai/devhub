@@ -24,20 +24,33 @@ def signup():
         current_app.logger.error('Error occurred during signup: %s', e)
         return jsonify({'message': 'Internal Server Error'}), 500
 
+def check_username():
+    username = request.args.get('username')
+    if username:
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            return jsonify({'available': False}), 200
+        else:
+            return jsonify({'available': True}), 200
+    return jsonify({'message': 'Username not provided'}), 400
 
 def login():
-    data = request.get_json()
+    try:
+        data = request.get_json()
    
-    user = User.query.filter_by(email=data['email']).first()
-    if user:
-        if bcrypt.check_password_hash(user.password, data['password']):
-            session['user_id'] = user.id
-            session['username'] = user.username
-            return jsonify({'message': 'Login successful', 'redirect': '/home'}), 200
+        user = User.query.filter_by(username=data['username']).first()
+        if user:
+            if bcrypt.check_password_hash(user.password, data['password']):
+                session['user_id'] = user.id
+                session['username'] = user.username
+                return jsonify({'message': 'Login successful', 'redirect': '/home'}), 200
+            else:
+                return jsonify({'message': 'Incorrect password'}), 401
         else:
-            return jsonify({'message': 'Incorrect password'}), 401
-    else:
-        return jsonify({'message': 'User does not exist'}), 404
+            return jsonify({'message': 'User does not exist'}), 404
+    except Exception as e:
+        current_app.logger.error('Error occurred during login: %s', e)
+        return jsonify({'message': 'Internal Server Error'}), 500
 
 
 def check_auth():
