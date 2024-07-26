@@ -124,7 +124,6 @@ const EditProfileForm: React.FC = () => {
                     ...prevData,
                     projects: prevData.projects.filter((project: any) => project.id !== projectId),
                 }));
-                console.log('Deleting project with ID:', projectId);
                 alert('Project deleted successfully');
                 if (selectedProject && selectedProject.id === projectId) {
                     setSelectedProject(null);
@@ -134,7 +133,6 @@ const EditProfileForm: React.FC = () => {
             }
         } catch (error) {
             console.error('Failed to delete project:', error);
-            console.log('Deleting project with ID:', projectId);
             alert('Failed to delete project');
         }
     };
@@ -153,7 +151,7 @@ const EditProfileForm: React.FC = () => {
                         <Input
                             id="bio"
                             name="bio"
-                            value={profileData.bio}
+                            value={profileData.bio || ''}
                             onChange={handleChange}
                             disabled={isLoading}
                             placeholder="Write something about yourself"
@@ -164,7 +162,7 @@ const EditProfileForm: React.FC = () => {
                         <Input
                             id="githubUsername"
                             name="githubUsername"
-                            value={profileData.githubUsername}
+                            value={profileData.githubUsername || ''}
                             onChange={handleChange}
                             disabled={isLoading}
                             placeholder="GitHub username"
@@ -190,11 +188,11 @@ const EditProfileForm: React.FC = () => {
             {selectedProject && (
                 <div className="grid gap-4">
                     <div>
-                        <Label htmlFor="projectTitle">Project Title</Label>
+                        <Label htmlFor="projectTitle">Title</Label>
                         <Input
                             id="projectTitle"
                             name="title"
-                            value={selectedProject.title}
+                            value={selectedProject.title || ''}
                             onChange={handleProjectChange}
                             disabled={isLoading}
                             placeholder="Project title"
@@ -205,90 +203,99 @@ const EditProfileForm: React.FC = () => {
                         <Input
                             id="projectDescription"
                             name="description"
-                            value={selectedProject.description}
+                            value={selectedProject.description || ''}
                             onChange={handleProjectChange}
+                            disabled={isLoading}
                             placeholder="Project description"
                         />
                     </div>
                     <div>
-                        <Label htmlFor="repoLink">Repository Link</Label>
+                        <Label htmlFor="projectRepoLink">Repository Link</Label>
                         <Input
-                            id="repoLink"
+                            id="projectRepoLink"
                             name="repoLink"
-                            value={selectedProject.repo_link}
+                            value={selectedProject.repoLink || ''}
                             onChange={handleProjectChange}
+                            disabled={isLoading}
                             placeholder="Repository link"
                         />
                     </div>
                     <div>
-                        <Label htmlFor="tags">Tags (separate with space)</Label>
+                        <Label htmlFor="projectTags">Tags</Label>
                         <Input
-                            id="tags"
+                            id="projectTags"
                             name="tags"
-                            value={selectedProject.tags.join(' ')}
+                            value={selectedProject.tags || ''}
                             onChange={handleProjectChange}
-                            placeholder="Tags"
+                            disabled={isLoading}
+                            placeholder="Tags (separated by spaces)"
                         />
                     </div>
-                    <Button onClick={handleUpdateProject}>
-                        Update Project
+                    <Button onClick={handleUpdateProject} disabled={isLoading}>
+                        {isLoading ? 'Updating...' : 'Update Project'}
                     </Button>
-                    <Button onClick={() => handleDeleteProject(selectedProject.id)} style={{ marginLeft: '10px' }}>
-                        Delete Project
+                    <Button onClick={() => handleDeleteProject(selectedProject.id)} disabled={isLoading}>
+                        {isLoading ? 'Deleting...' : 'Delete Project'}
                     </Button>
                 </div>
             )}
 
-            <Button onClick={openNewProjectForm}>
-                Add New Project
-            </Button>
-
             {newProjectMode && (
                 <div className="grid gap-4">
                     <div>
-                        <Label htmlFor="projectTitle">Project Title</Label>
+                        <Label htmlFor="newProjectTitle">Title</Label>
                         <Input
-                            id="projectTitle"
+                            id="newProjectTitle"
                             name="title"
                             value={newProject.title}
                             onChange={handleProjectChange}
+                            disabled={isLoading}
                             placeholder="Project title"
                         />
                     </div>
                     <div>
-                        <Label htmlFor="projectDescription">Description</Label>
+                        <Label htmlFor="newProjectDescription">Description</Label>
                         <Input
-                            id="projectDescription"
+                            id="newProjectDescription"
                             name="description"
                             value={newProject.description}
                             onChange={handleProjectChange}
+                            disabled={isLoading}
                             placeholder="Project description"
                         />
                     </div>
                     <div>
-                        <Label htmlFor="repoLink">Repository Link</Label>
+                        <Label htmlFor="newProjectRepoLink">Repository Link</Label>
                         <Input
-                            id="repoLink"
+                            id="newProjectRepoLink"
                             name="repoLink"
                             value={newProject.repoLink}
                             onChange={handleProjectChange}
+                            disabled={isLoading}
                             placeholder="Repository link"
                         />
                     </div>
                     <div>
-                        <Label htmlFor="tags">Tags (separate with space)</Label>
+                        <Label htmlFor="newProjectTags">Tags</Label>
                         <Input
-                            id="tags"
+                            id="newProjectTags"
                             name="tags"
                             value={newProject.tags}
                             onChange={handleProjectChange}
-                            placeholder="Tags"
+                            disabled={isLoading}
+                            placeholder="Tags (separated by spaces)"
                         />
                     </div>
-                    <Button onClick={handleAddProject}>
-                        Add Project
+                    <Button onClick={handleAddProject} disabled={isLoading}>
+                        {isLoading ? 'Adding...' : 'Add Project'}
                     </Button>
                 </div>
+            )}
+
+            {!newProjectMode && (
+                <Button onClick={openNewProjectForm} disabled={isLoading}>
+                    {isLoading ? 'Loading...' : 'Add New Project'}
+                </Button>
             )}
         </div>
     );
