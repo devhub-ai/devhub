@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 interface HomeProps {
   onLogout: () => void;
+  username: string;  // Add username prop
 }
 
-const Home: React.FC<HomeProps> = ({ onLogout }) => {
+const Home: React.FC<HomeProps> = ({ onLogout, username }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -17,10 +18,15 @@ const Home: React.FC<HomeProps> = ({ onLogout }) => {
     }
   };
 
+  const goToProfile = () => {
+    navigate(`/u/${username}`);
+  };
+
   return (
     <div>
       <h1>Home Page</h1>
       <button onClick={handleLogout}>Logout</button>
+      <button onClick={goToProfile}>Go to Profile</button>
     </div>
   );
 };
