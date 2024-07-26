@@ -1,3 +1,4 @@
+// UserAuthForm.tsx
 "use client"
 
 import React, { useState } from 'react';
@@ -14,7 +15,7 @@ import { Label } from "@/components/ui/label";
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onLoginSuccess?: () => void;
+  onLoginSuccess?: (username: string) => void;
 }
 
 export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFormProps) {
@@ -31,7 +32,7 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
       const response = await axios.post(`${backendUrl}/login`, { username, password }, { withCredentials: true });
       if (response.status === 200) {
         if (onLoginSuccess) {
-          onLoginSuccess();
+          onLoginSuccess(username); // Pass the username to the callback
         }
         navigate('/home');
       }
