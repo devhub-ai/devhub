@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { UserAuthForm } from "@/components/user-auth-form-login";
+import { UserAuthForm } from "@/components/Auth/user-auth-form-login";
 
 interface LoginProps {
   onLoginSuccess: () => void;
