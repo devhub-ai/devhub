@@ -1,9 +1,8 @@
 import React from 'react';
-import { Navbar } from '@/components/navbar';
+import { Navbar } from '@/components/Navbar/navbar';
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-import { MovingCards } from '@/components/moving-cards';
-import { FeaturesSectionDemo } from '@/components/features';
-import { DrawerDemo } from '@/components/drawer';
+import { FeaturesSectionDemo } from '@/components/Hero/features';
+import { DrawerDemo } from '@/components/Footer/drawer';
 
 const Landing: React.FC = () => {
   return (
@@ -44,8 +43,6 @@ const Landing: React.FC = () => {
         </div>
       </div>
       <FeaturesSectionDemo /> 
-      <MovingCards />
-      
       <div className='mb-10 p-4 max-w-3xl mx-auto relative z-10 w-full pt-20 md:pt-0 flex flex-col items-center'>
         <DrawerDemo />
       </div>

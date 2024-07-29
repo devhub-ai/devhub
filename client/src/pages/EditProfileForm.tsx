@@ -7,7 +7,11 @@ import { Label } from "@/components/ui/label";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
-const EditProfileForm: React.FC = () => {
+interface EditProfileFormProps {
+    onProjectAdded: (newProject: any) => void;
+}
+
+const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => {
     const { username } = useParams<{ username: string }>();
     const [profileData, setProfileData] = useState<any>({
         bio: '',
@@ -86,10 +90,7 @@ const EditProfileForm: React.FC = () => {
                 tags: newProject.tags.split(' ').map(tag => tag.trim()).filter(tag => tag),
             }, { withCredentials: true });
 
-            setProfileData(prevData => ({
-                ...prevData,
-                projects: [...prevData.projects, response.data.project],
-            }));
+            onProjectAdded(response.data.project);
             setNewProject({ title: '', description: '', repoLink: '', tags: '' });
             setNewProjectMode(false);
         } catch (error) {

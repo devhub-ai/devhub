@@ -1,7 +1,7 @@
 // App.tsx
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/Theme/theme-provider";
 import axios from 'axios';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
@@ -54,7 +54,7 @@ const App: React.FC = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login onLoginSuccess={(username) => { setAuthenticated(true); setUsername(username); }} />} />
           <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} username={username || ''} /> : <Navigate to="/" />} />
-          <Route path="/u/:username" element={<Profile />} /> 
+          <Route path="/u/:username" element={<Profile onLogout={handleLogout} username={username || '' } />} /> 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
