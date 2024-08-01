@@ -4,3 +4,6 @@ Flask-Bcrypt
 Flask-Login
 Flask-Cors
 gunicorn
+python-dotenv
+neo4j
+google-generativeai
