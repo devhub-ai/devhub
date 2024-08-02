@@ -14,6 +14,7 @@ interface EditProfileFormProps {
 const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => {
     const { username } = useParams<{ username: string }>();
     const [profileData, setProfileData] = useState<any>({
+        name: '',
         bio: '',
         githubUsername: '',
         projects: [],
@@ -157,6 +158,17 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
         <div>
             <form onSubmit={handleSubmit}>
                 <div className="grid gap-4">
+                    <div>
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            name="name"
+                            value={profileData.name || ''}
+                            onChange={handleChange}
+                            disabled={isLoading}
+                            placeholder="Your name"
+                        />
+                    </div>
                     <div>
                         <Label htmlFor="bio">Bio</Label>
                         <Input

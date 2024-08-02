@@ -48,8 +48,10 @@ def get_profile(username):
         user = user_record["u"]
         profile_data = {
             'username': user["username"],
+            'name': user["name"],
             'bio': user["bio"],
             'githubUsername': user["github_username"],
+            'email': user["email"]
         }
 
         projects_query = """
@@ -74,6 +76,8 @@ def update_profile(username):
     data = request.get_json()
     query = "MATCH (u:User {username: $username}) SET u += $properties RETURN u"
     properties = {}
+    if 'name' in data:
+        properties['name'] = data['name']
     if 'bio' in data:
         properties['bio'] = data['bio']
     if 'githubUsername' in data:
