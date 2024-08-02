@@ -39,7 +39,7 @@ const App: React.FC = () => {
       const response = await axios.get(`${backendUrl}/logout`, { withCredentials: true });
       if (response.data.message === 'Logout successful') {
         setAuthenticated(false);
-        setUsername(null); // Clear username on logout
+        setUsername(null);
       }
     } catch (error) {
       console.error('Failed to logout:', error);

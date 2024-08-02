@@ -43,28 +43,7 @@ const HomeSidebar: React.FC<HomeProps> = ({ onLogout, username }) => {
                 <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
             onClick: goToHome,
-        },
-        {
-            label: "Profile",
-            icon: (
-                <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-            onClick: goToProfile,
-        },
-        {
-            label: "Settings",
-            href: "#",
-            icon: (
-                <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-        {
-            label: "Logout",
-            icon: (
-                <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-            onClick: handleLogout,
-        },
+        }
     ];
 
     const [open, setOpen] = useState(false);
@@ -95,6 +74,18 @@ const HomeSidebar: React.FC<HomeProps> = ({ onLogout, username }) => {
                                         alt="Avatar"
                                     />
                                 ),
+                                onClick: goToProfile
+                            }}
+                            
+                        />
+                        <SidebarLink
+                            link={{
+                                label: "Logout",
+                                href: "#",
+                                icon: (
+                                    <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+                                ),
+                                onClick: handleLogout,
                             }}
                         />
                    

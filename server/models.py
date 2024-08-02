@@ -17,16 +17,18 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
+    name = Column(String, nullable=True)
     bio = Column(Text, nullable=True)
     github_username = Column(String, nullable=True)
     
     # Establish relationship with Project
     projects = relationship('Project', back_populates='user')
 
-    def __init__(self, username, email, password, bio=None, github_username=None):
+    def __init__(self, username, email, password, name=None, bio=None, github_username=None):
         self.username = username
         self.email = email
         self.password = password
+        self.name = name
         self.bio = bio
         self.github_username = github_username
 
