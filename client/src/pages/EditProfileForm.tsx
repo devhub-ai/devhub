@@ -14,6 +14,7 @@ interface EditProfileFormProps {
 const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => {
     const { username } = useParams<{ username: string }>();
     const [profileData, setProfileData] = useState<any>({
+        name: '',
         bio: '',
         githubUsername: '',
         projects: [],
@@ -25,7 +26,6 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
         title: '',
         description: '',
         repoLink: '',
-        tags: '',
     });
 
     useEffect(() => {
@@ -87,15 +87,26 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                 title: newProject.title,
                 description: newProject.description,
                 repo_link: newProject.repoLink,
-                tags: newProject.tags.split(' ').map(tag => tag.trim()).filter(tag => tag),
             }, { withCredentials: true });
 
-            onProjectAdded(response.data.project);
-            setNewProject({ title: '', description: '', repoLink: '', tags: '' });
-            setNewProjectMode(false);
+            const addedProject = response.data.project;
+
+            if (addedProject) {
+                setProfileData(prevData => ({
+                    ...prevData,
+                    projects: [...prevData.projects, addedProject],
+                }));
+
+                onProjectAdded(addedProject);
+                setNewProject({ title: '', description: '', repoLink: '' });
+                setNewProjectMode(false);
+            } else {
+                console.error('Project was not added correctly:', response.data);
+                alert('Failed to add project. Please try again.');
+            }
         } catch (error) {
             console.error('Failed to add project:', error);
-            alert('Failed to add project');
+            alert('Failed to add project. Please try again.');
         }
     };
 
@@ -147,6 +158,17 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
         <div>
             <form onSubmit={handleSubmit}>
                 <div className="grid gap-4">
+                    <div>
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            name="name"
+                            value={profileData.name || ''}
+                            onChange={handleChange}
+                            disabled={isLoading}
+                            placeholder="Your name"
+                        />
+                    </div>
                     <div>
                         <Label htmlFor="bio">Bio</Label>
                         <Input
@@ -221,17 +243,6 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                             placeholder="Repository link"
                         />
                     </div>
-                    <div>
-                        <Label htmlFor="projectTags">Tags</Label>
-                        <Input
-                            id="projectTags"
-                            name="tags"
-                            value={selectedProject.tags || ''}
-                            onChange={handleProjectChange}
-                            disabled={isLoading}
-                            placeholder="Tags (separated by spaces)"
-                        />
-                    </div>
                     <Button onClick={handleUpdateProject} disabled={isLoading}>
                         {isLoading ? 'Updating...' : 'Update Project'}
                     </Button>
@@ -274,17 +285,6 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                             onChange={handleProjectChange}
                             disabled={isLoading}
                             placeholder="Repository link"
-                        />
-                    </div>
-                    <div>
-                        <Label htmlFor="newProjectTags">Tags</Label>
-                        <Input
-                            id="newProjectTags"
-                            name="tags"
-                            value={newProject.tags}
-                            onChange={handleProjectChange}
-                            disabled={isLoading}
-                            placeholder="Tags (separated by spaces)"
                         />
                     </div>
                     <Button onClick={handleAddProject} disabled={isLoading}>

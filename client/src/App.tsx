@@ -7,7 +7,7 @@ import Landing from './pages/Landing';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Profile from './pages/Profile'; 
+import Profile from './pages/Profile';
 import { Toaster } from "@/components/ui/sonner";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -39,7 +39,7 @@ const App: React.FC = () => {
       const response = await axios.get(`${backendUrl}/logout`, { withCredentials: true });
       if (response.data.message === 'Logout successful') {
         setAuthenticated(false);
-        setUsername(null); // Clear username on logout
+        setUsername(null);
       }
     } catch (error) {
       console.error('Failed to logout:', error);
@@ -54,7 +54,7 @@ const App: React.FC = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login onLoginSuccess={(username) => { setAuthenticated(true); setUsername(username); }} />} />
           <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} username={username || ''} /> : <Navigate to="/" />} />
-          <Route path="/u/:username" element={<Profile onLogout={handleLogout} username={username || '' } />} /> 
+          <Route path="/u/:username" element={<Profile onLogout={handleLogout} username={username || ''} />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>

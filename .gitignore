@@ -1,7 +1,4 @@
 .dist/
 venv/
 __pycache__/
-
-# userauth db
-server/instance/
-instance/site.db
+.env
