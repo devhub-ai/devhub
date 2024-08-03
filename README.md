@@ -6,12 +6,12 @@ A Platform to connect with like minded people and create peer group using AI cha
 
 Backend - Flask<br>
 Frontend - Vite + React (typescript)<br>
-Database - Sqlite
+Database - Neo4j
 
 ## Installation 
 
-See the [INSTALLATION](INSTALLATION.md) Guide for Installing the project locally. 
+See the [INSTALLATION GUIDE](INSTALLATION.md) for Installing the project locally. 
 
 ## Contribution
 
-See the [CONTRIBUTION GUIDE](CONTRIBUTION.md) to contribute to the project
+See the [CONTRIBUTION GUIDE](CONTRIBUTION.md) to contribute to the project.

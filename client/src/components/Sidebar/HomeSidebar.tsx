@@ -43,65 +43,56 @@ const HomeSidebar: React.FC<HomeProps> = ({ onLogout, username }) => {
                 <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
             onClick: goToHome,
-        },
-        {
-            label: "Profile",
-            icon: (
-                <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-            onClick: goToProfile,
-        },
-        {
-            label: "Settings",
-            href: "#",
-            icon: (
-                <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-        {
-            label: "Logout",
-            icon: (
-                <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-            onClick: handleLogout,
-        },
+        }
     ];
 
     const [open, setOpen] = useState(false);
 
     return (
-        
-            <Sidebar open={open} setOpen={setOpen}>
-                <SidebarBody className="justify-between gap-10">
-                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-                        {open ? <Logo /> : <LogoIcon />}
-                        <div className="mt-8 flex flex-col gap-2">
-                            {links.map((link, idx) => (
-                                <SidebarLink key={idx} link={link} />
-                            ))}
-                        </div>
+
+        <Sidebar open={open} setOpen={setOpen}>
+            <SidebarBody className="justify-between gap-10">
+                <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+                    {open ? <Logo /> : <LogoIcon />}
+                    <div className="mt-8 flex flex-col gap-2">
+                        {links.map((link, idx) => (
+                            <SidebarLink key={idx} link={link} />
+                        ))}
                     </div>
-                    <div>
-                        <SidebarLink
-                            link={{
-                                label: username,
-                                href: "#",
-                                icon: (
-                                    <img
-                                        src="https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712707200&semt=ais"
-                                        className="h-7 w-7 flex-shrink-0 rounded-full"
-                                        width={50}
-                                        height={50}
-                                        alt="Avatar"
-                                    />
-                                ),
-                            }}
-                        />
-                   
-                    </div>
-                </SidebarBody>
-            </Sidebar>
-           
+                </div>
+                <div>
+                    <SidebarLink
+                        link={{
+                            label: username,
+                            href: "#",
+                            icon: (
+                                <img
+                                    src="https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1712707200&semt=ais"
+                                    className="h-7 w-7 flex-shrink-0 rounded-full"
+                                    width={50}
+                                    height={50}
+                                    alt="Avatar"
+                                />
+                            ),
+                            onClick: goToProfile
+                        }}
+
+                    />
+                    <SidebarLink
+                        link={{
+                            label: "Logout",
+                            href: "#",
+                            icon: (
+                                <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+                            ),
+                            onClick: handleLogout,
+                        }}
+                    />
+
+                </div>
+            </SidebarBody>
+        </Sidebar>
+
     );
 };
 

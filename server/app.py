@@ -1,14 +1,21 @@
 from flask import Flask
 from config import Config
-from extensions import db, bcrypt, cors
+from extensions import bcrypt, cors, Neo4jDriver, neo4j_db
 import logging
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Initialize extensions
-    db.init_app(app)
+    # Initialize Neo4j
+    global neo4j_db
+    neo4j_db = Neo4jDriver(
+        app.config['NEO4J_URI'], 
+        app.config['NEO4J_USER'], 
+        app.config['NEO4J_PASSWORD']
+    )
+
+    # Initialize other extensions
     bcrypt.init_app(app)
     cors.init_app(app, supports_credentials=True, resources={
         r"/*": {
@@ -23,15 +30,9 @@ def create_app():
     with app.app_context():
         from api.urls import register_routes
         register_routes(app)
-        db.create_all()
 
-    # CORS headers middleware
-    @app.after_request
-    def add_cors_headers(response):
-        response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5173'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-        response.headers['Access-Control-Allow-Credentials'] = 'true'
-        return response
+    @app.teardown_appcontext
+    def close_neo4j(exception):
+        neo4j_db.close()
 
     return app
