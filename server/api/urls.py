@@ -4,6 +4,8 @@ from api.handlers.userauth import (
 from api.handlers.profile import (
     get_profile, update_profile, add_project, update_project, delete_project
 )
+from api.handlers.analyze.githubdata import github_data, top_languages, streak_stats, pinned_repos
+from api.handlers.analyze.leetcodedata import leetcode_data
 
 def register_routes(app):
     # Authentication routes
@@ -19,6 +21,15 @@ def register_routes(app):
     # Profile routes
     app.add_url_rule('/profile/<username>', 'get_profile', get_profile, methods=['GET'])
     app.add_url_rule('/profile/<username>', 'update_profile', update_profile, methods=['PUT'])
+    
+    # Analyze routes - Github
+    app.add_url_rule('/analyze/github_data', 'github_data', github_data, methods=['POST'])
+    app.add_url_rule('/analyze/top_languages', 'top_languages', top_languages, methods=['POST'])
+    app.add_url_rule('/analyze/streak_stats', 'streak_stats', streak_stats, methods=['POST']) # Returns an HTML Response
+    app.add_url_rule('/analyze/pinned_repos', 'pinned_repos', pinned_repos, methods=['POST'])
+    
+    # Analyze routes - Leetcode
+    app.add_url_rule('/analyze/leetcode_data', 'leetcode_data', leetcode_data, methods=['POST'])
     
     # Project routes
     app.add_url_rule('/profile/<username>/projects', 'add_project', add_project, methods=['POST']) 
