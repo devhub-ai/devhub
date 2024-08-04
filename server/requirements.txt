@@ -7,3 +7,4 @@ gunicorn
 python-dotenv
 neo4j
 google-generativeai
+beautifulsoup4
