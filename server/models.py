@@ -1,8 +1,14 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref, Session
 
 Base = declarative_base()
+
+# Association table for the many-to-many relationship between users (friends)
+friend_association = Table('friend_association', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('friend_id', Integer, ForeignKey('users.id'))
+)
 
 # Association table for the many-to-many relationship between projects and tags
 project_tags = Table('project_tags', Base.metadata,
@@ -23,6 +29,16 @@ class User(Base):
     
     # Establish relationship with Project
     projects = relationship('Project', back_populates='user')
+    
+    # Establish many-to-many relationship with friends
+    friends = relationship(
+        'User',
+        secondary=friend_association,
+        primaryjoin=id==friend_association.c.user_id,
+        secondaryjoin=id==friend_association.c.friend_id,
+        backref=backref('friend_of', lazy='dynamic'),
+        lazy='dynamic'
+    )
 
     def __init__(self, username, email, password, name=None, bio=None, github_username=None):
         self.username = username
@@ -31,6 +47,18 @@ class User(Base):
         self.name = name
         self.bio = bio
         self.github_username = github_username
+
+    def add_friend(self, friend_user):
+        if friend_user not in self.friends:
+            self.friends.append(friend_user)
+        if self not in friend_user.friends:
+            friend_user.friends.append(self)
+
+    def remove_friend(self, friend_user):
+        if friend_user in self.friends:
+            self.friends.remove(friend_user)
+        if self in friend_user.friends:
+            friend_user.friends.remove(self)
 
 class Project(Base):
     __tablename__ = 'projects'
