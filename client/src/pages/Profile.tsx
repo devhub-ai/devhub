@@ -35,6 +35,44 @@ interface UserResponse {
     username: string;
 }
 
+interface GitHubData {
+    avatar_url: string;
+    name: string;
+    public_repos: number;
+    followers: number;
+    following: number;
+    bio: string;
+}
+
+interface Language {
+    language: string;
+    percentage: string;
+}
+
+interface LeetCodeData {
+    totalSolved: number;
+    totalSubmissions: number;
+    totalQuestions: number;
+    easySolved: number;
+    totalEasy: number;
+    mediumSolved: number;
+    totalMedium: number;
+    hardSolved: number;
+    totalHard: number;
+    ranking: number;
+    contributionPoint: number;
+    reputation: number;
+    submissionCalendar: string;
+    recentSubmissions: {
+        title: string;
+        titleSlug: string;
+        timestamp: string;
+        statusDisplay: string;
+        lang: string;
+    }[];
+}
+
+
 const Profile: React.FC<ProfileProps> = ({ onLogout, username }) => {
     return (
         <div
@@ -60,6 +98,62 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
     const friendStatus = useSelector((state: RootState) => state.user.friendStatus);
     const [profileData, setProfileData] = useState<UserResponse>();
     const [editing, setEditing] = useState(false);
+    const [githubData, setGithubData] = useState<GitHubData | null>(null);
+    const [languages, setLanguages] = useState<Language[]>([]);
+    const [streakStats, setStreakStats] = useState<string | null>(null);
+    const [pinnedRepos, setPinnedRepos] = useState<Project[]>([]);
+    const [leetcodeData, setLeetcodeData] = useState<LeetCodeData | null>(null);
+
+    useEffect(() => {
+        const fetchGithubData = async () => {
+            if (profileData?.githubUsername) {
+                try {
+                    const githubResponse = await axios.post(`${backendUrl}/analyze/github_data`, {
+                        'github-id': profileData.githubUsername,
+                    });
+                    setGithubData(githubResponse.data);
+
+                    const languagesResponse = await axios.post(`${backendUrl}/analyze/top_languages`, {
+                        'github-id': profileData.githubUsername,
+                    });
+                    setLanguages(languagesResponse.data);
+
+                    const streakResponse = await axios.post(`${backendUrl}/analyze/streak_stats`, {
+                        'github-id': profileData.githubUsername,
+                    });
+                    setStreakStats(streakResponse.data);
+
+                    const pinnedReposResponse = await axios.post(`${backendUrl}/analyze/pinned_repos`, {
+                        'github-id': profileData.githubUsername,
+                    });
+                    setPinnedRepos(pinnedReposResponse.data);
+
+                } catch (error) {
+                    console.error('Failed to fetch GitHub data:', error);
+                }
+            }
+        };
+
+        fetchGithubData();
+    }, [profileData]);
+
+    useEffect(() => {
+        const fetchLeetcodeData = async () => {
+            if (profileData?.leetcodeUsername) {
+                try {
+                    const leetcodeResponse = await axios.post(`${backendUrl}/analyze/leetcode_data`, {
+                        'leetcode-id': profileData.leetcodeUsername,
+                    });
+                    setLeetcodeData(leetcodeResponse.data);
+                } catch (error) {
+                    console.error('Failed to fetch LeetCode data:', error);
+                }
+            }
+        };
+
+        fetchLeetcodeData();
+    }, [profileData]);
+
 
     useEffect(() => {
         const fetchProfileAndFriends = async () => {
@@ -132,7 +226,12 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
                     <div className="grid max-w-7xl min-h-screen gap-6 px-4 mx-auto lg:grid-cols-[250px_1fr_300px] lg:px-6 xl:gap-10">
                         <div className="py-10 space-y-4 lg:block">
                             <div className="flex flex-col items-center space-y-2">
-                                <img src="/placeholder.svg" width="150" height="150" className="rounded-full" alt="Avatar" />
+                                    {githubData ? (
+                                        <img src={githubData.avatar_url} width="150" height="150" className="rounded-full" alt="Avatar" />
+                                    ) : (
+                                        <img src="/placeholder.svg" width="150" height="150" className="rounded-full" alt="Avatar" />
+                                    )}
+                                
                                 <div className="text-center">
                                     <h1 className="text-xl font-bold">{profileData.name}</h1>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">@{profileData.username}</p>
@@ -213,7 +312,91 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
                                     <p className="text-sm text-gray-500 dark:text-gray-400">No friends yet</p>
                                 )}
                             </div>
+                                <div className="space-y-6 lg:space-y-10">
+                                    <h2 className="text-xl font-bold">LeetCode Overview</h2>
+                                    {leetcodeData ? (
+                                        <div>
+                                            <p>Total Solved: {leetcodeData.totalSolved}</p>
+                                            <p>Easy: {leetcodeData.easySolved} / {leetcodeData.totalEasy}</p>
+                                            <p>Medium: {leetcodeData.mediumSolved} / {leetcodeData.totalMedium}</p>
+                                            <p>Hard: {leetcodeData.hardSolved} / {leetcodeData.totalHard}</p>
+                                            <p>Ranking: {leetcodeData.ranking}</p>
+                                            <p>Contribution Points: {leetcodeData.contributionPoint}</p>
+                                            <p>Reputation: {leetcodeData.reputation}</p>
+                                            <h3>Recent Submissions</h3>
+                                            <ul>
+                                                {leetcodeData.recentSubmissions.map((submission, index) => (
+                                                    <li key={index}>
+                                                        <p>{submission.title} - {submission.lang} - {submission.statusDisplay}</p>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ) : (
+                                        <p>Loading LeetCode data...</p>
+                                    )}
+                                </div>
                         </div>
+                            <div className="space-y-6 lg:space-y-10">
+                                <div className="flex flex-col space-y-2 lg:space-y-4">
+                                    <h2 className="text-xl font-bold">GitHub Overview</h2>
+                                    {githubData ? (
+                                        <div className="flex items-center space-x-2">
+                                            <div>
+                                                <p className="font-semibold">{githubData.name}</p>
+                                                <p>{githubData.bio}</p>
+                                                <p>Repositories: {githubData.public_repos}</p>
+                                                <p>Followers: {githubData.followers}</p>
+                                                <p>Following: {githubData.following}</p>
+                                            </div>
+                                            
+                                        </div>
+                                    ) : (
+                                        <p>Loading GitHub data...</p>
+                                    )}
+                                </div>
+
+                                <div className="space-y-2 lg:space-y-4">
+                                    <h2 className="text-xl font-bold">Top Languages</h2>
+                                    {languages.length > 0 ? (
+                                        <ul>
+                                            {languages.map((lang, index) => (
+                                                <li key={index}>{lang.language}: {lang.percentage}</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>Loading languages...</p>
+                                    )}
+                                </div>
+
+                                <div className="space-y-2 lg:space-y-4">
+                                    <h2 className="text-xl font-bold">Streak Stats</h2>
+                                    {streakStats ? (
+                                        <div dangerouslySetInnerHTML={{ __html: streakStats }} />
+                                    ) : (
+                                        <p>Loading streak stats...</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <h2>Pinned Repositories</h2>
+                                    {pinnedRepos.length > 0 ? (
+                                        <ul>
+                                            {pinnedRepos.map((repo, index) => (
+                                                <li key={index}>
+                                                    <a href={repo.repoLink} target="_blank" rel="noopener noreferrer">
+                                                        <h3>{repo.title}</h3>
+                                                        <p>{repo.description}</p>
+                                                        <p>{repo.tags}</p>
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>No pinned repositories found.</p>
+                                    )}
+                                </div>
+                            </div>
+
                     </div>
                 )}
             </div>
