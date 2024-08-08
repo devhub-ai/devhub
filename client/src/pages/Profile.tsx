@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import HomeSidebar from '@/components/Sidebar/HomeSidebar';
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../lib/store'; 
+import { setFriends, setFriendStatus } from '../lib/userSlice';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -13,12 +16,14 @@ interface ProfileProps {
     onLogout: () => void;
     username: string;
 }
+
 interface Project {
     description: string;
     repoLink: string;
     tags: string;
     title: string;
 }
+
 interface UserResponse {
     bio: string;
     email: string;
@@ -29,6 +34,7 @@ interface UserResponse {
     projects: Project[];
     username: string;
 }
+
 const Profile: React.FC<ProfileProps> = ({ onLogout, username }) => {
     return (
         <div
@@ -49,8 +55,10 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
     const { username } = useParams<{ username: string }>();
+    const dispatch = useDispatch<AppDispatch>();
+    const friends = useSelector((state: RootState) => state.user.friends);
+    const friendStatus = useSelector((state: RootState) => state.user.friendStatus);
     const [profileData, setProfileData] = useState<UserResponse>();
-    const [friends, setFriends] = useState<string[]>([]);
     const [editing, setEditing] = useState(false);
 
     useEffect(() => {
@@ -64,7 +72,10 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
 
                 // Fetch friends data
                 const friendsResponse = await axios.get(`${backendUrl}/profile/${username}/friends`);
-                setFriends(friendsResponse.data.friends);
+                dispatch(setFriends(friendsResponse.data.friends));
+
+                // Update friend status in Redux
+                dispatch(setFriendStatus(friendsResponse.data.friends.includes(loggedInUsername)));
             } catch (error) {
                 console.error('Failed to fetch profile or friends data:', error);
             }
@@ -73,7 +84,7 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
         if (username) {
             fetchProfileAndFriends();
         }
-    }, [username]);
+    }, [username, loggedInUsername, dispatch]);
 
     const handleProjectAdded = (newProject: Project) => {
         setProfileData(prevData => prevData ? {
@@ -89,16 +100,14 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
                     data: { friend_username: loggedInUsername }
                 });
                 setProfileData(prev => prev ? { ...prev, isFriend: false } : prev);
+                dispatch(setFriendStatus(false)); // Update Redux state
             } else {
                 await axios.post(`${backendUrl}/profile/${username}/friends`, {
                     friend_username: loggedInUsername
                 });
                 setProfileData(prev => prev ? { ...prev, isFriend: true } : prev);
+                dispatch(setFriendStatus(true)); // Update Redux state
             }
-
-            // Re-fetch friends to update the list
-            const friendsResponse = await axios.get<{ friends: string[] }>(`${backendUrl}/profile/${username}/friends`);
-            setFriends(friendsResponse.data.friends);
         } catch (error) {
             console.error('Failed to update friend status:', error);
         }
