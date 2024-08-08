@@ -52,6 +52,7 @@ def get_profile(username):
             'name': user["name"],
             'bio': user["bio"],
             'githubUsername': user["github_username"],
+            'leetcodeUsername': user["leetcode_username"],
             'email': user["email"]
         }
 
@@ -94,6 +95,8 @@ def update_profile(username):
         properties['bio'] = data['bio']
     if 'githubUsername' in data:
         properties['github_username'] = data['githubUsername']
+    if 'leetcodeUsername' in data:
+        properties['leetcode_username'] = data['leetcodeUsername']
 
     with neo4j_db.driver.session() as session:
         result = session.run(query, username=username, properties=properties)

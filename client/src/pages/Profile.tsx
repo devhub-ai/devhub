@@ -13,7 +13,22 @@ interface ProfileProps {
     onLogout: () => void;
     username: string;
 }
-
+interface Project {
+    description: string;
+    repoLink: string;
+    tags: string;
+    title: string;
+}
+interface UserResponse {
+    bio: string;
+    email: string;
+    githubUsername: string;
+    isFriend: boolean;
+    leetcodeUsername: string;
+    name: string | null;
+    projects: Project[];
+    username: string;
+}
 const Profile: React.FC<ProfileProps> = ({ onLogout, username }) => {
     return (
         <div
@@ -34,7 +49,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
     const { username } = useParams<{ username: string }>();
-    const [profileData, setProfileData] = useState<any>(null);
+    const [profileData, setProfileData] = useState<UserResponse>();
     const [friends, setFriends] = useState<string[]>([]);
     const [editing, setEditing] = useState(false);
 
@@ -60,29 +75,29 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
         }
     }, [username]);
 
-    const handleProjectAdded = (newProject: any) => {
-        setProfileData((prevData: any) => ({
+    const handleProjectAdded = (newProject: Project) => {
+        setProfileData(prevData => prevData ? {
             ...prevData,
             projects: [...prevData.projects, newProject],
-        }));
+        } : prevData);
     };
 
     const handleFriendRequest = async () => {
         try {
-            if (profileData.isFriend) {
+            if (profileData?.isFriend) {
                 await axios.delete(`${backendUrl}/profile/${username}/friends`, {
                     data: { friend_username: loggedInUsername }
                 });
-                setProfileData(prev => ({ ...prev, isFriend: false }));
+                setProfileData(prev => prev ? { ...prev, isFriend: false } : prev);
             } else {
                 await axios.post(`${backendUrl}/profile/${username}/friends`, {
                     friend_username: loggedInUsername
                 });
-                setProfileData(prev => ({ ...prev, isFriend: true }));
+                setProfileData(prev => prev ? { ...prev, isFriend: true } : prev);
             }
 
             // Re-fetch friends to update the list
-            const friendsResponse = await axios.get(`${backendUrl}/profile/${username}/friends`);
+            const friendsResponse = await axios.get<{ friends: string[] }>(`${backendUrl}/profile/${username}/friends`);
             setFriends(friendsResponse.data.friends);
         } catch (error) {
             console.error('Failed to update friend status:', error);
@@ -132,6 +147,12 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
                                     {profileData.githubUsername}
                                 </p>
                             </div>
+                            <div className="space-y-2">
+                                <p className="font-semibold">Leetcode</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    {profileData.leetcodeUsername}
+                                </p>
+                            </div>
 
                             {!isOwnProfile && (
                                 <Button className="w-full" onClick={handleFriendRequest}>
@@ -151,8 +172,8 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
                                 </div>
                             </div>
                             <div className="space-y-4">
-                                {profileData.projects.map((project: any) => (
-                                    <Card key={project.id}>
+                                {profileData.projects.map((project: Project) => (
+                                    <Card key={project.title}>
                                         <CardHeader className="flex flex-col gap-1">
                                             <div className="flex items-center gap-2">
                                                 <div className="text-sm">

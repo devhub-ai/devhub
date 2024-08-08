@@ -17,6 +17,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
         name: '',
         bio: '',
         githubUsername: '',
+        leetcodeUsername: '',
         projects: [],
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -189,6 +190,17 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                             onChange={handleChange}
                             disabled={isLoading}
                             placeholder="GitHub username"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="leetcodeUsername">Leetcode Username</Label>
+                        <Input
+                            id="leetcodeUsername"
+                            name="leetcodeUsername"
+                            value={profileData.leetcodeUsername || ''}
+                            onChange={handleChange}
+                            disabled={isLoading}
+                            placeholder="Leetcode username"
                         />
                     </div>
                     <Button type="submit" disabled={isLoading}>
