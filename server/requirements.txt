@@ -5,6 +5,8 @@ Flask-Login
 Flask-Cors
 gunicorn
 python-dotenv
+bcrypt
 neo4j
+neo4j-driver
 google-generativeai
 beautifulsoup4
