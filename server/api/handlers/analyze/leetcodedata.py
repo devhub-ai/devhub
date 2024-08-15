@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 
 query = """
   query getUserProfile($username: String!) {
@@ -102,3 +102,22 @@ def leetcode_data():
         return jsonify(formatted_data)
     else:
         return jsonify({"error": "Failed to fetch data from LeetCode API", "status_code": response.status_code}), response.status_code
+      
+def leetcode_card():
+    data = request.get_json()
+    username = data.get('leetcode-id')
+    
+    if not username:
+        return jsonify({"error": "LeetCode username is required"}), 400
+    
+    url = f"https://leetcard.jacoblin.cool/{username}?ext=contest"
+    
+    try:
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            return Response(response.content)
+        else:
+            return jsonify({"error": "Failed to fetch image from LeetCode API", "status_code": response.status_code}), response.status_code
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 500
