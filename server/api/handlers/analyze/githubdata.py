@@ -90,3 +90,22 @@ def pinned_repos():
             return jsonify({"error": "Failed to fetch data from Pinned Repos API", "status_code": response.status_code}), response.status_code
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 500
+
+def streak_chart():
+    data = request.get_json()
+    username = data.get('github-id')
+    
+    if not username:
+        return jsonify({"error": "GitHub username is required"}), 400
+    
+    url = f"https://ghchart.rshah.org/{username}"
+    
+    try:
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            return Response(response.content)
+        else:
+            return jsonify({"error": "Failed to fetch contribution chart", "status_code": response.status_code}), response.status_code
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 500
