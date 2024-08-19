@@ -1,8 +1,9 @@
 import React from 'react';
-import { Navbar } from '@/components/Navbar/navbar';
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { FeaturesSectionDemo } from '@/components/Hero/features';
-import { DrawerDemo } from '@/components/Footer/drawer';
+import Footer from '@/components/Footer/Footer';
+import { Navbar } from '@/components/Navbar/navbar';
+import { Hero } from '@/components/Hero/Hero';
 
 const Landing: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ const Landing: React.FC = () => {
 
       <Navbar />
 
-      <div className="mt-[10rem] p-4 max-w-7xl mx-auto relative z-10 w-full pt-20 md:pt-0 flex flex-col items-center">
+      <div className="mt-[2rem] p-4 max-w-7xl mx-auto relative z-20 w-full pt-20 md:pt-0 flex flex-col items-center">
         <button className="bg-slate-800 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-900 rounded-full p-px text-xs font-semibold leading-6 text-white inline-block mb-8">
           <span className="absolute inset-0 overflow-hidden rounded-full">
             <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -27,26 +28,28 @@ const Landing: React.FC = () => {
           DevHub
         </h1>
         <p className="mt-4 font-normal text-base text-neutral-300 max-w-lg text-center mx-auto">
-          The platform offers intelligent matchmaking and personalized recommendations to form effective teams and engage in meaningful collaborations. 
+          The platform offers intelligent matchmaking and personalized recommendations to form effective teams and engage in meaningful collaborations.
         </p>
         <div className='mt-8'>
-            <HoverBorderGradient
-          containerClassName="rounded-full"
-          as="button"
-          className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
-          onClick={() => {
-            window.location.href = '/login';
-          }}
-        >
-          <span>Login to Continue</span>
-        </HoverBorderGradient>
+          <HoverBorderGradient
+            containerClassName="rounded-full"
+            as="button"
+            className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+            onClick={() => {
+              window.location.href = '/login';
+            }}
+          >
+            <span>Login to Continue</span>
+          </HoverBorderGradient>
         </div>
       </div>
-      <FeaturesSectionDemo /> 
-      <div className='mb-10 p-4 max-w-3xl mx-auto relative z-10 w-full pt-20 md:pt-0 flex flex-col items-center'>
-        <DrawerDemo />
-      </div>
+
+      <Hero />
       
+      <FeaturesSectionDemo />
+
+      <Footer />
+
     </div>
   );
 };
