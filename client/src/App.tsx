@@ -22,7 +22,7 @@ const App: React.FC = () => {
         const response = await axios.get(`${backendUrl}/check_auth`, { withCredentials: true });
         if (response.data.authenticated) {
           setAuthenticated(true);
-          setUsername(response.data.username); // Store the username
+          setUsername(response.data.username);
         } else {
           setAuthenticated(false);
         }
