@@ -7,13 +7,28 @@ import { Label } from "@/components/ui/label";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
+interface Project {
+    id?: number;
+    title: string;
+    description: string;
+    repoLink: string;
+}
+
+interface ProfileData {
+    name: string;
+    bio: string;
+    githubUsername: string;
+    leetcodeUsername: string;
+    projects: Project[];
+}
+
 interface EditProfileFormProps {
-    onProjectAdded: (newProject: any) => void;
+    onProjectAdded: (newProject: Project) => void;
 }
 
 const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => {
     const { username } = useParams<{ username: string }>();
-    const [profileData, setProfileData] = useState<any>({
+    const [profileData, setProfileData] = useState<ProfileData>({
         name: '',
         bio: '',
         githubUsername: '',
@@ -21,9 +36,9 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
         projects: [],
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<any>(null);
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [newProjectMode, setNewProjectMode] = useState(false);
-    const [newProject, setNewProject] = useState({
+    const [newProject, setNewProject] = useState<Project>({
         title: '',
         description: '',
         repoLink: '',
@@ -46,7 +61,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setProfileData(prevData => ({
+        setProfileData((prevData: ProfileData) => ({
             ...prevData,
             [name]: value,
         }));
@@ -55,12 +70,12 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
     const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (selectedProject) {
-            setSelectedProject(prevProject => ({
+            setSelectedProject((prevProject: Project) => ({
                 ...prevProject,
                 [name]: value,
             }));
         } else {
-            setNewProject(prevProject => ({
+            setNewProject((prevProject: Project) => ({
                 ...prevProject,
                 [name]: value,
             }));
@@ -93,7 +108,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
             const addedProject = response.data.project;
 
             if (addedProject) {
-                setProfileData(prevData => ({
+                setProfileData((prevData: ProfileData) => ({
                     ...prevData,
                     projects: [...prevData.projects, addedProject],
                 }));
@@ -117,9 +132,9 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                 const updatedProject = { ...selectedProject };
                 await axios.put(`${backendUrl}/profile/${username}/projects/${selectedProject.id}`, updatedProject, { withCredentials: true });
 
-                setProfileData(prevData => ({
+                setProfileData((prevData: ProfileData) => ({
                     ...prevData,
-                    projects: prevData.projects.map((p: any) => p.id === selectedProject.id ? updatedProject : p),
+                    projects: prevData.projects.map((p: Project) => p.id === selectedProject.id ? updatedProject : p),
                 }));
                 setSelectedProject(null);
             }
@@ -133,9 +148,9 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
         try {
             const response = await axios.delete(`${backendUrl}/profile/${username}/projects/${projectId}`, { withCredentials: true });
             if (response.status === 200) {
-                setProfileData(prevData => ({
+                setProfileData((prevData: ProfileData) => ({
                     ...prevData,
-                    projects: prevData.projects.filter((project: any) => project.id !== projectId),
+                    projects: prevData.projects.filter((project: Project) => project.id !== projectId),
                 }));
                 alert('Project deleted successfully');
                 if (selectedProject && selectedProject.id === projectId) {
@@ -211,7 +226,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
 
             <h2>Existing Projects</h2>
             <ul>
-                {profileData.projects && profileData.projects.map((project, index) => (
+                {profileData.projects && profileData.projects.map((project: Project, index: number) => (
                     project && project.title ? (
                         <li key={project.id || index}>
                             <h3 onClick={() => setSelectedProject(project)}>{project.title}</h3>
@@ -258,7 +273,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                     <Button onClick={handleUpdateProject} disabled={isLoading}>
                         {isLoading ? 'Updating...' : 'Update Project'}
                     </Button>
-                    <Button onClick={() => handleDeleteProject(selectedProject.id)} disabled={isLoading}>
+                    <Button onClick={() => handleDeleteProject(selectedProject.id!)} disabled={isLoading}>
                         {isLoading ? 'Deleting...' : 'Delete Project'}
                     </Button>
                 </div>
