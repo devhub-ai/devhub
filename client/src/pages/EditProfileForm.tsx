@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import TagInput from "@/components/MultiSelect/TagInput";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -12,7 +13,9 @@ interface Project {
     title: string;
     description: string;
     repoLink: string;
+    tags: string[];
 }
+
 
 interface ProfileData {
     name: string;
@@ -42,7 +45,9 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
         title: '',
         description: '',
         repoLink: '',
+        tags: [],
     });
+    
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -99,22 +104,29 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
 
     const handleAddProject = async () => {
         try {
+            console.log("Tags:", newProject.tags);
+            const tagsString = newProject.tags.map(tag => tag.value).join(",");
+
+
+            console.log("Adding project:", tagsString);
             const response = await axios.post(`${backendUrl}/profile/${username}/projects`, {
                 title: newProject.title,
                 description: newProject.description,
                 repo_link: newProject.repoLink,
+                tags: tagsString,
             }, { withCredentials: true });
-
+            if(response.status === 200)
+                console.log("Project added successfully:", response.data);
             const addedProject = response.data.project;
-
+    
             if (addedProject) {
                 setProfileData((prevData: ProfileData) => ({
                     ...prevData,
                     projects: [...prevData.projects, addedProject],
                 }));
-
+    
                 onProjectAdded(addedProject);
-                setNewProject({ title: '', description: '', repoLink: '' });
+                setNewProject({ title: '', description: '', repoLink: '', tags: [] });
                 setNewProjectMode(false);
             } else {
                 console.error('Project was not added correctly:', response.data);
@@ -125,13 +137,14 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
             alert('Failed to add project. Please try again.');
         }
     };
+    
 
     const handleUpdateProject = async () => {
         try {
             if (selectedProject) {
                 const updatedProject = { ...selectedProject };
                 await axios.put(`${backendUrl}/profile/${username}/projects/${selectedProject.id}`, updatedProject, { withCredentials: true });
-
+    
                 setProfileData((prevData: ProfileData) => ({
                     ...prevData,
                     projects: prevData.projects.map((p: Project) => p.id === selectedProject.id ? updatedProject : p),
@@ -143,20 +156,23 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
             alert('Failed to update project');
         }
     };
+    
 
-    const handleDeleteProject = async (projectId: number) => {
+    const handleDeleteProject = async (projectTitle: string) => {
         try {
-            const response = await axios.delete(`${backendUrl}/profile/${username}/projects/${projectId}`, { withCredentials: true });
+            console.log("Deleting project:", projectTitle);
+            const response = await axios.delete(`${backendUrl}/profile/${username}/projects/${projectTitle}`, { withCredentials: true });
             if (response.status === 200) {
                 setProfileData((prevData: ProfileData) => ({
                     ...prevData,
-                    projects: prevData.projects.filter((project: Project) => project.id !== projectId),
+                    projects: prevData.projects.filter((project: Project) => project.title !== projectTitle),
                 }));
                 alert('Project deleted successfully');
-                if (selectedProject && selectedProject.id === projectId) {
+                if (selectedProject && selectedProject.title === projectTitle) {
                     setSelectedProject(null);
                 }
             } else {
+                console.log(response.status);
                 alert('Failed to delete project');
             }
         } catch (error) {
@@ -273,7 +289,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                     <Button onClick={handleUpdateProject} disabled={isLoading}>
                         {isLoading ? 'Updating...' : 'Update Project'}
                     </Button>
-                    <Button onClick={() => handleDeleteProject(selectedProject.id!)} disabled={isLoading}>
+                    <Button onClick={() => handleDeleteProject(selectedProject.title!)} disabled={isLoading}>
                         {isLoading ? 'Deleting...' : 'Delete Project'}
                     </Button>
                 </div>
@@ -302,6 +318,14 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                             disabled={isLoading}
                             placeholder="Project description"
                         />
+                    </div>
+                    <div>
+                        <Label>Project Tags</Label>
+                        <TagInput
+                            selectedTags={newProject.tags}
+                            onTagsChange={(tags: string[]) => setNewProject({ ...newProject, tags })}
+                        />
+
                     </div>
                     <div>
                         <Label htmlFor="newProjectRepoLink">Repository Link</Label>

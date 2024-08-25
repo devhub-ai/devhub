@@ -33,7 +33,7 @@ def register_routes(app):
     # Project routes
     app.add_url_rule('/profile/<username>/projects', 'add_project', add_project, methods=['POST'])
     app.add_url_rule('/profile/<username>/projects/<int:project_id>', 'update_project', update_project, methods=['PUT'])
-    app.add_url_rule('/profile/<username>/projects/<int:project_id>', 'delete_project', delete_project, methods=['DELETE'])
+    app.add_url_rule('/profile/<username>/projects/<string:project_title>', 'delete_project', delete_project, methods=['DELETE'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)
