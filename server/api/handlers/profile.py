@@ -111,11 +111,12 @@ def add_project(username):
     title = data.get('title')
     description = data.get('description', '')
     repo_link = data.get('repo_link', '')
+    tags = data.get('tags', '')
 
     # Define a query to create a project without tags initially
     create_project_query = """
     MATCH (u:User {username: $username})
-    CREATE (p:Project {title: $title, description: $description, repo_link: $repo_link})
+    CREATE (p:Project {title: $title, description: $description, repo_link: $repo_link, tags: $tags})
     CREATE (u)-[:OWNS]->(p)
     RETURN p
     """
@@ -123,18 +124,18 @@ def add_project(username):
     try:
         with neo4j_db.driver.session() as session:
             # Create the project
-            result = session.run(create_project_query, username=username, title=title, description=description, repo_link=repo_link)
+            result = session.run(create_project_query, username=username, title=title, description=description, repo_link=repo_link, tags=tags)
             project_record = result.single()
             
             if project_record:
                 project = project_record["p"]
                 
                 # Analyze the description to get tags
-                tags = analyze_project_description(description)
+                # tags = analyze_project_description(description)
                 
                 # Categorize the tags into predefined domains
-                predefined_domains = ['healthcare', 'fintech', 'blockchain', 'sports', 'agriculture']
-                domain_tags = [tag for tag in tags.split(',') if tag.strip() in predefined_domains]
+                # predefined_domains = ['healthcare', 'fintech', 'blockchain', 'sports', 'agriculture']
+                domain_tags = [tag for tag in tags.split(',') if tag.strip() in tags]
 
                 # Update project with tags
                 update_project_query = """
@@ -192,15 +193,15 @@ def update_project(username, project_id):
             return jsonify({'message': 'Project updated successfully'}), 200
         return jsonify({'message': 'Project or user not found'}), 404
 
-def delete_project(username, project_id):
+def delete_project(username, project_title):
     query = """
-    MATCH (u:User {username: $username})-[:OWNS]->(p:Project {id: $project_id})
-    OPTIONAL MATCH (p)-[r:TAGGED_WITH]->(t:Tag)
+    MATCH (u:User {username: $username})-[:OWNS]->(p:Project {title: $project_title})
+    OPTIONAL MATCH (p)-[r]-()
     DELETE r, p
     RETURN u
     """
     with neo4j_db.driver.session() as session:
-        result = session.run(query, username=username, project_id=project_id)
+        result = session.run(query, username=username, project_title=project_title)
         if result.single():
             return jsonify({'message': 'Project deleted successfully'}), 200
         return jsonify({'message': 'Project or user not found'}), 404
