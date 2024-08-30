@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import TagInput from "@/components/MultiSelect/TagInput";
+import { toast } from "sonner";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -93,10 +94,14 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
 
         try {
             await axios.put(`${backendUrl}/profile/${username}`, profileData, { withCredentials: true });
-            alert('Profile updated successfully');
+            toast.success("Profile updated successfully");
+            // alert('Profile updated successfully');
         } catch (error) {
             console.error('Failed to update profile:', error);
-            alert('Failed to update profile');
+            toast.error("Failed to update profile", {
+                description: "Please check your details and try again.",
+            });
+            // alert('Failed to update profile');
         } finally {
             setIsLoading(false);
         }
@@ -116,7 +121,8 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                 tags: tagsString,
             }, { withCredentials: true });
             if(response.status === 200)
-                console.log("Project added successfully:", response.data);
+                // console.log("Project added successfully:", );
+                toast.success("Project added successfully");
             const addedProject = response.data.project;
     
             if (addedProject) {
@@ -130,11 +136,17 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                 setNewProjectMode(false);
             } else {
                 console.error('Project was not added correctly:', response.data);
-                alert('Failed to add project. Please try again.');
+                toast.error("Failed to add project", {
+                    action: {
+                        label: "Try again",
+                        onClick: () => console.log("Try again clicked"),
+                    },
+                });
+                // alert('Failed to add project. Please try again.');
             }
         } catch (error) {
             console.error('Failed to add project:', error);
-            alert('Failed to add project. Please try again.');
+            // alert('Failed to add project. Please try again.');
         }
     };
     
@@ -153,7 +165,14 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
             }
         } catch (error) {
             console.error('Failed to update project:', error);
-            alert('Failed to update project');
+            toast.error("Failed to update project", {
+                description: "There was a problem with your request.",
+                action: {
+                    label: "Try again",
+                    onClick: () => console.log("Try again clicked"),
+                },
+            });
+            // alert('Failed to update project');
         }
     };
     
@@ -167,17 +186,32 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                     ...prevData,
                     projects: prevData.projects.filter((project: Project) => project.title !== projectTitle),
                 }));
-                alert('Project deleted successfully');
+                // alert('Project deleted successfully');
+                toast.success("Project deleted successfully");
                 if (selectedProject && selectedProject.title === projectTitle) {
                     setSelectedProject(null);
                 }
             } else {
                 console.log(response.status);
-                alert('Failed to delete project');
+                toast.error("Failed to delete project", {
+                    description: "There was a problem with your request.",
+                    action: {
+                        label: "Try again",
+                        onClick: () => console.log("Try again clicked"),
+                    },
+                });
+                // alert('Failed to delete project');
             }
         } catch (error) {
             console.error('Failed to delete project:', error);
-            alert('Failed to delete project');
+            // alert('Failed to delete project');
+            toast.error("Failed to delete project", {
+                description: "There was a problem with your request.",
+                action: {
+                    label: "Try again",
+                    onClick: () => console.log("Try again clicked"),
+                },
+            });
         }
     };
 
