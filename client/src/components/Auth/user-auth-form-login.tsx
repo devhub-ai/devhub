@@ -1,10 +1,9 @@
-// UserAuthForm.tsx
 "use client"
 
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast } from "sonner"; // Import sonner toast
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/ui/icons";
