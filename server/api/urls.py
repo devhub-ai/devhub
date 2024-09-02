@@ -2,6 +2,7 @@ from api.handlers.userauth import signup, login, check_auth, home, logout, index
 from api.handlers.profile import get_profile, update_profile, add_project, update_project, delete_project
 from api.handlers.analyze.githubdata import github_data, top_languages, streak_stats, pinned_repos, streak_chart
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
+from api.handlers.query.querymodel import chat,retrieve_chat
 from api.handlers.friends import friends_bp
 
 def register_routes(app):
@@ -34,6 +35,10 @@ def register_routes(app):
     app.add_url_rule('/profile/<username>/projects', 'add_project', add_project, methods=['POST'])
     app.add_url_rule('/profile/<username>/projects/<int:project_id>', 'update_project', update_project, methods=['PUT'])
     app.add_url_rule('/profile/<username>/projects/<string:project_title>', 'delete_project', delete_project, methods=['DELETE'])
+    
+    # Chat with model routes
+    app.add_url_rule('/chat','chat',chat, methods=['POST'])
+    app.add_url_rule('/chat/<chat_id>','retrieve_chat',retrieve_chat, methods=['GET'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)
