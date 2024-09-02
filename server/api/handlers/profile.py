@@ -2,40 +2,7 @@ from flask import request, jsonify, current_app
 from extensions import neo4j_db
 from models import User, Project, Tag
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
 import os
-import google.generativeai as genai
-
-load_dotenv()
-
-# Configure Genai Key
-genai.configure(api_key=os.getenv("GENAI_API_KEY"))
-
-def get_gemini_response(question, prompt):
-    model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content([prompt, question])
-    return response.text
-
-def analyze_project_description(description):
-    prompt = (
-        "You are a sophisticated AI model trained to categorize project descriptions into predefined domains. "
-        "Please review the following project description and determine the most relevant domain from the provided options. "
-        "The available domains are: healthcare, fintech, blockchain, sports, agriculture. Based on the description, "
-        "choose the most appropriate domain from the given. If multiple domains are applicable, provide "
-        "comma-separated tags.\n\n"
-        "Project Description: {description}\n\n"
-        "Domain(s) (comma-separated): "
-    )
-    question = description
-    response = get_gemini_response(question, prompt)
-    tags = extract_tags(response)
-    return tags
-
-def extract_tags(response_text):
-    tags_part = response_text.split("Tags:")[-1].strip()
-    tags_list = tags_part.split(',')
-    tags = [tag.strip().lower() for tag in tags_list if tag.strip()]
-    return ', '.join(tags)
 
 def get_profile(username):
     logged_in_user = request.args.get('logged_in_user')
@@ -130,11 +97,6 @@ def add_project(username):
             if project_record:
                 project = project_record["p"]
                 
-                # Analyze the description to get tags
-                # tags = analyze_project_description(description)
-                
-                # Categorize the tags into predefined domains
-                # predefined_domains = ['healthcare', 'fintech', 'blockchain', 'sports', 'agriculture']
                 domain_tags = [tag for tag in tags.split(',') if tag.strip() in tags]
 
                 # Update project with tags
@@ -169,11 +131,7 @@ def update_project(username, project_id):
     title = data.get('title')
     description = data.get('description')
     repo_link = data.get('repo_link')
-
-    if description:
-        tags = analyze_project_description(description)
-    else:
-        tags = None
+    tags = data.get('tags', '')
 
     query = """
     MATCH (u:User {username: $username})-[:OWNS]->(p:Project {id: $project_id})
