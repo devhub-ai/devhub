@@ -45,8 +45,8 @@ jobs:
         with:
           name: python-app
           path: |
-            ./server/release.zip
-            !./server/venv/
+            release.zip
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip ./server release.zip
+        run: unzip release.zip
 
       
       - name: Login to Azure
