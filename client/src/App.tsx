@@ -52,7 +52,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Landing />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login onLoginSuccess={(username) => { setAuthenticated(true); setUsername(username); }} />} />
+          <Route path="/login" element={<Login onLoginSuccess={(username: string) => { setAuthenticated(true); setUsername(username); }} />} />
           <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} username={username || ''} /> : <Navigate to="/" />} />
           <Route path="/u/:username" element={<Profile onLogout={handleLogout} username={username || ''} />} />
           <Route path="*" element={<Navigate to="/" />} />

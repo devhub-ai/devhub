@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/Auth/user-auth-form-login";
 
 interface LoginProps {
-  onLoginSuccess: () => void;
+  onLoginSuccess: (username: string) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
@@ -62,7 +62,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                 Enter your details below to Login to your account
               </p>
             </div>
-            <UserAuthForm onLoginSuccess={onLoginSuccess} />
+            <UserAuthForm onLoginSuccess={(username: string) => onLoginSuccess(username)} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
