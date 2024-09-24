@@ -1,9 +1,9 @@
-from api.handlers.userauth import signup, login, check_auth, home, logout, index, check_username
-from api.handlers.profile import get_profile, update_profile, add_project, update_project, delete_project
+from api.handlers.auth.userauth import signup, login, check_auth, home, logout, index, check_username
+from api.handlers.user.profile import get_profile, update_profile, add_project, update_project, delete_project
 from api.handlers.analyze.githubdata import github_data, top_languages, streak_stats, pinned_repos, streak_chart
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,retrieve_chat
-from api.handlers.friends import friends_bp
+from api.handlers.user.friends import friends_bp
 
 def register_routes(app):
     # Authentication routes

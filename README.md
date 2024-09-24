@@ -12,6 +12,13 @@ Backend - Flask<br>
 Frontend - Vite + React (typescript)<br>
 Database - Neo4j
 
+## Features
+1. Create your profile
+2. Find peers with similar interests and skills
+3. chat with peers
+4. See others posted projects
+5. Get the best Roadmap for development
+
 ## Installation 
 
 See the [INSTALLATION GUIDE](INSTALLATION.md) for Installing the project locally. 

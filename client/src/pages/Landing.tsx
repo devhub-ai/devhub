@@ -7,7 +7,7 @@ import { Hero } from '@/components/Hero/Hero';
 
 const Landing: React.FC = () => {
   return (
-    <div className="w-full rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-black bg-white  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] items-center justify-center" >
+    <div className="w-full rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-zinc-900 bg-white  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] items-center justify-center" >
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
 
       <Navbar />
