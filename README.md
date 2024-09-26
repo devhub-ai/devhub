@@ -51,6 +51,18 @@ Open two terminal for server and client and enter into the directories.
 ## 1st terminal for server
 cd server
 
+## create .env file with following details (you can create your neo4j account or use our mirror database credentials)
+
+GOOGLE_API_KEY= 
+SECRET_KEY=
+NEO4J_URI= 
+NEO4J_USER=
+NEO4J_USERNAME=
+NEO4J_PASSWORD=
+
+## Join our discord server to get Mirror Database Credentials.
+Discord Server Link : https://discord.gg/he8QHEC8WP
+
 ## Create Virtual Environment
 python -m venv venv
 
