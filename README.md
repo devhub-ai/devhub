@@ -1,28 +1,81 @@
-# Devhub
+# DevHub: Intelligent Matchmaking Platform for Developers 💻🤝
 
-A Platform to connect with like minded people and create peer group using AI chat with advance algorithm and LLM. 
+DevHub is an innovative platform designed to connect developers who share similar interests and complementary skills. By leveraging advanced technologies, it facilitates intelligent matchmaking and personalized recommendations, enabling devs to form effective teams and engage in meaningful collaborations. The platform provides a structured and user-friendly environment for networking, learning, and growth, ultimately enhancing the academic and professional experiences of developers.
 
-Students from colleges and universities often face significant challenges when it comes to finding peers with similar interests, skills, and knowledge for collaboration on projects, hackathons, and other academic or extracurricular activities. This difficulty in connecting with like-minded individuals can hinder their ability to form effective teams, share knowledge, and achieve their full potential in these activities.
+## Features 🌟
 
-we aim to address these challenges by providing a comprehensive platform where students can easily find and connect with peers who share their interests and possess complementary skills. By leveraging advanced AI technology, DevHub-AI will facilitate intelligent matchmaking and personalized recommendations, ensuring that students can form effective teams and engage in meaningful collaborations. The platform will provide a structured and user-friendly environment for networking, learning, and growth, ultimately enhancing the academic and professional experiences of college students.
+### Advanced Matchmaking System
+DevHub integrates several cutting-edge technologies to create a robust matchmaking experience:
 
-## TechStacks
+- **Large Language Model (LLM)**: 🧠 Processes natural language inputs to understand user preferences and extract relevant information, enhancing matchmaking accuracy through:
+  - Natural Language Processing (NLP) 💬
+  - Entity Recognition 🔍
+  - Contextual Understanding 📊
 
-Backend - Flask<br>
-Frontend - Vite + React (typescript)<br>
-Database - Neo4j
+- **LangChain**: 🔗 Optimizes workflows by streamlining data integration between components, improving response quality and facilitating connections with external services.
 
-## Features
-1. Create your profile
-2. Find peers with similar interests and skills
-3. chat with peers
-4. See others posted projects
-5. Get the best Roadmap for development
+- **Neo4j Database**: 📈 Stores user profiles and project data in a graph format, allowing for complex relationships to be represented and queried effectively. Key features include:
+  - Knowledge Graph Creation 🌐
+  - Advanced Querying with Cypher 🗄️
+  - Integration with External Data Sources 🌍
+
+### User Interaction Features
+- **Chat Functionality**: 💬 Users can interact with the system to find matches or ask questions about potential collaborations using GraphRAG technology.
+- **Visualization Tools**: 📊 Users can visualize their connections within the knowledge graph, aiding in understanding potential collaborations.
+
+## Tech Stacks 🛠️
+
+- **Backend**: Flask 🐍 + LangChain 🔗  
+- **Frontend**: Vite + React (TypeScript) ⚛️  
+- **Database**: Neo4j 🌐  + Sqlite 
+
+---
+
+## Features ✨
+
+1. **Create Your Profile**: Set up a personalized profile to showcase your skills and interests.  
+2. **Find Peers**: Connect with fellow students who share similar interests and complementary skills.  
+3. **Chat with Peers**: Engage in real-time conversations to discuss projects and collaborations.  
+4. **Explore Projects**: View projects posted by other users to gain inspiration and insights.  
+5. **Get Development Roadmaps**: Access curated roadmaps tailored for your development journey.  
 
 ## Installation 
 
-See the [INSTALLATION GUIDE](INSTALLATION.md) for Installing the project locally. 
+Enter into the root directory.
+```bash
+cd devhub
+```
+Open two terminal for server and client and enter into the directories.
+```bash
+## 1st terminal for server
+cd server
+
+## Create Virtual Environment
+python -m venv venv
+
+## Activate the virtual Env.
+./venv/Scripts/activate
+
+## Intall dependencies
+pip install -r requirements.txt
+
+## Run the Server
+flask run or python server.py
+```
+```bash
+## 2nd terminal for client
+cd client
+
+## Intall dependencies
+npm install
+
+## Run the client
+npm run dev
+```
+
+## Conclusion 🎉
+By integrating LLMs for natural language understanding, LangChain for workflow enhancement, and Neo4j for advanced data storage and querying, DevHub offers a comprehensive solution for devs seeking meaningful collaborations. This combination not only enhances user experience but also ensures that connections are based on relevant skills and interests, leading to more effective teamwork.
 
 ## Contribution
 
-See the [CONTRIBUTION GUIDE](CONTRIBUTION.md) to contribute to the project.
+See the [CONTRIBUTION GUIDE](https://github.com/devhub-ai/devhub/blob/main/.github/CONTRIBUTING.md) to get started.
