@@ -1,9 +1,6 @@
 # DevHub: Intelligent Matchmaking Platform for Developers 💻🤝
-  <div align="center">
-  <a href="https://discord.gg/he8QHEC8WP" target="_blank"><img src="https://img.shields.io/discord/1259889923129999411
-  ?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff" /></a>
-  <br>
-  </div>
+  <a href="https://discord.gg/he8QHEC8WP" target="_blank"><img src="https://img.shields.io/discord/1259889923129999411?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff" /></a>
+
 DevHub is an innovative platform designed to connect developers who share similar interests and complementary skills. By leveraging advanced technologies, it facilitates intelligent matchmaking and personalized recommendations, enabling devs to form effective teams and engage in meaningful collaborations. The platform provides a structured and user-friendly environment for networking, learning, and growth, ultimately enhancing the academic and professional experiences of developers.
 
 ## Features 🌟
