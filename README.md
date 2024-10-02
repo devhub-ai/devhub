@@ -57,7 +57,6 @@ GOOGLE_API_KEY=
 SECRET_KEY=
 NEO4J_URI= 
 NEO4J_USER=
-NEO4J_USERNAME=
 NEO4J_PASSWORD=
 
 ## Join our discord server to get Mirror Database Credentials.

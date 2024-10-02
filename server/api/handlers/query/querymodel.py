@@ -10,7 +10,7 @@ import uuid
 # Load environment variables
 os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 os.environ["NEO4J_URI"] = os.getenv("NEO4J_URI")
-os.environ["NEO4J_USERNAME"] = os.getenv("NEO4J_USERNAME")
+os.environ["NEO4J_USERNAME"] = os.getenv("NEO4J_USER")
 os.environ["NEO4J_PASSWORD"] = os.getenv("NEO4J_PASSWORD")
 
 # Initialize Neo4j graph and language model 
