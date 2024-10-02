@@ -1,13 +1,12 @@
 import { FloatingDock } from "@/components/ui/floating-dock";
 import {
   IconBrandGithub,
-  IconBrandX,
+  IconBrandDiscord,
   IconExchange,
   IconHome,
   IconNewSection,
   IconTerminal2,
 } from "@tabler/icons-react";
-
 
 export function Navbar() {
   const links = [
@@ -16,22 +15,21 @@ export function Navbar() {
       icon: (
         <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      to: "#top", // Scroll to top
     },
-
     {
-      title: "Products",
+      title: "Features",
       icon: (
         <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      to: "#features", // Scroll to features section
     },
     {
-      title: "Components",
+      title: "FAQs",
       icon: (
         <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      to: "#help", // Scroll to help section
     },
     {
       title: "DevHub",
@@ -43,35 +41,34 @@ export function Navbar() {
           alt="DevHub"
         />
       ),
-      href: "#",
+      to: "#", // No scrolling
     },
     {
-      title: "Changelog",
+      title: "DevMap",
       icon: (
         <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      to: "#", // No scrolling
     },
-
     {
-      title: "Twitter",
+      title: "Discord",
       icon: (
-        <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconBrandDiscord className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      to: "https://discord.gg/he8QHEC8WP", // Discord link
     },
     {
       title: "GitHub",
       icon: (
         <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      to: "https://github.com/devhub-ai/devhub", // GitHub link
     },
   ];
+
   return (
     <div className="flex items-center justify-center mt-16 w-full">
       <FloatingDock
-        // mobileClassName="translate-y-20" // only for demo, remove for production
         items={links}
       />
     </div>

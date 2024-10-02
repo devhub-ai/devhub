@@ -1,61 +1,53 @@
 import { cn } from "@/lib/utils";
-import {
-    IconAdjustmentsBolt,
-    IconCloud,
-    IconCurrencyDollar,
-    IconEaseInOut,
-    IconHeart,
-    IconHelp,
-    IconRouteAltLeft,
-    IconTerminal2,
-} from "@tabler/icons-react";
+import { IconLock, IconStar, IconShare, IconUsers, IconUserPlus, IconBulb, IconBuilding, IconMap } from "@tabler/icons-react";
+
 
 export function FeaturesSectionDemo() {
     const features = [
         {
-            title: "Built for developers",
+            title: "Secure Your Access",
             description:
-                "Built for engineers, developers, dreamers, thinkers and doers.",
-            icon: <IconTerminal2 />,
+                "Protect your account with industry-standard OTP authentication, ensuring only you can log in.",
+            icon: <IconLock />,
         },
         {
-            title: "Ease of use",
+            title: "Showcase Your Skills",
             description:
-                "It's as easy as using an Apple, and as expensive as buying one.",
-            icon: <IconEaseInOut />,
+                "Link your coding profiles from GitHub, LeetCode, and more to demonstrate your expertise and achievements.",
+            icon: <IconStar />,
         },
         {
-            title: "Pricing like no other",
+            title: "Share Your Journey",
             description:
-                "Our prices are best in the market. No cap, no lock, no credit card required.",
-            icon: <IconCurrencyDollar />,
+                "Create a profile that reflects your passion and work, and easily share it with others to grow your network.",
+            icon: <IconShare />,
         },
         {
-            title: "100% Uptime guarantee",
-            description: "We just cannot be taken down by anyone.",
-            icon: <IconCloud />,
+            title: "Find Your Community",
+            description: "Search and connect with like-minded developers and engineers from across the globe based on skills and interests.",
+            icon: <IconUsers />,
         },
         {
-            title: "Multi-tenant Architecture",
-            description: "You can simply share passwords instead of buying new seats",
-            icon: <IconRouteAltLeft />,
+            title: "Collaborate Instantly",
+            description: "Start conversations, discuss projects, and brainstorm ideas with fellow developers through instant chat.",
+            icon: <IconUserPlus />,
         },
         {
-            title: "24/7 Customer Support",
+            title: "Share Your Innovations",
             description:
-                "We are available a 100% of the time. Atleast our AI Agents are.",
-            icon: <IconHelp />,
+                "Post your latest projects, get feedback, and showcase your creativity to the developer community.",
+            icon: <IconBulb />,
         },
         {
-            title: "Money back guarantee",
+            title: "Build Together",
             description:
-                "If you donot like EveryAI, we will convince you to like us.",
-            icon: <IconAdjustmentsBolt />,
+                "Form groups to collaborate, work on projects, or simply discuss ideas with others who share your vision.",
+            icon: <IconBuilding />,
         },
         {
-            title: "And everything else",
-            description: "I just ran out of copy ideas. Accept my sincere apologies",
-            icon: <IconHeart />,
+            title: "Plan Your Path",
+            description: "Follow a customized roadmap to guide your learning, hone your skills, and reach your career goals as a developer.",
+            icon: <IconMap />,
         },
     ];
     return (
