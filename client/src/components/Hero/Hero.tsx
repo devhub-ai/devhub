@@ -9,32 +9,32 @@ import { Link } from 'react-router-dom';
 export function Hero() {
     const features = [
         {
-            title: "Track issues effectively",
+            title: "Find your peer group in one search",
             description:
-                "Track and manage your project issues with ease using our intuitive interface.",
+                "Advance graph matches you with your most like minded people.",
             skeleton: <SkeletonOne />,
             className:
                 "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
         },
         {
-            title: "Capture pictures with AI",
+            title: "Make your profile and share with others",
             description:
-                "Capture stunning photos effortlessly using our advanced AI technology.",
+                "Complete your coding profile and showcase people your projects, skills and interests.",
             skeleton: <SkeletonTwo />,
             className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
         },
         {
             title: "Watch our AI on YouTube",
             description:
-                "Whether its you or Tyler Durden, you can get to know about our product on YouTube",
+                "see how our AI connects people using the graph.",
             skeleton: <SkeletonThree />,
             className:
                 "col-span-1 lg:col-span-3 lg:border-r  dark:border-neutral-800",
         },
         {
-            title: "Deploy in seconds",
+            title: "Bridge the Distance",
             description:
-                "With our blazing fast, state of the art, cutting edge, we are so back cloud servies (read AWS) - you can deploy your model in seconds.",
+                "Connect with like-minded dev. anywhere in the World!",
             skeleton: <SkeletonFour />,
             className: "col-span-1 lg:col-span-3 border-b lg:border-none",
         },
@@ -99,7 +99,7 @@ export const SkeletonOne = () => {
                 <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
                     {/* TODO */}
                     <img
-                        src="/linear.webp"
+                        src="https://static.packt-cdn.com/products/9781783987405/graphics/7405OS_07_07.jpg"
                         alt="header"
                         width={800}
                         height={800}
@@ -126,7 +126,7 @@ export const SkeletonThree = () => {
                     {/* TODO */}
                     <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto " />
                     <img
-                        src="https://assets.aceternity.com/fireship.jpg"
+                        src="https://i.pinimg.com/736x/48/77/25/487725278219aba044dcbd9ce4cae1de.jpg"
                         alt="header"
                         width={800}
                         height={800}
@@ -140,11 +140,11 @@ export const SkeletonThree = () => {
 
 export const SkeletonTwo = () => {
     const imgs = [
-        "https://imgs.unsplash.com/photo-1517322048670-4fba75cbbb62?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://imgs.unsplash.com/photo-1573790387438-4da905039392?q=80&w=3425&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://imgs.unsplash.com/photo-1555400038-63f5ba517a47?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://imgs.unsplash.com/photo-1554931670-4ebfabf6e7a9?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://imgs.unsplash.com/photo-1546484475-7f7bd55792da?q=80&w=2581&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://iili.io/dD5RK2s.png",
+        "https://iili.io/dD5RK2s.png",
+        "https://iili.io/dD5RK2s.png",
+        "https://iili.io/dD5RK2s.png",
+        "https://iili.io/dD5RK2s.png",
     ];
 
     const imgVariants = {
