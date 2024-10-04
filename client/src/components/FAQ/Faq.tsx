@@ -5,7 +5,6 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 
-
 export function Faq() {
     const faqs = [
         {
@@ -28,9 +27,9 @@ export function Faq() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1  relative z-10 py-10 max-w-7xl mx-auto">
             <h1>FAQS</h1>
-            {faqs.map(data => (
-                <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1">
+            {faqs.map((data, index) => (
+                <Accordion key={index} type="single" collapsible>
+                    <AccordionItem value={`item-${index}`}>
                         <AccordionTrigger>{data.question}</AccordionTrigger>
                         <AccordionContent>
                             {data.answer}
@@ -39,6 +38,5 @@ export function Faq() {
                 </Accordion>
             ))}
         </div>
-
     );
 }
