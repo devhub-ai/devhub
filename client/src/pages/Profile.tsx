@@ -417,27 +417,25 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
             </div>
 
             <div className="space-y-6 lg:space-y-10">
-              <div className="flex flex-col space-y-2 lg:space-y-4">
-                <h2 className="text-xl font-bold">Friends</h2>
-                {friends.length > 0 ? (
-                  friends.map((friend: string) => (
-                    <div key={friend} className="flex items-center space-x-2">
-                      <img
-                        src="/placeholder.svg"
-                        width="30"
-                        height="30"
-                        className="rounded-full"
-                        alt="Friend Avatar"
-                      />
-                      <p className="text-sm font-semibold">{friend}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    No friends yet
-                  </p>
-                )}
-              </div>
+                <div className="flex flex-col space-y-2 lg:space-y-4">
+                  <h2 className="text-xl font-bold">Friends</h2>
+                  {friends.length > 0 ? (
+                    friends.map((friend: string) => (
+                      <div key={friend} className="flex items-center space-x-2">
+                        <a
+                          href={`${backendUrl}/u/${friend}`}
+                          className="text-sm font-semibold"
+                        >
+                          {friend}
+                        </a>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      No friends yet
+                    </p>
+                  )}
+                </div>
 
               <div className="space-y-6 lg:space-y-10">
                 {leetcodeSvg ? (

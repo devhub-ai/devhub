@@ -7,47 +7,54 @@ import {
   IconNewSection,
   IconTerminal2,
 } from "@tabler/icons-react";
+import React from "react";
+
+interface Link {
+  title: string;
+  icon: React.ReactNode;
+  to: string;
+}
 
 export function Navbar() {
-  const links = [
+  const links: Link[] = [
     {
       title: "Home",
       icon: <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#top", // Scroll to top
+      to: "#top", 
     },
     {
       title: "Features",
       icon: <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#features", // Scroll to features section
+      to: "#features", 
     },
     {
       title: "FAQs",
       icon: <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#help", // Scroll to help section
+      to: "#help", 
     },
     {
       title: "DevHub",
       icon: <img src="../../../public/logo.png" width={20} height={20} alt="DevHub" />,
-      to: "#", // No scrolling
+      to: "#", 
     },
     {
       title: "DevMap",
       icon: <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#", // No scrolling
+      to: "#", 
     },
     {
       title: "Discord",
       icon: <IconBrandDiscord className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "https://discord.gg/he8QHEC8WP", // Discord link
+      to: "https://discord.gg/he8QHEC8WP", 
     },
     {
       title: "GitHub",
       icon: <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "https://github.com/devhub-ai/devhub", // GitHub link
+      to: "https://github.com/devhub-ai/devhub",
     },
   ];
 
-  const handleClick = (event, link) => {
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>, link: Link) => {
     if (link.to.startsWith("#")) {
       event.preventDefault();
       const targetElement = document.querySelector(link.to);
@@ -62,7 +69,7 @@ export function Navbar() {
       <FloatingDock
         items={links.map(link => ({
           ...link,
-          onClick: (event) => handleClick(event, link),
+          onClick: (event: React.MouseEvent<HTMLAnchorElement>) => handleClick(event, link),
         }))}
       />
     </div>

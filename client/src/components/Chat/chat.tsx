@@ -1,7 +1,7 @@
 "use client";
 
-import { PlaceholdersAndVanishInput } from "./ui/placeholders-and-vanish-input";
-import { useState, useEffect } from "react";
+import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
+import { useState } from "react";
 import axios from "axios";
 
 export function PlaceholdersAndVanishInputDemo() {
@@ -19,7 +19,7 @@ export function PlaceholdersAndVanishInputDemo() {
         "How to assemble your own PC?",
     ];
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = () => {
         // You can add any additional logic here if needed
     };
 

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { PlaceholdersAndVanishInputDemo } from "@/components/chat";
+import { PlaceholdersAndVanishInputDemo } from "@/components/Chat/chat";
 import HomeSidebar from "@/components/Sidebar/HomeSidebar";
 
 interface HomeProps {
