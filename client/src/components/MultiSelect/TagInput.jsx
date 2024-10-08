@@ -22,7 +22,7 @@ const TAGS = [
   { value: "fintech", label: "Fintech" },
 ];
 
-export default function TagInput({ selectedTags, onTagsChange }) {
+export function TagInput({ selectedTags, onTagsChange }) {
   const inputRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");

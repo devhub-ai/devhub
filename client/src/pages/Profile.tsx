@@ -21,8 +21,13 @@ interface ProfileProps {
 interface Project {
   description: string;
   repoLink: string;
-  tags: string;
+  tags: string[];
   title: string;
+  repo?: string; 
+  link?: string; 
+  language?: string; 
+  stars?: number;
+  forks?: number; 
 }
 
 interface UserResponse {
@@ -50,28 +55,28 @@ interface Language {
   percentage: string;
 }
 
-interface LeetCodeData {
-  totalSolved: number;
-  totalSubmissions: number;
-  totalQuestions: number;
-  easySolved: number;
-  totalEasy: number;
-  mediumSolved: number;
-  totalMedium: number;
-  hardSolved: number;
-  totalHard: number;
-  ranking: number;
-  contributionPoint: number;
-  reputation: number;
-  submissionCalendar: string;
-  recentSubmissions: {
-    title: string;
-    titleSlug: string;
-    timestamp: string;
-    statusDisplay: string;
-    lang: string;
-  }[];
-}
+// interface LeetCodeData {
+//   totalSolved: number;
+//   totalSubmissions: number;
+//   totalQuestions: number;
+//   easySolved: number;
+//   totalEasy: number;
+//   mediumSolved: number;
+//   totalMedium: number;
+//   hardSolved: number;
+//   totalHard: number;
+//   ranking: number;
+//   contributionPoint: number;
+//   reputation: number;
+//   submissionCalendar: string;
+//   recentSubmissions: {
+//     title: string;
+//     titleSlug: string;
+//     timestamp: string;
+//     statusDisplay: string;
+//     lang: string;
+//   }[];
+// }
 
 const Profile: React.FC<ProfileProps> = ({ onLogout, username }) => {
   return (
@@ -94,16 +99,15 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
   const { username } = useParams<{ username: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const friends = useSelector((state: RootState) => state.user.friends);
-  const friendStatus = useSelector(
-    (state: RootState) => state.user.friendStatus
-  );
+  // const friendStatus = useSelector(
+  //   (state: RootState) => state.user.friendStatus
+  // );
   const [profileData, setProfileData] = useState<UserResponse>();
   const [editing, setEditing] = useState(false);
   const [githubData, setGithubData] = useState<GitHubData | null>(null);
   const [languages, setLanguages] = useState<Language[]>([]);
   const [streakStats, setStreakStats] = useState<string | null>(null);
   const [pinnedRepos, setPinnedRepos] = useState<Project[]>([]);
-  const [leetcodeData, setLeetcodeData] = useState<LeetCodeData | null>(null);
   const [leetcodeSvg, setLeetcodeSvg] = useState(null);
   const [githubStreakSvg, setGithubStreakSvg] = useState(null);
 
@@ -248,13 +252,13 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
           data: { friend_username: loggedInUsername },
         });
         setProfileData((prev) => (prev ? { ...prev, isFriend: false } : prev));
-        dispatch(setFriendStatus(false)); // Update Redux state
+        dispatch(setFriendStatus({ username: loggedInUsername, isFriend: false })); // Updated to pass an object
       } else {
         await axios.post(`${backendUrl}/profile/${username}/friends`, {
           friend_username: loggedInUsername,
         });
         setProfileData((prev) => (prev ? { ...prev, isFriend: true } : prev));
-        dispatch(setFriendStatus(true)); // Update Redux state
+        dispatch(setFriendStatus({ username: loggedInUsername, isFriend: true })); // Updated to pass an object
       }
     } catch (error) {
       console.error("Failed to update friend status:", error);
