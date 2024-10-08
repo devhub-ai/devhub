@@ -18,10 +18,15 @@ interface ProfileProps {
   username: string;
 }
 
+export interface Tag {
+  value: string;
+  label: string;
+}
+
 interface Project {
   description: string;
   repoLink: string;
-  tags: string[];
+  tags: Tag[];
   title: string;
   repo?: string; 
   link?: string; 
