@@ -18,11 +18,12 @@ export function PlaceholdersAndVanishInputDemo() {
 		import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 	const placeholders = [
-		"What's the first rule of Fight Club?",
-		'Who is Tyler Durden?',
-		'Where is Andrew Laeddis Hiding?',
-		'Write a Javascript method to reverse a string',
-		'How to assemble your own PC?',
+		'How to set up a React project with Vite?',
+		'What is the difference between JavaScript and TypeScript?',
+		'How to implement authentication in a Next.js app?',
+		'What is a closure in JavaScript?',
+		'How to optimize React app performance?',
+		'Explain event delegation in JavaScript',
 	];
 
 	const scrollToBottom = () => {
@@ -70,7 +71,7 @@ export function PlaceholdersAndVanishInputDemo() {
 	};
 
 	return (
-		<div className='h-screen flex flex-col'>
+		<div className='h-screen md:w-[60%] w-full mx-auto justify-center flex flex-col'>
 			<h2 className='mb-4 text-xl text-center sm:text-5xl dark:text-white text-black mt-5'>
 				Start Collaborating
 			</h2>
