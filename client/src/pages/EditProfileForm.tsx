@@ -9,12 +9,17 @@ import { toast } from "sonner";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
+interface Tag {
+    value: string;
+    label: string;
+}
+
 interface Project {
     id?: number;
     title: string;
     description: string;
     repoLink: string;
-    tags: string[];
+    tags: Tag[];
 }
 
 
@@ -76,10 +81,15 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
     const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (selectedProject) {
-            setSelectedProject((prevProject: Project) => ({
-                ...prevProject,
-                [name]: value,
-            }));
+            setSelectedProject((prevProject: Project | null) => {
+                if (prevProject) {
+                    return {
+                        ...prevProject,
+                        [name]: value,
+                    };
+                }
+                return null; // or return a default Project object if you prefer
+            });
         } else {
             setNewProject((prevProject: Project) => ({
                 ...prevProject,
@@ -110,15 +120,14 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
     const handleAddProject = async () => {
         try {
             console.log("Tags:", newProject.tags);
-            const tagsString = newProject.tags.map(tag => tag.value).join(",");
+            const tagsArray = newProject.tags.map(tag => ({ value: tag, label: tag }));  // Convert Tag objects to strings
 
-
-            console.log("Adding project:", tagsString);
+            console.log("Adding project:", tagsArray);
             const response = await axios.post(`${backendUrl}/profile/${username}/projects`, {
                 title: newProject.title,
                 description: newProject.description,
                 repo_link: newProject.repoLink,
-                tags: tagsString,
+                tags: tagsArray, // Use the formatted tagsArray
             }, { withCredentials: true });
             if(response.status === 200)
                 // console.log("Project added successfully:", );
@@ -356,8 +365,8 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onProjectAdded }) => 
                     <div>
                         <Label>Project Tags</Label>
                         <TagInput
-                            selectedTags={newProject.tags}
-                            onTagsChange={(tags: string[]) => setNewProject({ ...newProject, tags })}
+                            selectedTags={newProject.tags} // This should be an array of Tag objects
+                            onTagsChange={(tags: Tag[]) => setNewProject({ ...newProject, tags })} // Ensure tags are of type Tag[]
                         />
 
                     </div>

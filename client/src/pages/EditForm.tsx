@@ -74,7 +74,7 @@ export function ProfileForm() {
         control: form.control,
     })
 
-    function onSubmit(data: ProfileFormValues) {
+    function onSubmit() {
         toast.success("Signup successful", {
             description: "You can now log in with your new account."
             
