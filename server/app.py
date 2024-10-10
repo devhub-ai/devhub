@@ -19,7 +19,7 @@ def create_app():
     bcrypt.init_app(app)
     cors.init_app(app, supports_credentials=True, resources={
         r"/*": {
-            "origins": ["http://localhost:5173", "https://devhub-ai.vercel.app"],
+            "origins": ["http://localhost:5173", "https://devhub-ai.vercel.app", "https://www.devhub.page", "https://devhub.page/"],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"]
         }
