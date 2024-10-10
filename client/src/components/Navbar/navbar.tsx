@@ -6,7 +6,9 @@ import {
   IconHome,
   IconNewSection,
   IconTerminal2,
+  IconSun
 } from "@tabler/icons-react";
+import { ModeToggle } from "../Theme/mode-toggle";
 
 export function Navbar() {
   const links = [
@@ -59,12 +61,20 @@ export function Navbar() {
 
   return (
     <div className="flex items-center justify-center mt-16 w-full">
-      <FloatingDock
-        items={links.map(link => ({
-          ...link,
-          onClick: (event) => handleClick(event, link),
-        }))}
-      />
+      <img src="../../../public/logo.png" className="size-10 mx-5" />
+      <div className="hidden md:block">
+        <FloatingDock
+          items={links.map(link => ({
+            ...link,
+            onClick: (event) => handleClick(event, link),
+          }))}
+        />
+      </div>
+      <div className="flex gap-4 md:hidden">
+        <button onClick={(e) => handleClick(e, { to: "#features" })}><IconTerminal2 className="size-10" /></button>
+        <a href="https://github.com/devhub-ai/devhub" target="_blank"><IconBrandGithub className="size-10" /></a>
+      </div>
+      <button className="px-5"><ModeToggle /></button>
     </div>
   );
 }
