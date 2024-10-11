@@ -65,6 +65,8 @@ export function Navbar() {
     }
   };
 
+
+
   const handleGithubClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     window.open("https://github.com/devhub-ai/devhub", "_blank");
@@ -82,9 +84,21 @@ export function Navbar() {
         />
       </div>
       <div className="flex gap-4 md:hidden">
-        <button onClick={(e) => handleClick(e, { to: "#features" })}><IconTerminal2 className="size-10" /></button>
-        <button onClick={(e) => handleGithubClick(e)}><IconBrandGithub className="size-10" /></button>
+        <button onClick={(e) => {
+          e.preventDefault();
+          const targetElement = document.querySelector("#features");
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+          }
+        }}>
+          <IconTerminal2 className="size-10" />
+        </button>
+        <button onClick={handleGithubClick}>
+          <IconBrandGithub className="size-10" />
+        </button>
       </div>
+
+
       <div className="px-4">
         <ModeToggle />
       </div>
