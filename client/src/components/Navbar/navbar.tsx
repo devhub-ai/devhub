@@ -35,7 +35,7 @@ export function Navbar() {
     },
     {
       title: "DevHub",
-      icon: <img src="../../../public/logo.png" width={20} height={20} alt="DevHub" />,
+      icon: <img src="https://i.ibb.co/xLbC5K7/logo.png" width={20} height={20} alt="DevHub" />,
       to: "#",
     },
     {
@@ -74,7 +74,7 @@ export function Navbar() {
 
   return (
     <div className="flex items-center justify-center mt-16 w-full">
-      <a href="/"><img src="../../../public/logo.png" className="size-10 mx-5" /></a>
+      <a href="/"><img src="https://i.ibb.co/xLbC5K7/logo.png" className="size-10 mx-5" /></a>
       <div className="hidden md:block">
         <FloatingDock
           items={links.map(link => ({
