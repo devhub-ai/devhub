@@ -21,12 +21,26 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState<boolean | null>(null);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [usernameError, setUsernameError] = useState<string>('');
   const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     const checkUsernameAvailability = async () => {
       if (username) {
         try {
+          if((username.match(/^[a-zA-Z0-9]+$/))===null){
+            setUsernameError('Username must be alphanumeric');
+            return;
+          }
+          else if(!(username.length>7)){
+            setUsernameError('Username must be greater than 7 characters');
+            return;
+          }
+          else if(!(username.length<12)){
+            setUsernameError('Username must be less than 12 characters');
+            return;
+          }
+          setUsernameError('')
           const response = await axios.get(`${backendUrl}/check_username`, {
             params: { username }
           });
@@ -36,6 +50,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         }
       } else {
         setIsUsernameAvailable(null);
+        setUsernameError('');
       }
     };
 
@@ -110,6 +125,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {isUsernameAvailable === true && (
               <p className="text-green-500">Username is available</p>
             )}
+            {
+              usernameError && <p className="text-red-500">{usernameError}</p>
+            }
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
