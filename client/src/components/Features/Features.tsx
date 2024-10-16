@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { IconLock, IconStar, IconShare, IconUsers, IconUserPlus, IconBulb, IconBuilding, IconMap } from "@tabler/icons-react";
 
 
-export function FeaturesSectionDemo() {
+export function Features() {
   const features = [
     {
       title: "Secure Your Access",
@@ -71,6 +71,7 @@ const Feature = ({
   index: number;
 }) => {
   return (
+    <>
     <div
       className={cn(
         "flex flex-col lg:border-r  py-10 relative group/feature dark:border-neutral-800 ml-5",
@@ -97,5 +98,7 @@ const Feature = ({
         {description}
       </p>
     </div>
+    </>
+    
   );
 };

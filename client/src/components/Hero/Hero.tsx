@@ -42,7 +42,6 @@ export function Hero() {
   return (
     <div className="relative z-20 py-20 lg:py-20 max-w-7xl mx-auto">
       <div className="relative ">
-        <h2 className="text-center text-3xl font-semibold mb-4">Features</h2>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-6 xl:border rounded-md dark:border-neutral-800 h-[140rem] lg:h-[60rem]">
           {features.map((feature) => (
             <FeatureCard key={feature.title} className={feature.className}>
