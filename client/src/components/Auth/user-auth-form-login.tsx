@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -30,8 +30,11 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
     try {
       const response = await axios.post(`${backendUrl}/login`, { username, password }, { withCredentials: true });
       if (response.status === 200) {
+
+        localStorage.setItem('devhub_username', username);
+
         if (onLoginSuccess) {
-          onLoginSuccess(username); // Pass the username to the callback
+          onLoginSuccess(username); 
         }
         navigate('/home');
       }

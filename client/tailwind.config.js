@@ -72,6 +72,16 @@ module.exports = {
           to: {
             transform: "translate(calc(-50% - 0.5rem))",
           },
+          spotlight: {
+            "0%": {
+              opacity: 0,
+              transform: "translate(-72%, -62%) scale(0.5)",
+            },
+            "100%": {
+              opacity: 1,
+              transform: "translate(-50%,-40%) scale(1)",
+            },
+          },
         },
         "accordion-down": {
           from: { height: "0" },
@@ -83,6 +93,7 @@ module.exports = {
         },
       },
       animation: {
+        spotlight: "spotlight 2s ease .75s 1 forwards",
         scroll:
           "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -91,7 +102,7 @@ module.exports = {
     },
   },
   plugins: [
-    addVariablesForColors,
+    [addVariablesForColors],
     function ({ matchUtilities, theme }: any) {
       matchUtilities(
         {

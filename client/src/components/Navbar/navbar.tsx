@@ -20,32 +20,32 @@ export function Navbar() {
     {
       title: "Home",
       icon: <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#top", 
+      to: "#top",
     },
     {
       title: "Features",
       icon: <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#features", 
+      to: "#features",
     },
     {
       title: "FAQs",
       icon: <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#help", 
+      to: "#help",
     },
     {
       title: "DevHub",
-      icon: <img src="../../../public/logo.png" width={20} height={20} alt="DevHub" />,
-      to: "#", 
+      icon: <img src="https://i.ibb.co/xLbC5K7/logo.png" width={20} height={20} alt="DevHub" />,
+      to: "#",
     },
     {
       title: "DevMap",
       icon: <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "#", 
+      to: "#",
     },
     {
       title: "Discord",
       icon: <IconBrandDiscord className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      to: "https://discord.gg/he8QHEC8WP", 
+      to: "https://discord.gg/he8QHEC8WP",
     },
     {
       title: "GitHub",
@@ -66,12 +66,16 @@ export function Navbar() {
 
   return (
     <div className="flex items-center justify-center mt-16 w-full">
-      <FloatingDock
-        items={links.map(link => ({
-          ...link,
-          onClick: (event: React.MouseEvent<HTMLAnchorElement>) => handleClick(event, link),
-        }))}
-      />
+      <div className="hidden md:block">
+        <FloatingDock
+          items={links.map(link => ({
+            ...link,
+            onClick: (event: React.MouseEvent<HTMLAnchorElement>) => handleClick(event, link),
+          }))}
+        />
+      </div>
+      <div className="px-4">
+      </div>
     </div>
   );
 }
