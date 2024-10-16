@@ -8,7 +8,6 @@ import {
   IconTerminal2,
 } from "@tabler/icons-react";
 import React from "react";
-import { ModeToggle } from "../Theme/mode-toggle";
 
 interface Link {
   title: string;
@@ -65,16 +64,8 @@ export function Navbar() {
     }
   };
 
-
-
-  const handleGithubClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    window.open("https://github.com/devhub-ai/devhub", "_blank");
-  }
-
   return (
     <div className="flex items-center justify-center mt-16 w-full">
-      <a href="/"><img src="https://i.ibb.co/xLbC5K7/logo.png" className="size-10 mx-5" /></a>
       <div className="hidden md:block">
         <FloatingDock
           items={links.map(link => ({
@@ -83,24 +74,7 @@ export function Navbar() {
           }))}
         />
       </div>
-      <div className="flex gap-4 md:hidden">
-        <button onClick={(e) => {
-          e.preventDefault();
-          const targetElement = document.querySelector("#features");
-          if (targetElement) {
-            targetElement.scrollIntoView({ behavior: "smooth" });
-          }
-        }}>
-          <IconTerminal2 className="size-10" />
-        </button>
-        <button onClick={handleGithubClick}>
-          <IconBrandGithub className="size-10" />
-        </button>
-      </div>
-
-
       <div className="px-4">
-        <ModeToggle />
       </div>
     </div>
   );
