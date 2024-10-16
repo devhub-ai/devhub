@@ -10,52 +10,18 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import { Toaster } from "@/components/ui/sonner";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-
 const App: React.FC = () => {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [username, setUsername] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/check_auth`, { withCredentials: true });
-        if (response.data.authenticated) {
-          setAuthenticated(true);
-          setUsername(response.data.username);
-        } else {
-          setAuthenticated(false);
-        }
-      } catch (error) {
-        console.error('Failed to check authentication status:', error);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      const response = await axios.get(`${backendUrl}/logout`, { withCredentials: true });
-      if (response.data.message === 'Logout successful') {
-        setAuthenticated(false);
-        setUsername(null);
-      }
-    } catch (error) {
-      console.error('Failed to logout:', error);
-    }
-  };
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Router>
         <Routes>
-          <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Landing />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login onLoginSuccess={(username: string) => { setAuthenticated(true); setUsername(username); }} />} />
-          <Route path="/home" element={authenticated ? <Home onLogout={handleLogout} username={username || ''} /> : <Navigate to="/" />} />
-          <Route path="/u/:username" element={<Profile onLogout={handleLogout} username={username || ''} />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/u/:username" element={<Profile />} />
+          <Route path="*" element={<div>404</div>} />
         </Routes>
       </Router>
       <Toaster />

@@ -4,7 +4,6 @@ import axios from "axios";
 import EditProfileForm from "./EditProfileForm";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import HomeSidebar from "@/components/Sidebar/HomeSidebar";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../lib/store";
@@ -12,11 +11,6 @@ import { setFriends, setFriendStatus } from "../lib/userSlice";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-
-interface ProfileProps {
-  onLogout: () => void;
-  username: string;
-}
 
 export interface Tag {
   value: string;
@@ -28,11 +22,11 @@ interface Project {
   repoLink: string;
   tags: Tag[];
   title: string;
-  repo?: string; 
-  link?: string; 
-  language?: string; 
+  repo?: string;
+  link?: string;
+  language?: string;
   stars?: number;
-  forks?: number; 
+  forks?: number;
 }
 
 interface UserResponse {
@@ -60,53 +54,21 @@ interface Language {
   percentage: string;
 }
 
-// interface LeetCodeData {
-//   totalSolved: number;
-//   totalSubmissions: number;
-//   totalQuestions: number;
-//   easySolved: number;
-//   totalEasy: number;
-//   mediumSolved: number;
-//   totalMedium: number;
-//   hardSolved: number;
-//   totalHard: number;
-//   ranking: number;
-//   contributionPoint: number;
-//   reputation: number;
-//   submissionCalendar: string;
-//   recentSubmissions: {
-//     title: string;
-//     titleSlug: string;
-//     timestamp: string;
-//     statusDisplay: string;
-//     lang: string;
-//   }[];
-// }
-
-const Profile: React.FC<ProfileProps> = ({ onLogout, username }) => {
-  return (
-    <div
-      className={cn(
-        "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full flex-1 mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden"
-      )}
-    >
-      <HomeSidebar onLogout={onLogout} username={username} />
-      <Dashboard loggedInUsername={username} />
-    </div>
-  );
-};
+// const Profile = () => {
+//   const { username } = useParams<{ username: string }>();
+//   return (
+    
+//   );
+// };
 
 interface DashboardProps {
-  loggedInUsername: string;
+  username: string;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
-  const { username } = useParams<{ username: string }>();
+const Profile: React.FC<DashboardProps> = ({ username }) => {
   const dispatch = useDispatch<AppDispatch>();
   const friends = useSelector((state: RootState) => state.user.friends);
-  // const friendStatus = useSelector(
-  //   (state: RootState) => state.user.friendStatus
-  // );
+  const loggedInUsername = useSelector((state: RootState) => state.auth.username);
   const [profileData, setProfileData] = useState<UserResponse>();
   const [editing, setEditing] = useState(false);
   const [githubData, setGithubData] = useState<GitHubData | null>(null);
@@ -243,9 +205,9 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
     setProfileData((prevData) =>
       prevData
         ? {
-            ...prevData,
-            projects: [...prevData.projects, newProject],
-          }
+          ...prevData,
+          projects: [...prevData.projects, newProject],
+        }
         : prevData
     );
   };
@@ -316,261 +278,106 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUsername }) => {
               </div>
               <div className="space-y-2">
                 <p className="font-semibold">Bio</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {profileData.bio}
-                </p>
+                <p>{profileData.bio || "This user hasn't added a bio yet."}</p>
               </div>
               <div className="space-y-2">
-                <p className="font-semibold">Email</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {profileData.email}
-                </p>
-              </div>
-              {/* <div className="space-y-2">
-                                <p className="font-semibold">Github</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    {profileData.githubUsername}
-                                </p>
-                            </div>
-                            <div className="space-y-2">
-                                <p className="font-semibold">Leetcode</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    {profileData.leetcodeUsername}
-                                </p>
-                            </div> */}
-
-              <div className="flex space-x-6">
-                <a
-                  href={`https://github.com/${profileData.githubUsername}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-500 dark:text-gray-400 flex items-center space-x-1 hover:text-blue-500 transition-colors duration-200"
-                >
-                  <FaExternalLinkAlt className="text-blue-500" />
-                  <span className="font-semibold">GitHub</span>
-                </a>
-                <a
-                  href={`https://leetcode.com/${profileData.leetcodeUsername}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-500 dark:text-gray-400 flex items-center space-x-1 hover:text-orange-500 transition-colors duration-200"
-                >
-                  <FaExternalLinkAlt className="text-orange-500" />
-                  <span className="font-semibold">LeetCode</span>
-                </a>
-              </div>
-              <div className="space-y-2 lg:space-y-4">
-                <h2 className="text-sl font-bold">Top Languages</h2>
+                <p className="font-semibold">Top Languages</p>
                 {languages.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {languages.map((lang, index) => (
-                      <span
-                        key={index}
-                        className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm font-medium"
-                      >
-                        {lang.language}: {lang.percentage}
-                      </span>
-                    ))}
-                  </div>
+                  languages.map((lang) => (
+                    <p key={lang.language}>
+                      {lang.language}: {lang.percentage}%
+                    </p>
+                  ))
                 ) : (
-                  <p>Loading languages...</p>
+                  <p>No languages data available.</p>
                 )}
               </div>
-
-              <div className="space-y-2 lg:space-y-4">
-                {streakStats ? (
-                  <div dangerouslySetInnerHTML={{ __html: streakStats }} />
-                ) : (
-                  <p>Loading streak stats...</p>
-                )}
-              </div>
-
-              {!isOwnProfile && (
-                <Button className="w-full" onClick={handleFriendRequest}>
-                  {profileData.isFriend ? "Disconnect" : "Connect"}
-                </Button>
-              )}
-
-              {isOwnProfile && (
-                <Button className="w-full" onClick={() => setEditing(true)}>
-                  Update Profile
-                </Button>
-              )}
             </div>
-
-            <div className="space-y-6 lg:space-y-10">
-              <div className="flex flex-col space-y-2 lg:space-y-4">
-                <div className="flex items-center space-x-2">
-                  <h2 className="text-xl font-bold">Projects</h2>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {profileData.projects.map((project: Project) => (
-                  <Card key={project.title}>
-                    <CardHeader className="flex flex-col gap-1">
-                      <div className="flex items-center gap-2">
-                        <div className="text-sm">
-                          <div className="font-semibold">{project.title}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">
-                            @{profileData.username}
-                          </div>
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <h2 className="text-lg font-bold">Pinned Projects</h2>
+                </CardHeader>
+                <CardContent>
+                  {pinnedRepos.length > 0 ? (
+                    pinnedRepos.map((project) => (
+                      <div key={project.repoLink} className="mb-4">
+                        <h3 className="text-lg font-bold">{project.title}</h3>
+                        <p>{project.description}</p>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {project.tags.map((tag, index) => (
+                            <span
+                              key={index}
+                              className="px-2 py-1 text-xs bg-gray-200 rounded dark:bg-neutral-700"
+                            >
+                              {tag.label}
+                            </span>
+                          ))}
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p>{project.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-6 lg:space-y-10">
-                <div className="flex flex-col space-y-2 lg:space-y-4">
-                  <h2 className="text-xl font-bold">Friends</h2>
-                  {friends.length > 0 ? (
-                    friends.map((friend: string) => (
-                      <div key={friend} className="flex items-center space-x-2">
-                        <a
-                          href={`${backendUrl}/u/${friend}`}
-                          className="text-sm font-semibold"
-                        >
-                          {friend}
-                        </a>
+                        {project.repoLink && (
+                          <a
+                            href={project.repoLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center mt-2 text-blue-600 dark:text-blue-400"
+                          >
+                            GitHub Repo <FaExternalLinkAlt className="ml-1" />
+                          </a>
+                        )}
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      No friends yet
-                    </p>
+                    <p>No pinned projects available.</p>
                   )}
-                </div>
-
-              <div className="space-y-6 lg:space-y-10">
-                {leetcodeSvg ? (
-                  <div dangerouslySetInnerHTML={{ __html: leetcodeSvg }} />
-                ) : (
-                  <p>Loading LeetCode data...</p>
-                )}
-              </div>
-
-              {githubData ? (
-                <div className="space-y-4">
-                  <h2 className="text-xl font-bold">GitHub Profile Summary</h2>
-
-                  <div className="flex items-center space-x-6">
-                    <div className="flex-1 text-center">
-                      <p className="font-semibold">{githubData.public_repos}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Repositories
-                      </p>
-                    </div>
-                    <div className="flex-1 text-center">
-                      <p className="font-semibold">{githubData.followers}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Followers
-                      </p>
-                    </div>
-                    <div className="flex-1 text-center">
-                      <p className="font-semibold">{githubData.following}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Following
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <p>Loading GitHub data...</p>
-              )}
-              {githubStreakSvg ? (
-                <div dangerouslySetInnerHTML={{ __html: githubStreakSvg }} />
-              ) : (
-                <p>Loading GitHub streak chart...</p>
-              )}
+                </CardContent>
+              </Card>
+            </div>
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <h2 className="text-lg font-bold">GitHub Streak</h2>
+                </CardHeader>
+                <CardContent>
+                  {githubStreakSvg ? (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: githubStreakSvg }}
+                    />
+                  ) : (
+                    <p>No streak data available.</p>
+                  )}
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <h2 className="text-lg font-bold">LeetCode Stats</h2>
+                </CardHeader>
+                <CardContent>
+                  {leetcodeSvg ? (
+                    <div dangerouslySetInnerHTML={{ __html: leetcodeSvg }} />
+                  ) : (
+                    <p>No LeetCode stats available.</p>
+                  )}
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <h2 className="text-lg font-bold">Friend Status</h2>
+                </CardHeader>
+                <CardContent>
+                  {isOwnProfile ? (
+                    <p>You can't add yourself as a friend.</p>
+                  ) : (
+                    <Button onClick={handleFriendRequest} variant="primary">
+                      {profileData.isFriend
+                        ? "Remove Friend"
+                        : "Add Friend"}
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </div>
         )}
-
-        <div>
-          <h2 className="text-xl font-bold">Pinned Repositories:</h2>
-          {pinnedRepos.length > 0 ? (
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-              {pinnedRepos.map((repo, index) => (
-                <a
-                  key={index}
-                  href={repo.repoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="repo-card p-4 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-transform transform hover:translate-y-[-2px]"
-                >
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="flex items-center space-x-2">
-                      <h6 className="text-gray-700 dark:text-gray-300">
-                        {repo.repo}
-                      </h6>
-                    </div>
-                    <a
-                      href={repo.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center"
-                    >
-                      <img
-                        src="../../src/assets/open.svg"
-                        alt="Open in new tab"
-                        className="w-5 h-5 cursor-pointer"
-                      />
-                    </a>
-                  </div>
-
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {repo.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {repo.description}
-                  </p>
-                  <div className="flex justify-between items-center mt-3">
-                    <div className="flex items-center space-x-2">
-                      <span className="dot" />
-                      <h6 className="text-sm text-gray-700 dark:text-gray-300">
-                        {repo.language}
-                      </h6>
-
-                      {repo.stars && (
-                        <div className="flex items-center space-x-1">
-                          <img
-                            src="../../src/assets/star.svg"
-                            alt="Star"
-                            className="w-4 h-4"
-                          />
-                          <h6 className="text-sm text-gray-700 dark:text-gray-300">
-                            {repo.stars}
-                          </h6>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex space-x-4">
-                      {repo.forks != null && repo.forks > 0 && (
-                        <div className="flex items-center space-x-1">
-                          <img
-                            src="../../src/assets/fork.svg"
-                            alt="Fork"
-                            className="w-4 h-4"
-                          />
-                          <h6 className="text-sm text-gray-700 dark:text-gray-300">
-                            {repo.forks}
-                          </h6>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <p>No pinned repositories found.</p>
-          )}
-        </div>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -11,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 interface PasswordRules {
   minLength: boolean;
   containsUpper: boolean;
@@ -26,18 +25,15 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
-  const [isUsernameAvailable, setIsUsernameAvailable] = useState<
-    boolean | null
-  >(null);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState<boolean | null>(null);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [usernameError, setUsernameError] = useState<string>("");
-  const [passwordRules, setPasswordRules] = useState<PasswordRules | null>(
-    null
-  );
+  const [passwordRules, setPasswordRules] = useState<PasswordRules | null>(null);
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
+  // Username availability check with debounce
   useEffect(() => {
     const checkUsernameAvailability = async () => {
       if (username) {
@@ -56,10 +52,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             return;
           }
           setUsernameError("");
-          const response = await axios.get(`${backendUrl}/check_username`, {
-            params: { username },
-          });
-          setIsUsernameAvailable(response.data.available);
+
+          const response = await fetch(`${backendUrl}/check_username?username=${username}`);
+          const data = await response.json();
+          setIsUsernameAvailable(data.available);
         } catch (error) {
           console.error("Error checking username availability:", error);
         }
@@ -76,6 +72,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     return () => clearTimeout(delayDebounceFn);
   }, [username]);
 
+  // Password validation rules
   const validatePassword = (password: string): PasswordRules => {
     return {
       minLength: password.length >= 6,
@@ -107,6 +104,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     noWhitespace: "Should not contain spaces.",
   };
 
+  // Form submission handler
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
@@ -116,7 +114,19 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
 
     try {
-      await axios.post(`${backendUrl}/signup`, { username, email, password });
+      const response = await fetch(`${backendUrl}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Signup failed");
+      }
+
       toast.success("Signup successful", {
         description: "You can now log in with your new account.",
         action: {
@@ -124,26 +134,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           onClick: () => navigate("/login"),
         },
       });
-      navigate("/login"); // Redirect to login page on successful signup
-    } catch (err: any) {
-      if (err.response && err.response.data && err.response.data.message) {
-        toast.error(err.response.data.message, {
-          description: "Please check your details and try again.",
-          action: {
-            label: "Try again",
-            onClick: () => console.log("Try again clicked"),
-          },
-        });
-      } else {
-        toast.error("Signup failed", {
-          description: "There was a problem with your request.",
-          action: {
-            label: "Try again",
-            onClick: () => console.log("Try again clicked"),
-          },
-        });
-      }
-      console.error("Error during signup:", err);
+      navigate("/login");
+    } catch (error) {
+      toast.error(`Signup failed ${error}`, {
+        description: "Please check your details and try again.",
+        action: {
+          label: "Try again",
+          onClick: () => console.log("Try again clicked"),
+        },
+      });
+      console.error("Error during signup:", error);
     } finally {
       setIsLoading(false);
     }

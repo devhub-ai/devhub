@@ -1,8 +1,10 @@
-'use client';
-
+import Sidebar from "../Sidebar/Sidebar";
+import MobileSidebar from "../MobileSidebar/MobileSidebar";
 import { PlaceholdersAndVanishInput } from '../ui/placeholders-and-vanish-input';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 interface Message {
 	query: string;
@@ -10,12 +12,11 @@ interface Message {
 	isLoading?: boolean;
 }
 
-export function PlaceholdersAndVanishInputDemo() {
+export default function Chat() {
 	const [messages, setMessages] = useState<Array<Message>>([]);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	const backendUrl =
-		import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 
 	const placeholders = [
 		'How to set up a React project with Vite?',
@@ -29,19 +30,47 @@ export function PlaceholdersAndVanishInputDemo() {
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 	};
-
 	useEffect(() => {
 		scrollToBottom();
 	}, [messages]);
 
-	const handleChange = () => {
-		// Additional logic can be added here
-	};
+	const username = localStorage.getItem('devhub_username');
+
+	useEffect(() => {
+		const fetchChatHistory = async () => {
+			if (!username) {
+				console.error('Username not found in localStorage');
+				return;
+			}
+
+			try {
+				const result = await axios.get(`${backendUrl}/chat_history`, {
+					params: { username },
+					withCredentials: true
+				});
+
+				const chatHistory =
+					result.data.chat_history.length > 0
+						? result.data.chat_history
+						: [{ query: 'Hi', response: 'Welcome to DevHub!' }];
+				setMessages(chatHistory);
+			} catch (error) {
+				console.error('Error fetching chat history:', error);
+			}
+		};
+
+		fetchChatHistory();
+	}, [username]);
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const query = e.currentTarget.querySelector('input')?.value;
 		if (!query) return;
+
+		if (!username) {
+			console.error('Username not found in localStorage');
+			return;
+		}
 
 		setMessages((prevMessages) => [
 			...prevMessages,
@@ -49,7 +78,8 @@ export function PlaceholdersAndVanishInputDemo() {
 		]);
 
 		try {
-			const result = await axios.post(`${backendUrl}/chat`, { query });
+			const result = await axios.post(`${backendUrl}/chat`, { query, username }, { withCredentials: true });
+
 			setMessages((prevMessages) => {
 				const newMessages = [...prevMessages];
 				const lastMessage = newMessages[newMessages.length - 1];
@@ -62,50 +92,46 @@ export function PlaceholdersAndVanishInputDemo() {
 			setMessages((prevMessages) => {
 				const newMessages = [...prevMessages];
 				const lastMessage = newMessages[newMessages.length - 1];
-				lastMessage.response =
-					'An error occurred while processing your request.';
+				lastMessage.response = 'An error occurred while processing your request.';
 				lastMessage.isLoading = false;
 				return newMessages;
 			});
 		}
 	};
-
 	return (
-		<div className='h-screen md:w-[60%] w-full mx-auto justify-center flex flex-col'>
-			<h2 className='mb-4 text-xl text-center sm:text-5xl dark:text-white text-black mt-5'>
-				Start Collaborating
-			</h2>
-			<div className='flex-grow overflow-y-auto px-4'>
-				{messages.map((message, index) => (
-					<div
-						key={index}
-						className='mb-4'>
-						<div className='flex justify-end mb-2'>
-							<div className='bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg max-w-[80%]'>
+		<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+			<Sidebar />
+			<div className="flex flex-col h-screen">
+				<header className="sticky top-0 z-10 bg-background border-b">
+					<MobileSidebar />
+				</header>
+				<div className='h-screen md:w-[60%] w-full mx-auto justify-center flex flex-col'>
+					<div className='flex-grow overflow-y-auto px-4'>
+						{messages.map((message, index) => (
+							<div key={index} className='mb-4'>
+
 								<p className='font-bold'>You:</p>
 								<p>{message.query}</p>
-							</div>
-						</div>
-						<div className='flex justify-start'>
-							<div className='bg-zinc-200 dark:bg-zinc-700 p-3 rounded-lg max-w-[80%]'>
+
+
 								<p className='font-bold'>AI:</p>
 								{message.isLoading ? (
 									<p>Loading...</p>
 								) : (
 									<p>{message.response}</p>
 								)}
+
 							</div>
-						</div>
+						))}
+						<div ref={messagesEndRef} />
 					</div>
-				))}
-				<div ref={messagesEndRef} />
-			</div>
-			<div className='p-4 mb-auto'>
-				<PlaceholdersAndVanishInput
-					placeholders={placeholders}
-					onChange={handleChange}
-					onSubmit={onSubmit}
-				/>
+					<div className='p-4 mb-auto'>
+						<PlaceholdersAndVanishInput
+							placeholders={placeholders}
+							onSubmit={onSubmit}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

@@ -1,14 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/Auth/user-auth-form-login";
 
-interface LoginProps {
-  onLoginSuccess: (username: string) => void;
-}
+const Login = () => {
+  const navigate = useNavigate();
 
-const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('devhub_username');
+    if (storedUsername) {
+      navigate('/home');
+    }
+  }, [navigate]);
+
   return (
     <div className="container relative h-screen flex flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
@@ -50,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               Enter your details below to Login to your account
             </p>
           </div>
-          <UserAuthForm onLoginSuccess={(username: string) => onLoginSuccess(username)} />
+          <UserAuthForm/>
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
             <Link
@@ -71,7 +76,6 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         </div>
       </div>
     </div>
-
   );
 };
 
