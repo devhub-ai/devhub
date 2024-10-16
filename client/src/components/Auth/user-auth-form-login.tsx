@@ -35,7 +35,7 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
         }
         navigate('/home');
       }
-    } catch (err: any) {
+    } catch (err:any) {
       if (err.response && err.response.data && err.response.data.message) {
         toast.error(err.response.data.message, {
           description: "Please check your details and try again.",
