@@ -17,7 +17,7 @@ interface Message {
 	isTypingFinished?: boolean // Track typing completion per message
 }
 
-export default function Chat() {
+export function Chat() {
 	const [messages, setMessages] = useState<Array<Message>>([])
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 

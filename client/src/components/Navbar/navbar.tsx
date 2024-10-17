@@ -15,7 +15,7 @@ interface Link {
   to: string;
 }
 
-export default function Navbar() {
+export function Navbar() {
   const links: Link[] = [
     {
       title: "Home",
