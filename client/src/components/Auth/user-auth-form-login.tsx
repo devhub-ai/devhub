@@ -75,6 +75,7 @@ export function UserAuthForm() {
               disabled={isLoading}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              className='dark:bg-zinc-900'
             />
           </div>
           <div className="grid gap-1">
@@ -89,6 +90,7 @@ export function UserAuthForm() {
               disabled={isLoading}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className='dark:bg-zinc-900'
             />
           </div>
           <Button disabled={isLoading}>

@@ -184,7 +184,7 @@ const SkeletonFour = () => {
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
         <img
-          src="https://pbs.twimg.com/profile_imgs/1417752099488636931/cs2R59eW_400x400.jpg"
+          src="https://cdn3d.iconscout.com/3d/premium/thumb/person-3d-icon-download-in-png-blend-fbx-gltf-file-formats--cap-hat-winter-man-avatar-male-pack-people-icons-5638294.png?f=webp"
           alt="avatar"
           height="100"
           width="100"
@@ -194,12 +194,12 @@ const SkeletonFour = () => {
           Just code in Vanilla Javascript
         </p>
         <p className="border border-red-500 bg-red-100 dark:bg-red-900/20 text-red-600 text-xs rounded-full px-2 py-0.5 mt-4">
-          Delusional
+          Developer 🧑🏻‍💻
         </p>
       </motion.div>
       <motion.div className="h-full relative z-20 w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center">
         <img
-          src="https://pbs.twimg.com/profile_imgs/1417752099488636931/cs2R59eW_400x400.jpg"
+          src="https://cdn3d.iconscout.com/3d/premium/thumb/happy-man-3d-icon-download-in-png-blend-fbx-gltf-file-formats--young-boy-stylist-character-avatar-pack-avatars-icons-4786136.png?f=webp"
           alt="avatar"
           height="100"
           width="100"
@@ -209,7 +209,7 @@ const SkeletonFour = () => {
           Tailwind CSS is cool, you know
         </p>
         <p className="border border-green-500 bg-green-100 dark:bg-green-900/20 text-green-600 text-xs rounded-full px-2 py-0.5 mt-4">
-          Sensible
+          UI/UX
         </p>
       </motion.div>
       <motion.div
@@ -217,7 +217,7 @@ const SkeletonFour = () => {
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
         <img
-          src="https://pbs.twimg.com/profile_imgs/1417752099488636931/cs2R59eW_400x400.jpg"
+          src="https://cdn3d.iconscout.com/3d/premium/thumb/man-3d-illustration-download-in-png-blend-fbx-gltf-file-formats--fashion-human-person-avatar-pack-people-illustrations-4107676.png?f=webp"
           alt="avatar"
           height="100"
           width="100"
@@ -227,7 +227,7 @@ const SkeletonFour = () => {
           I love angular, RSC, and Redux.
         </p>
         <p className="border border-orange-500 bg-orange-100 dark:bg-orange-900/20 text-orange-600 text-xs rounded-full px-2 py-0.5 mt-4">
-          Helpless
+          Backend 🚀
         </p>
       </motion.div>
     </motion.div>
@@ -270,7 +270,7 @@ const SkeletonFive = () => {
         className="flex flex-row rounded-2xl border border-neutral-100 dark:border-white/[0.2] p-2  items-start space-x-2 bg-white dark:bg-black"
       >
         <img
-          src="https://pbs.twimg.com/profile_imgs/1417752099488636931/cs2R59eW_400x400.jpg"
+          src="https://i.ibb.co/kh28sVv/cropped-image.png"
           alt="avatar"
           height="100"
           width="100"
@@ -293,10 +293,10 @@ const SkeletonFive = () => {
 };
 const items = [
   {
-    title: "AI Content Generation",
+    title: "Chat with Devhub Model",
     description: (
       <span className="text-sm">
-        Experience the power of AI in generating unique content.
+        Experience the power of AI and Graph db to find people.
       </span>
     ),
     header: <SkeletonOne />,
@@ -304,10 +304,10 @@ const items = [
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Automated Proofreading",
+    title: "Explore Community",
     description: (
       <span className="text-sm">
-        Let AI handle the proofreading of your documents.
+        Gather people with similar interests and work together
       </span>
     ),
     header: <SkeletonTwo />,
@@ -315,10 +315,10 @@ const items = [
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Contextual Suggestions",
+    title: "Showcase your projects",
     description: (
       <span className="text-sm">
-        Get AI-powered suggestions based on your writing context.
+        Present your Project to everyone and get a chance to win badge
       </span>
     ),
     header: <SkeletonThree />,
@@ -326,10 +326,10 @@ const items = [
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Sentiment Analysis",
+    title: "Create your profile ",
     description: (
       <span className="text-sm">
-        Understand the sentiment of your text with AI analysis.
+        People judge you by your amazing profiles
       </span>
     ),
     header: <SkeletonFour />,
@@ -338,10 +338,10 @@ const items = [
   },
 
   {
-    title: "Text Summarization",
+    title: "Chat with users",
     description: (
       <span className="text-sm">
-        Summarize your lengthy documents with AI technology.
+        Know each other by our chat feature
       </span>
     ),
     header: <SkeletonFive />,

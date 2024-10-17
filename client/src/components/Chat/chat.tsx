@@ -4,6 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input'
 import Sidebar from "@/components/Sidebar/Sidebar"
 import MobileSidebar from "@/components/MobileSidebar/MobileSidebar"
+import { Skeleton } from "@/components/ui/skeleton"
+import Typewriter from 'typewriter-effect'
+import ReactMarkdown from 'react-markdown';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -11,6 +14,7 @@ interface Message {
 	query: string
 	response: string
 	isLoading?: boolean
+	isTypingFinished?: boolean // Track typing completion per message
 }
 
 export default function Chat() {
@@ -54,7 +58,7 @@ export default function Chat() {
 				const chatHistory =
 					result.data.chat_history.length > 0
 						? result.data.chat_history
-						: [{ query: 'Hi', response: 'Welcome to DevHub!' }]
+						: [{ query: '', response: 'Welcome to DevHub!' }]
 				setMessages(chatHistory)
 			} catch (error) {
 				console.error('Error fetching chat history:', error)
@@ -76,7 +80,7 @@ export default function Chat() {
 
 		setMessages((prevMessages) => [
 			...prevMessages,
-			{ query, response: '', isLoading: true },
+			{ query, response: '', isLoading: true, isTypingFinished: false }, // Initialize isTypingFinished for each message
 		])
 
 		try {
@@ -109,44 +113,66 @@ export default function Chat() {
 					<MobileSidebar />
 				</header>
 				<main className="flex flex-col flex-grow p-4 overflow-hidden">
-					<div className="flex flex-col h-full md:w-[80%] lg:w-[70%] xl:w-[60%] mx-auto flex-grow overflow-y-auto p-4" ref={scrollAreaRef}>
-						<div className="space-y-4 p-4">
+					<div className="flex flex-col h-full w-full md:w-[80%] lg:w-[70%] xl:w-[60%] mx-auto flex-grow overflow-y-auto p-1" ref={scrollAreaRef}>
+						<div className="space-y-4">
 							{messages.map((message, index) => (
-								<div key={index} className="mb-6 last:mb-0">
+								<div key={index} className="last:mb-0">
 									<div className="flex items-start justify-end">
-										<div className="flex-grow text-right p-4">
+										<div className="flex-grow text-right">
 											<p className="text-sm">{message.query}</p>
 										</div>
-										
 									</div>
-									<div className="flex items-start mb-4">
+									<div className="flex items-start mb-4 mt-1">
 										<Avatar className="mr-4">
 											<AvatarImage src="/ai-avatar.png" alt="dh" />
 											<AvatarFallback>dh</AvatarFallback>
 										</Avatar>
-										<div className="flex-grow mt-2">
+										<div className="flex-grow mt-2" style={{ maxWidth: '70%' }}> {/* Set maxWidth to 70% */}
 											{message.isLoading ? (
-												<p className="text-muted-foreground">Thinking...</p>
+												<>
+													<Skeleton className="h-4 w-[250px]" />
+													<Skeleton className="h-4 w-[290px] mt-1" />
+												</>
 											) : (
-												<p className="text-sm">{message.response}</p>
+												index === messages.length - 1 && !message.isTypingFinished ? (
+													<Typewriter
+														onInit={(typewriter) => {
+															typewriter.typeString(message.response)
+																.callFunction(() => {
+																	setMessages((prevMessages) => {
+																		const newMessages = [...prevMessages]
+																		const lastMessage = newMessages[newMessages.length - 1]
+																		lastMessage.isTypingFinished = true
+																		return newMessages
+																	})
+																})
+																.pauseFor(500)
+																.start();
+														}}
+														options={{
+															delay: 2,
+														}}
+													/>
+												) : (
+													<ReactMarkdown className="text-sm">{message.response}</ReactMarkdown>
+												)
 											)}
 										</div>
 									</div>
-
 								</div>
+
 							))}
 						</div>
-
 					</div>
 				</main>
-				
-					<div className="p-4">
-						<PlaceholdersAndVanishInput
-							placeholders={placeholders}
-							onSubmit={onSubmit}
-						/>
-					</div>
+
+				<div className="p-4">
+					<PlaceholdersAndVanishInput
+						placeholders={placeholders}
+						onSubmit={onSubmit}
+					/>
 				</div>
 			</div>
+		</div>
 	)
 }

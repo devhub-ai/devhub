@@ -15,7 +15,7 @@ const Login = () => {
   }, [navigate]);
 
   return (
-    <div className="container relative h-screen flex flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="container relative h-screen flex flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-2 lg:px-0 dark:bg-zinc-900">
       <Link
         to="/signup"
         className={cn(

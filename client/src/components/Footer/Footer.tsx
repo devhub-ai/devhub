@@ -9,7 +9,7 @@ const Footer = () => {
                                 <img
                                     src="https://i.ibb.co/kh28sVv/cropped-image.png"
                                   className="h-8 me-3"
-                                  alt="FlowBite Logo"
+                                  alt="Devhub Logo"
                               />
                                 <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                                     Devhub
@@ -41,7 +41,7 @@ const Footer = () => {
                                 <ul className="text-gray-500 dark:text-gray-400 font-medium">
                                     <li className="mb-4">
                                         <a
-                                            href="/"
+                                            href="https://github.com/devhub-ai/devhub/"
                                             className="hover:underline "
                                         >
                                             Github
@@ -104,7 +104,7 @@ const Footer = () => {
                             </a>
 
                             <a
-                                href="#"
+                                href="https://github.com/devhub-ai/devhub/"
                                 className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
                             >
                                 <svg
