@@ -1,7 +1,8 @@
 from flask import request, jsonify, session, redirect, url_for, current_app
 from flask import Flask, request, jsonify, session as flask_session
-from extensions import bcrypt, neo4j_db
+from extensions import bcrypt, neo4j_db, users_chat
 from models import User
+from pymongo import MongoClient
 
 def signup():
     try:
@@ -29,6 +30,13 @@ def signup():
         """
         with neo4j_db.driver.session() as session:
             session.run(query, username=data['username'], email=data['email'], password=hashed_password)
+        
+        # Insert user into MongoDB with an empty chat history array
+        mongo_user = {
+            'username': data['username'],
+            'chat_history': []
+        }
+        users_chat.insert_one(mongo_user)
         
         return jsonify({'message': 'User created successfully'}), 201
 

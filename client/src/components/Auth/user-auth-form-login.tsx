@@ -1,7 +1,4 @@
-"use client";
-
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "sonner";
 
@@ -13,11 +10,7 @@ import { Label } from "@/components/ui/label";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onLoginSuccess?: (username: string) => void;
-}
-
-export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFormProps) {
+export function UserAuthForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -28,42 +21,44 @@ export function UserAuthForm({ className, onLoginSuccess, ...props }: UserAuthFo
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${backendUrl}/login`, { username, password }, { withCredentials: true });
-      if (response.status === 200) {
+      const response = await fetch(`${backendUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
+      });
 
+      if (response.ok) {
         localStorage.setItem('devhub_username', username);
-
-        if (onLoginSuccess) {
-          onLoginSuccess(username); 
-        }
         navigate('/home');
-      }
-    } catch (err: any) {
-      if (err.response && err.response.data && err.response.data.message) {
-        toast.error(err.response.data.message, {
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Login failed", {
           description: "Please check your details and try again.",
           action: {
             label: "Try again",
             onClick: () => console.log("Try again clicked"),
           },
         });
-      } else {
-        toast.error("Login failed", {
-          description: "There was a problem with your request.",
-          action: {
-            label: "Try again",
-            onClick: () => console.log("Try again clicked"),
-          },
-        });
       }
-      console.error('Login error:', err);
+    } catch (error) {
+      toast.error("Login failed", {
+        description: "There was a problem with your request.",
+        action: {
+          label: "Try again",
+          onClick: () => console.log("Try again clicked"),
+        },
+      });
+      console.error('Login error:', error);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn("grid gap-6")}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
