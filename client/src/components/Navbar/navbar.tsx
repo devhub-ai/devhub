@@ -15,7 +15,7 @@ interface Link {
   to: string;
 }
 
-export function Navbar() {
+export const Navbar: React.FC = () => {
   const links: Link[] = [
     {
       title: "Home",

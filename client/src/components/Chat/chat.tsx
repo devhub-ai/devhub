@@ -17,7 +17,7 @@ interface Message {
 	isTypingFinished?: boolean // Track typing completion per message
 }
 
-export function Chat() {
+export const Chat: React.FC = () => {
 	const [messages, setMessages] = useState<Array<Message>>([])
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 
