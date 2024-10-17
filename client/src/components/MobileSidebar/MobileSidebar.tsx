@@ -16,17 +16,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom";
 
-// const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-
 const MobileSidebar = () => {
     const navigate = useNavigate();
 
-  
-
-    
-
     return (
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 lg:border-b-0 lg:bg-transparent">
             <Sheet>
                 <SheetTrigger asChild>
                     <Button variant="outline" size="icon" className="shrink-0 md:hidden">
@@ -60,8 +54,6 @@ const MobileSidebar = () => {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="secondary" size="icon" className="rounded-full">
-                       
-                            
                         <CircleUser className="h-5 w-5" />
                     </Button>
                 </DropdownMenuTrigger>
@@ -82,7 +74,10 @@ const MobileSidebar = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/settings')}>Settings</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                        localStorage.removeItem('devhub_username');
+                        navigate('/');
+                    }}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </header>

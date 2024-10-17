@@ -6,6 +6,7 @@ from langchain_community.chains.graph_qa.cypher import GraphCypherQAChain
 from langchain_community.graphs import Neo4jGraph
 from extensions import users_chat
 import logging
+import google.generativeai as genai
 
 # Load environment variables
 load_dotenv()
@@ -13,11 +14,32 @@ os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 os.environ["NEO4J_URI"] = os.getenv("NEO4J_URI")
 os.environ["NEO4J_USERNAME"] = os.getenv("NEO4J_USER")
 os.environ["NEO4J_PASSWORD"] = os.getenv("NEO4J_PASSWORD")
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Initialize Neo4j graph and language model 
 graph = Neo4jGraph()
 llm = ChatGoogleGenerativeAI(model="gemini-pro")
 chain = GraphCypherQAChain.from_llm(graph=graph, llm=llm, verbose=True)
+
+# Define model configuration
+generation_config = {
+    "temperature": 0.5,  # Adjust randomness
+    "top_p": 0.95,
+    "top_k": 50,
+    "max_output_tokens": 500,  # Limit the response length
+    "response_mime_type": "text/plain",
+}
+
+# Initialize the model
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config=generation_config,
+)
+
+# Predefined prompt to guide the chatbot's behavior
+pre_prompt = """
+You are a model of Devhub and you are here to help people with their queries. you will be provided a question and a previous model response. your work is to see the response and if the response is not upto mark like i don't know the answer or something like that then see the question and answer it properly.
+"""
 
 def save_chat(username, query, response):
     """Save chat entry to the user's chat history in the database."""
@@ -80,8 +102,9 @@ def chat():
     
     try:
         result = get_graph_response(query)
-        chat_id = save_chat(username, query, result)
-        return jsonify({"chat_id": chat_id, "result": result}), 200
+        response = model.generate_content(pre_prompt+query+result)
+        chat_id = save_chat(username, query, response.text)
+        return jsonify({"chat_id": chat_id, "result": response.text}), 200
     except Exception as e:
         logging.error(f"Error in chat: {str(e)}")
         return jsonify({"error": "An error occurred while processing the query"}), 500
