@@ -167,6 +167,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              className='dark:bg-zinc-900'
               required
             />
             {isUsernameAvailable === false && (
@@ -191,6 +192,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className='dark:bg-zinc-900'
               required
             />
           </div>
@@ -206,6 +208,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
               value={password}
               onChange={handlePasswordChange}
+              className='dark:bg-zinc-900'
               required
             />
             {passwordRules &&

@@ -1,7 +1,6 @@
 import {
     CircleUser,
     Home,
-    LineChart,
     Menu,
 } from "lucide-react"
 import {
@@ -35,17 +34,10 @@ const MobileSidebar = () => {
                         </a>
                         <a
                             href="/home"
-                            className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                            className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground mt-4"
                         >
                             <Home className="h-5 w-5" />
                             Home
-                        </a>
-                        <a
-                            href="/plot"
-                            className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                        >
-                            <LineChart className="h-5 w-5" />
-                            f(x) Plotter
                         </a>
                     </nav>
                 </SheetContent>

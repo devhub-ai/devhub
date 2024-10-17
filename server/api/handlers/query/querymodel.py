@@ -38,7 +38,7 @@ model = genai.GenerativeModel(
 
 # Predefined prompt to guide the chatbot's behavior
 pre_prompt = """
-You are a model of Devhub and you are here to help people with their queries. you will be provided a question and a previous model response. your work is to see the response and if the response is not upto mark like i don't know the answer or something like that then see the question and answer it properly.
+You are a model of Devhub and you are here to help people with their queries. you will be provided a question and a previous model response. your work is to see the response and if the response is not upto mark like i don't know the answer or something like that then see the question and answer it properly. Your answer should be short and relevant to the question.
 """
 
 def save_chat(username, query, response):
@@ -68,12 +68,10 @@ def get_chat_history(username):
     user = users_chat.find_one({'username': username}, {'chat_history': 1})
     
     if user and 'chat_history' in user:
-        # Check if chat history is empty
         if not user['chat_history']:
-            # Initialize chat history with a welcome message
             welcome_message = {
-                'query': "Hi",
-                'response': "Welcome to DevHub!"
+                'query': "",
+                'response': "Welcome to 🚀 DevHub!"
             }
             users_chat.update_one(
                 {'username': username},
