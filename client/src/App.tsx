@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import { Toaster } from "@/components/ui/sonner";
+import EditProfileForm from './pages/EditProfileForm';
 
 const App = () => {
 
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/settings" element={<EditProfileForm />} />
           <Route path="/u/:username" element={<Profile />} />
           <Route path="*" element={<div>404</div>} />
         </Routes>

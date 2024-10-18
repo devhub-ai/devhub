@@ -127,7 +127,7 @@ export const Chat: React.FC = () => {
 											<AvatarImage src="/ai-avatar.png" alt="dh" />
 											<AvatarFallback>dh</AvatarFallback>
 										</Avatar>
-										<div className="flex-grow mt-2" style={{ maxWidth: '70%' }}> {/* Set maxWidth to 70% */}
+										<div className="flex-grow mt-2" style={{ maxWidth: '70%' }}>
 											{message.isLoading ? (
 												<>
 													<Skeleton className="h-4 w-[250px]" />
