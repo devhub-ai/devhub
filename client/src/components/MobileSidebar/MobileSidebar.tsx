@@ -45,9 +45,9 @@ const MobileSidebar = () => {
             <div className="w-full flex-1"></div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="secondary" size="icon" className="rounded-full">
-                        <CircleUser className="h-5 w-5" />
-                    </Button>
+                    {/* <Button variant="secondary" size="icon" className="rounded-full"> */}
+                        <CircleUser className="h-8 w-8" />
+                    {/* </Button> */}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>

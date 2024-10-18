@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Chat } from '../components/Chat/Chat';
+import { Chat } from '@/components/Chat/Chat';
 
 const Home = () => {
   const navigate = useNavigate();
