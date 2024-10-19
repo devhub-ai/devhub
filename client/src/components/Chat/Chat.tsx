@@ -2,11 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input'
-import Sidebar from "@/components/Sidebar/Sidebar"
-import MobileSidebar from "@/components/MobileSidebar/MobileSidebar"
 import { Skeleton } from "@/components/ui/skeleton"
 import Typewriter from 'typewriter-effect'
 import ReactMarkdown from 'react-markdown';
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+} from "@/components/ui/sidebar"
+import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -80,7 +84,7 @@ export const Chat: React.FC = () => {
 
 		setMessages((prevMessages) => [
 			...prevMessages,
-			{ query, response: '', isLoading: true, isTypingFinished: false }, // Initialize isTypingFinished for each message
+			{ query, response: '', isLoading: true, isTypingFinished: false },
 		])
 
 		try {
@@ -106,12 +110,14 @@ export const Chat: React.FC = () => {
 	}
 
 	return (
-		<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-			<Sidebar />
-			<div className="flex flex-col h-screen">
-				<header className="sticky top-0 z-10">
-					<MobileSidebar />
-				</header>
+			<SidebarProvider>
+				<SidebarLeft />
+				<SidebarInset>
+					<header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background">
+						<div className="flex flex-1 items-center gap-2 px-3">
+							<SidebarTrigger />
+						</div>
+					</header>
 				<main className="flex flex-col flex-grow p-4 overflow-hidden">
 					<div className="flex flex-col h-full w-full md:w-[80%] lg:w-[70%] xl:w-[60%] mx-auto flex-grow overflow-y-auto p-1" ref={scrollAreaRef}>
 						<div className="space-y-4">
@@ -165,14 +171,13 @@ export const Chat: React.FC = () => {
 						</div>
 					</div>
 				</main>
-
 				<div className="p-4">
 					<PlaceholdersAndVanishInput
 						placeholders={placeholders}
 						onSubmit={onSubmit}
 					/>
 				</div>
-			</div>
-		</div>
+				</SidebarInset>
+			</SidebarProvider>
 	)
 }

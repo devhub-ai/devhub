@@ -7,8 +7,12 @@ import { AppDispatch } from '../lib/store';
 import { setFriendStatus } from '../lib/userSlice';
 import { FaExternalLinkAlt, FaStar, FaCodeBranch } from 'react-icons/fa';
 import { Skeleton } from '@/components/ui/skeleton';
-import Sidebar from "@/components/Sidebar/Sidebar";
-import MobileSidebar from "@/components/MobileSidebar/MobileSidebar";
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+} from "@/components/ui/sidebar"
+import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -83,18 +87,19 @@ interface Language {
 const Profile = () => {
 
 	return (
-		<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-			<Sidebar />
-			<div className="flex flex-col h-screen">
-				<header className="sticky top-0 z-10">
-					<MobileSidebar />
+		<SidebarProvider>
+			<SidebarLeft />
+			<SidebarInset>
+				<header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background">
+					<div className="flex flex-1 items-center gap-2 px-3">
+						<SidebarTrigger />
+					</div>
 				</header>
 				<main className="flex flex-col flex-grow p-4 overflow-hidden">
 					<Dashboard />
 				</main>
-
-			</div>
-		</div>
+			</SidebarInset>
+		</SidebarProvider>
 	);
 
 };
