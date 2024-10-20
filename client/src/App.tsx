@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import { Toaster } from "@/components/ui/sonner";
 import EditProfileForm from './pages/EditProfileForm';
-import { MessagePage } from './components/Messages/MessagePage';
+import { MessagePage } from './pages/MessagePage';
 
 const App = () => {
 

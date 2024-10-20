@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/resizable"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import axios from "axios"
+import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -135,25 +138,45 @@ export function Message() {
                 <ResizableHandle withHandle />
                 <ResizablePanel minSize={30} className="flex flex-col">
                     <div className="flex-grow overflow-auto">
-                        {selectedUser && (
+                        
+                        {selectedUser ? (
                             <div>
                                 <h3>Chat with {selectedUser.username}</h3>
-                                <div>
+                                <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
                                     {chatMessages.map((msg, index) => (
                                         <div key={index}>
                                             <strong>{msg.sender_username === currentUserId ? "You" : selectedUser.username}:</strong> {msg.message}
                                         </div>
                                     ))}
                                 </div>
-                                <input
-                                    type="text"
-                                    value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
-                                    placeholder="Type a message"
-                                />
-                                <button onClick={handleSendMessage}>Send</button>
-                            </div>
-                        )}
+                                <Separator className="mt-auto" />
+                                <div className="p-4">
+                                    <form>
+                                        <div className="grid gap-4">
+                                            <Textarea
+                                                className="p-4"
+                                                value={message}
+                                                onChange={(e) => setMessage(e.target.value)}
+                                                placeholder="Type a message"
+                                            />
+                                            <div className="flex items-center">
+                                                <Button
+                                                    onClick={handleSendMessage}
+                                                    size="sm"
+                                                    className="ml-auto"
+                                                >
+                                                    Send
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                </div>
+                        ) : (
+                        <div className="p-8 text-center text-muted-foreground">
+                            No message selected
+                        </div>
+      )}
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>

@@ -4,7 +4,7 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { SidebarLeft } from '@/components/Sidebar/Sidebar'
-import { Message } from "./Message";
+import { Message } from "../components/Messages/Message";
 
 export const MessagePage: React.FC = () => {
     
