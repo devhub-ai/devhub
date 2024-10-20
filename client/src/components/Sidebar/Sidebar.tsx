@@ -52,11 +52,10 @@ export default function DevhubSidebar() {
 export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const navigate = useNavigate();
 
-    // Handle logout logic
     const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();  // Prevent the default anchor behavior
+        e.preventDefault();  
         localStorage.removeItem('devhub_username');
-        navigate('/login');  // Redirect to the login page
+        navigate('/login'); 
     };
 
     const sidebarLeftData = {
@@ -67,10 +66,9 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 icon: Sparkles,
             },
             {
-                title: "Inbox",
-                url: "#",
+                title: "Message",
+                url: "/message",
                 icon: Inbox,
-                badge: "10",
             },
         ],
         navSecondary: [
@@ -96,9 +94,9 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
             },
             {
                 title: "Logout",
-                url: "#",  // Keep the url as # for now
+                url: "#",
                 icon: LogOut,
-                onClick: handleLogout,  // Call the logout function on click
+                onClick: handleLogout, 
             }
         ]
     };

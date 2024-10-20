@@ -4,6 +4,7 @@ from api.handlers.analyze.githubdata import github_data, top_languages, streak_s
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,chat_history
 from api.handlers.user.friends import friends_bp
+from api.handlers.message.message import search_users, send_message, get_messages
 
 def register_routes(app):
     # Authentication routes
@@ -39,6 +40,11 @@ def register_routes(app):
     # Chat with model routes
     app.add_url_rule('/chat', 'chat', chat, methods=['POST'])
     app.add_url_rule('/chat_history', 'chat_history', chat_history, methods=['GET'])
+    
+    # Messaging routes
+    app.add_url_rule('/search_users', 'search_users', search_users, methods=['GET'])
+    app.add_url_rule('/send_message', 'send_message', send_message, methods=['POST']) 
+    app.add_url_rule('/get_messages/<username>', 'get_messages', get_messages, methods=['GET'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)

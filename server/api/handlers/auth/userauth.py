@@ -2,7 +2,6 @@ from flask import request, jsonify, session, redirect, url_for, current_app
 from flask import Flask, request, jsonify, session as flask_session
 from extensions import bcrypt, neo4j_db, users_chat
 from models import User
-from pymongo import MongoClient
 
 def signup():
     try:

@@ -1,21 +1,19 @@
 from flask import Flask
 from config import Config
-from extensions import bcrypt, cors, Neo4jDriver, neo4j_db
+from extensions import bcrypt, cors, Neo4jDriver
 import logging
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Initialize Neo4j
     global neo4j_db
     neo4j_db = Neo4jDriver(
         app.config['NEO4J_URI'], 
         app.config['NEO4J_USER'], 
         app.config['NEO4J_PASSWORD']
     )
-
-    # Initialize other extensions
+        
     bcrypt.init_app(app)
     cors.init_app(app, supports_credentials=True, resources={
         r"/*": {

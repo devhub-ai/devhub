@@ -3,6 +3,7 @@ from flask_cors import CORS
 from neo4j import GraphDatabase
 from config import Config
 from pymongo import MongoClient
+import logging
 
 bcrypt = Bcrypt()
 cors = CORS()
@@ -20,7 +21,9 @@ neo4j_db = Neo4jDriver(
     password=Config.NEO4J_PASSWORD
 )
 
-# MongoDB setup
 mongo_client = MongoClient(Config.MONGODB_URI)
 mongo_db = mongo_client['devhub']
 users_chat = mongo_db['users']
+chat_collection = mongo_db['chats']
+
+logging.getLogger('pymongo').setLevel(logging.WARNING)
