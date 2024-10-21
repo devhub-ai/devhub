@@ -9,6 +9,8 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Check, X } from "lucide-react";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 interface PasswordRules {
@@ -31,6 +33,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [usernameError, setUsernameError] = useState<string>("");
   const [passwordRules, setPasswordRules] = useState<PasswordRules | null>(null);
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
+  const allRulesPassed = passwordRules && Object.values(passwordRules).every((passed) => passed === true);
   const navigate = useNavigate();
 
   // Username availability check with debounce
@@ -157,26 +160,57 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <Label className="sr-only" htmlFor="username">
               Username
             </Label>
-            <Input
-              id="username"
-              placeholder="Username"
-              type="text"
-              autoCapitalize="none"
-              autoComplete="username"
-              autoCorrect="off"
-              disabled={isLoading}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className='dark:bg-zinc-900'
-              required
-            />
-            {isUsernameAvailable === false && (
-              <p className="text-red-500">Username is not available</p>
-            )}
-            {isUsernameAvailable === true && (
-              <p className="text-green-500">Username is available</p>
-            )}
-            {usernameError && <p className="text-red-500">{usernameError}</p>}
+
+            {/* Container for input and icon */}
+            <div className="relative flex items-center">
+              <Input
+                id="username"
+                placeholder="Username"
+                type="text"
+                autoCapitalize="none"
+                autoComplete="username"
+                autoCorrect="off"
+                disabled={isLoading}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="dark:bg-zinc-900 pr-10" // Add padding to the right for the icon
+                required
+              />
+
+              {/* HoverCard for the green tick */}
+              {isUsernameAvailable && (
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Check className="absolute right-3 text-green-500" />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="text-green-500 text-sm bg-zinc-900">
+                    Username is available
+                  </HoverCardContent>
+                </HoverCard>
+              )}
+              {isUsernameAvailable === false && (
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <X className="absolute right-3 text-red-500" />
+                  </HoverCardTrigger>
+                    <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
+                      Username is not available
+                    Username is not available
+                    </HoverCardContent>
+                </HoverCard>
+              )}
+
+              {usernameError && (
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <X className="absolute right-3 text-red-500" />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
+                    {usernameError}
+                  </HoverCardContent>
+                </HoverCard>
+              )}
+            </div>
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -200,26 +234,50 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <Label className="sr-only" htmlFor="password">
               Password
             </Label>
-            <Input
-              id="password"
-              placeholder="Password"
-              type="password"
-              autoComplete="current-password"
-              disabled={isLoading}
-              value={password}
-              onChange={handlePasswordChange}
-              className='dark:bg-zinc-900'
-              required
-            />
-            {passwordRules &&
-              Object.entries(passwordRules).map(([rule, passed]) => (
-                <p
-                  key={rule}
-                  className={passed ? "text-green-500" : "text-red-500"}
-                >
-                  {passwordRuleMessages[rule as keyof PasswordRules]}
-                </p>
-              ))}
+            <div className="relative flex items-center">
+              <Input
+                id="password"
+                placeholder="Password"
+                type="password"
+                autoComplete="current-password"
+                disabled={isLoading}
+                value={password}
+                onChange={handlePasswordChange}
+                className="dark:bg-zinc-900 pr-10" 
+                required
+              />
+              {allRulesPassed && (
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Check className="absolute right-3 text-green-500" />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="text-green-500 text-sm bg-zinc-900">
+                    {passwordRules &&
+                      Object.entries(passwordRules).map(([rule, passed]) => (
+                        <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
+                          {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
+                        </p>
+                      ))}
+                  </HoverCardContent>
+                </HoverCard>
+              )}
+              {!allRulesPassed && (
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <X className="absolute right-3 text-red-500" />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
+                    {passwordRules &&
+                      Object.entries(passwordRules).map(([rule, passed]) => (
+                        <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
+                          {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
+                        </p>
+                      ))}
+                  </HoverCardContent>
+                </HoverCard>
+              )}
+            </div>
+            
           </div>
           <Button
             disabled={
