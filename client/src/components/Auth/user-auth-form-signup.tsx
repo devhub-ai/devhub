@@ -34,7 +34,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [passwordRules, setPasswordRules] = useState<PasswordRules | null>(null);
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
   const allRulesPassed = passwordRules && Object.values(passwordRules).every((passed) => passed === true);
+  const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const navigate = useNavigate();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHasStartedTyping(true); 
+    handlePasswordChange(e);
+  };
 
   // Username availability check with debounce
   useEffect(() => {
@@ -234,6 +240,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <Label className="sr-only" htmlFor="password">
               Password
             </Label>
+
             <div className="relative flex items-center">
               <Input
                 id="password"
@@ -242,42 +249,46 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 autoComplete="current-password"
                 disabled={isLoading}
                 value={password}
-                onChange={handlePasswordChange}
-                className="dark:bg-zinc-900 pr-10" 
+                onChange={handleInputChange}
+                className="dark:bg-zinc-900 pr-10"
                 required
               />
-              {allRulesPassed && (
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <Check className="absolute right-3 text-green-500" />
-                  </HoverCardTrigger>
-                  <HoverCardContent className="text-green-500 text-sm bg-zinc-900">
-                    {passwordRules &&
-                      Object.entries(passwordRules).map(([rule, passed]) => (
-                        <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
-                          {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
-                        </p>
-                      ))}
-                  </HoverCardContent>
-                </HoverCard>
-              )}
-              {!allRulesPassed && (
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <X className="absolute right-3 text-red-500" />
-                  </HoverCardTrigger>
-                  <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
-                    {passwordRules &&
-                      Object.entries(passwordRules).map(([rule, passed]) => (
-                        <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
-                          {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
-                        </p>
-                      ))}
-                  </HoverCardContent>
-                </HoverCard>
+
+              {/* Show the validation only after user has started typing */}
+              {hasStartedTyping && (
+                <>
+                  {allRulesPassed ? (
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <Check className="absolute right-3 text-green-500" />
+                      </HoverCardTrigger>
+                      <HoverCardContent className="text-green-500 text-sm bg-zinc-900">
+                        {passwordRules &&
+                          Object.entries(passwordRules).map(([rule, passed]) => (
+                            <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
+                              {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
+                            </p>
+                          ))}
+                      </HoverCardContent>
+                    </HoverCard>
+                  ) : (
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <X className="absolute right-3 text-red-500" />
+                      </HoverCardTrigger>
+                      <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
+                        {passwordRules &&
+                          Object.entries(passwordRules).map(([rule, passed]) => (
+                            <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
+                              {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
+                            </p>
+                          ))}
+                      </HoverCardContent>
+                    </HoverCard>
+                  )}
+                </>
               )}
             </div>
-            
           </div>
           <Button
             disabled={
