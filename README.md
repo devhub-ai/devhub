@@ -31,6 +31,13 @@ Enter into the root directory.
 ```bash
 cd devhub
 ```
+You can use `setup.bat` to automate the installation and running process of the webapp. (make sure to make `.env` in server and populate it with the data)
+
+```bash
+./setup.bat
+```
+### Manual Installation
+
 Open two terminal for server and client and enter into the directories.
 ```bash
 ## 1st terminal for server
