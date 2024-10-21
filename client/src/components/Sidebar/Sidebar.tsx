@@ -6,6 +6,7 @@ import {
     CircleUser,
     Trash2,
     LogOut,
+    MessagesSquare,
     type LucideIcon,
 } from "lucide-react"
 
@@ -68,6 +69,11 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
             {
                 title: "Message",
                 url: "/message",
+                icon: MessagesSquare,
+            },
+            {
+                title: "Projects",
+                url: "/projects",
                 icon: Inbox,
             },
         ],
@@ -155,7 +161,7 @@ function NavSecondary({
         url: string
         icon: LucideIcon
         badge?: React.ReactNode
-        onClick?: React.MouseEventHandler<HTMLAnchorElement>  // Add onClick type
+        onClick?: React.MouseEventHandler<HTMLAnchorElement> 
     }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
     return (
@@ -165,7 +171,6 @@ function NavSecondary({
                     {items.map((item) => (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton asChild>
-                                {/* Handle click if provided */}
                                 <a href={item.url} onClick={item.onClick}>
                                     <item.icon />
                                     <span>{item.title}</span>
