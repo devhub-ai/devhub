@@ -23,7 +23,8 @@ def create_app():
         }
     })
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger('neo4j').setLevel(logging.WARNING)
+    logging.getLogger('pymongo').setLevel(logging.WARNING)
 
     with app.app_context():
         from api.urls import register_routes

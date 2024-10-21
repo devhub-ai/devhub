@@ -125,9 +125,8 @@ const Dashboard = () => {
 					setProfileData(profileResponse.data);
 
 					const friendsResponse = await axios.get(`${backendUrl}/profile/${username}/friends`);
-					setFriendsList(friendsResponse.data.friends);  // Set the visited user's friends list
+					setFriendsList(friendsResponse.data.friends);
 
-					// Check if logged-in user is a friend of the profile user
 					const loggedInFriendsResponse = await axios.get(`${backendUrl}/profile/${loggedInUsername}/friends`);
 					const isFriendOfProfileUser = loggedInFriendsResponse.data.friends.includes(username);
 					setIsFriend(isFriendOfProfileUser);
@@ -171,22 +170,19 @@ const Dashboard = () => {
 	const handleFriendRequest = async () => {
 		try {
 			if (isFriend) {
-				// Disconnect if already a friend
 				await axios.delete(`${backendUrl}/profile/${profileData?.username}/friends`, { data: { friend_username: loggedInUsername } });
 				setIsFriend(false);
-				if (username) {  // Ensure username is defined
+				if (username) { 
 					dispatch(setFriendStatus({ username, isFriend: false }));
 				}
 			} else {
-				// Connect if not a friend
 				await axios.post(`${backendUrl}/profile/${profileData?.username}/friends`, { friend_username: loggedInUsername });
 				setIsFriend(true);
-				if (username) {  // Ensure username is defined
+				if (username) { 
 					dispatch(setFriendStatus({ username, isFriend: true }));
 				}
 			}
 
-			// Fetch the updated friends list for the visited user
 			const friendsResponse = await axios.get(`${backendUrl}/profile/${username}/friends`);
 			setFriendsList(friendsResponse.data.friends);
 		} catch (error) {
@@ -203,7 +199,6 @@ const Dashboard = () => {
 	return (
 		<div className='flex flex-col w-full h-screen bg-neutral-50 p-4 overflow-y-auto bg-white dark:bg-zinc-950'>
 			<div className='grid gap-6 min-h-screen grid-cols-1 lg:grid-cols-[350px_1fr_300px] lg:px-6 xl:gap-10 w-full'>
-				{/* Sidebar */}
 				<div className='space-y-6 py-6 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-zinc-900 px-2 '>
 					<div className='flex flex-col items-center space-y-3'>
 						{githubData ? (
@@ -234,7 +229,6 @@ const Dashboard = () => {
 							</p>
 						</div>
 					</div>
-					{/* Profile Info Section */}
 					<div className='space-y-4'>
 						<div className='space-y-2'>
 							<p className='font-semibold'>Bio</p>
@@ -258,7 +252,6 @@ const Dashboard = () => {
 							)}
 						</div>
 					</div>
-					{/* GitHub and LeetCode Links */}
 					<div className='flex space-x-4'>
 						{profileData ? (
 							<>
@@ -310,14 +303,13 @@ const Dashboard = () => {
 							</div>
 						)}
 					</div>
-					{/* Friend Button */}
+
 					{!isOwnProfile && (
 						<button onClick={handleFriendRequest} className="bg-blue-500 text-white rounded py-2 px-4">
 							{isFriend ? 'Disconnect' : 'Connect'}
 						</button>
 					)}
 
-					{/* Friends List */}
 					<div>
 						<h2 className='text-xl font-bold'>Friends</h2>
 						{friends.length > 0 ? (
@@ -330,10 +322,7 @@ const Dashboard = () => {
 					</div>
 				</div>
 
-				{/* Main Content Section */}
 				<div className='space-y-6 col-span-2 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-zinc-900 p-4'>
-					{/* Friends Section */}
-
 					<h2 className='text-xl font-bold'>Projects</h2>
 					<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 						{profileData ? (
