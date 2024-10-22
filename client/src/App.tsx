@@ -22,8 +22,8 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/settings" element={<EditProfileForm />} />
           <Route path="/message" element={<MessagePage/>} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/u/:username" element={<Profile />} />
+          <Route path="/projects/:username" element={<Projects />} />
+          <Route path="/user/:username" element={<Profile />} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </Router>

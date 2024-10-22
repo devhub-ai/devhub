@@ -1,6 +1,6 @@
 from api.handlers.auth.userauth import signup, login, check_auth, home, logout, index, check_username
 from api.handlers.user.profile import get_profile, update_profile
-from api.handlers.projects.projects import add_project, update_project, delete_project
+from api.handlers.projects.projects import add_project, update_project, delete_project, get_projects, increment_star
 from api.handlers.analyze.githubdata import github_data, top_languages, streak_stats, pinned_repos, streak_chart
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,chat_history
@@ -34,9 +34,11 @@ def register_routes(app):
     app.add_url_rule('/analyze/leetcode_card', 'leetcode_card', leetcode_card, methods=['POST'])
     
     # Project routes
+    app.add_url_rule('/profile/<username>/projects', 'get_projects', get_projects, methods=['GET'])
     app.add_url_rule('/profile/<username>/projects', 'add_project', add_project, methods=['POST'])
-    app.add_url_rule('/profile/<username>/projects/<int:project_id>', 'update_project', update_project, methods=['PUT'])
-    app.add_url_rule('/profile/<username>/projects/<string:project_title>', 'delete_project', delete_project, methods=['DELETE'])
+    app.add_url_rule('/profile/<username>/projects/<string:project_id>', 'update_project', update_project, methods=['PUT'])
+    app.add_url_rule('/profile/<username>/projects/<string:project_id>', 'delete_project', delete_project, methods=['DELETE'])
+    app.add_url_rule('/profile/<username>/projects/<project_id>/star', 'increment_star', increment_star, methods=['POST'])
     
     # Chat with model routes
     app.add_url_rule('/chat', 'chat', chat, methods=['POST'])

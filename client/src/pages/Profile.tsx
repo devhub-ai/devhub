@@ -323,7 +323,7 @@ const Dashboard = () => {
 				</div>
 
 				<div className='space-y-6 col-span-2 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-zinc-900 p-4'>
-					<h2 className='text-xl font-bold'>Projects</h2>
+					{/* <h2 className='text-xl font-bold'>Projects</h2>
 					<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 						{profileData ? (
 							profileData.projects.map((project, index) => (
@@ -347,7 +347,7 @@ const Dashboard = () => {
 								<Skeleton className='h-32 w-full' />
 							</>
 						)}
-					</div>
+					</div> */}
 
 					{/* GitHub Stats */}
 					<div className='space-y-8'>
