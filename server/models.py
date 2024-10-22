@@ -61,21 +61,24 @@ class User(Base):
 
 class Project(Base):
     __tablename__ = 'projects'
-    
-    id = Column(Integer, primary_key=True)
+
+    project_id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     repo_link = Column(String, nullable=True)
+    star = Column(Integer, default=0, nullable=False)
     
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship('User', back_populates='projects')
 
     tags = relationship('Tag', secondary=project_tags, back_populates='projects')
 
-    def __init__(self, title, description=None, repo_link=None):
+    def __init__(self, title, description=None, repo_link=None, star=0):
         self.title = title
         self.description = description
         self.repo_link = repo_link
+        self.star = star
+
 
 class Tag(Base):
     __tablename__ = 'tags'

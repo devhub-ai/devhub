@@ -73,7 +73,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
             },
             {
                 title: "Projects",
-                url: "/projects",
+                url: username ? `/projects/${username}` : "#",
                 icon: Inbox,
             },
         ],
@@ -95,7 +95,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
             },
             {
                 title: username ? `${username}` : "profile",
-                url: username ? `/u/${username}` : "#",
+                url: username ? `/user/${username}` : "#",
                 icon: CircleUser,
             },
             {
