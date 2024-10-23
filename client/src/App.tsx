@@ -8,7 +8,8 @@ import Profile from './pages/Profile';
 import { Toaster } from "@/components/ui/sonner";
 import EditProfileForm from './pages/EditProfileForm';
 import { MessagePage } from './pages/MessagePage';
-import Projects from './components/Projects/Projects';
+import Projects from './pages/Projects';
+import Visualization from './pages/Visualization';
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/message" element={<MessagePage/>} />
           <Route path="/projects/:username" element={<Projects />} />
           <Route path="/user/:username" element={<Profile />} />
+          <Route path="/relations/:username" element={<Visualization />} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </Router>
