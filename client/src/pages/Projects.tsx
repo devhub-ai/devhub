@@ -7,7 +7,8 @@ import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 import { useEffect, useState } from "react";
 import { ProjectCard } from "@/components/Projects/ProjectCard";
 import { useParams } from "react-router-dom";
-import AddProject from "./AddProject";
+import AddProject from "../components/Projects/AddProject";
+import { Skeleton } from '@/components/ui/skeleton';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -53,14 +54,6 @@ const Projects = () => {
         setRefresh(!refresh); // Toggle refresh state to re-trigger useEffect
     };
 
-    if (loading) {
-        return <div>Loading projects...</div>;
-    }
-
-    if (!projects.length) {
-        return <div>No projects found.</div>;
-    }
-
     return (
         <SidebarProvider>
             <SidebarLeft />
@@ -72,13 +65,26 @@ const Projects = () => {
                 </header>
                 <main className="flex flex-col flex-grow p-4 overflow-hidden">
                     <h1 className="ml-5 text-5xl mt-2">Projects</h1>
-                    <AddProject onProjectChange={handleRefresh} /> {/* Pass the callback */}
+                    <AddProject onProjectChange={handleRefresh} />
                     <div className="flex flex-1 flex-col gap-4 p-4">
+                        {!projects.length ? (
+                            <div className="flex flex-col justify-center items-center">
+                                <h1 className="text-3xl">No Projects yet.</h1>
+                            </div>
+                        ) :
+                        loading ? (
+                            <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                            {Array.from({ length: 3 }).map((_, index) => (
+                                <Skeleton key={index} className="h-32 w-100"/>
+                            ))}
+                            </div>
+                        ) : (
                         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                             {projects.map((project) => (
                                 <ProjectCard key={project.projectId} project={project} onProjectChange={handleRefresh} />
                             ))}
                         </div>
+                        )}
                     </div>
                 </main>
             </SidebarInset>

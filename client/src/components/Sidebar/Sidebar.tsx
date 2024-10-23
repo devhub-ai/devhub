@@ -4,12 +4,11 @@ import {
     Settings2,
     Sparkles,
     CircleUser,
-    Trash2,
     LogOut,
     MessagesSquare,
+    ChartNetwork,
     type LucideIcon,
 } from "lucide-react"
-
 import { Separator } from "@/components/ui/separator"
 import {
     Sidebar,
@@ -76,13 +75,14 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 url: username ? `/projects/${username}` : "#",
                 icon: Inbox,
             },
+            {
+                title: "KGs",
+                url: `/relations/${username}`,
+                icon: ChartNetwork,
+            }
         ],
         navSecondary: [
-            {
-                title: "Trash",
-                url: "#",
-                icon: Trash2,
-            },
+            
             {
                 title: "Help",
                 url: "#",

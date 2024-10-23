@@ -6,6 +6,7 @@ from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,chat_history
 from api.handlers.user.friends import friends_bp
 from api.handlers.message.message import search_users, send_message, get_messages
+from api.handlers.visualization.visualization import get_user_relations
 
 def register_routes(app):
     # Authentication routes
@@ -48,6 +49,9 @@ def register_routes(app):
     app.add_url_rule('/search_users', 'search_users', search_users, methods=['GET'])
     app.add_url_rule('/send_message', 'send_message', send_message, methods=['POST']) 
     app.add_url_rule('/get_messages/<username>', 'get_messages', get_messages, methods=['GET'])
+    
+    # Visualization route
+    app.add_url_rule('/profile/relations','get_user_relations',get_user_relations, methods=['GET'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)
