@@ -10,6 +10,8 @@ import EditProfileForm from './pages/EditProfileForm';
 import { MessagePage } from './pages/MessagePage';
 import Projects from './pages/Projects';
 import Visualization from './pages/Visualization';
+import PrivacyPolicy from './pages/Privacypolicy';
+import ProjectDisplay from './pages/ProjectDisplay';
 
 const App = () => {
 
@@ -24,8 +26,10 @@ const App = () => {
           <Route path="/settings" element={<EditProfileForm />} />
           <Route path="/message" element={<MessagePage/>} />
           <Route path="/projects/:username" element={<Projects />} />
+          <Route path="/projects/:username/:projectId" element={<ProjectDisplay />} />
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/relations/:username" element={<Visualization />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </Router>

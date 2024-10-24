@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { StarIcon, GitHubLogoIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FaStar as FilledStarIcon } from "react-icons/fa";
 import {
     AlertDialog,
@@ -14,6 +14,9 @@ import {
 import UpdateProject from "./UpdateProject";
 import DeleteProject from "./DeleteProject";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { Skeleton } from "../ui/skeleton";
+import { useNavigate } from "react-router-dom";
+import ReactMarkdown from 'react-markdown';
 
 interface Project {
     projectId: string;
@@ -21,6 +24,7 @@ interface Project {
     description: string;
     repoLink: string;
     starCount: number;
+    imageUrl: string;
     tags: string[];
 }
 
@@ -34,7 +38,13 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 export function ProjectCard({ project, onProjectChange }: ProjectProps) {
     const [isStarred, setIsStarred] = useState(false);
     const [starCount, setStarCount] = useState(project.starCount);
-    const username = localStorage.getItem('devhub_username'); 
+    const username = localStorage.getItem('devhub_username');
+
+    const navigate = useNavigate();
+    
+    const projectDetails = () => {
+        navigate(`/projects/${username}/${project.projectId}`);
+    }
 
     // Fetch initial star state from server/localStorage or logic to check if user has starred
     useEffect(() => {
@@ -68,10 +78,24 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
 
     return (
         <Card>
+            {
+                project.imageUrl ? (
+                    <div className="h-40 w-full bg-primary rounded-tl-md rounded-tr-md" style={{backgroundImage: `url(${project.imageUrl})`}}></div>
+                ):
+                (
+                    <Skeleton className="h-40 w-full rounded-tl-md rounded-tr-md" />
+                )
+            }     
             <CardHeader className="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0">
+                
                 <div className="space-y-1">
-                    <CardTitle>{project.title}</CardTitle>
-                    <CardDescription>{project.description}</CardDescription>
+                    <CardTitle 
+                        onClick={projectDetails} 
+                        className="hover:underline cursor-pointer"
+                    >
+                        {project.title}
+                    </CardTitle>
+                    <ReactMarkdown>{project.description}</ReactMarkdown>
                 </div>
                 <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
                     <Button

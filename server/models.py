@@ -66,6 +66,7 @@ class Project(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     repo_link = Column(String, nullable=True)
+    image_link = Column(String, nullable=True)  # New field to store image links
     star = Column(Integer, default=0, nullable=False)
     
     user_id = Column(Integer, ForeignKey('users.id'))
@@ -73,12 +74,12 @@ class Project(Base):
 
     tags = relationship('Tag', secondary=project_tags, back_populates='projects')
 
-    def __init__(self, title, description=None, repo_link=None, star=0):
+    def __init__(self, title, description=None, repo_link=None, image_link=None, star=0):
         self.title = title
         self.description = description
         self.repo_link = repo_link
+        self.image_link = image_link  # Set the image link
         self.star = star
-
 
 class Tag(Base):
     __tablename__ = 'tags'
