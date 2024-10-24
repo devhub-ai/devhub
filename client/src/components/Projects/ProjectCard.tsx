@@ -15,7 +15,7 @@ import UpdateProject from "./UpdateProject";
 import DeleteProject from "./DeleteProject";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { Skeleton } from "../ui/skeleton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 
 interface Project {
@@ -38,13 +38,16 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 export function ProjectCard({ project, onProjectChange }: ProjectProps) {
     const [isStarred, setIsStarred] = useState(false);
     const [starCount, setStarCount] = useState(project.starCount);
-    const username = localStorage.getItem('devhub_username');
+    const username = localStorage.getItem('devhub_username'); // Logged-in user
+    const { username: paramsUsername } = useParams<{ username: string }>(); // Extract username from URL
+
+    const isProjectOwner = username === paramsUsername; // Check if the logged-in user is the project owner
 
     const navigate = useNavigate();
-    
+
     const projectDetails = () => {
-        navigate(`/projects/${username}/${project.projectId}`);
-    }
+        navigate(`/projects/${paramsUsername}/${project.projectId}`);
+    };
 
     // Fetch initial star state from server/localStorage or logic to check if user has starred
     useEffect(() => {
@@ -59,7 +62,7 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
         if (isStarred) return; // Prevent multiple stars
 
         try {
-            const response = await fetch(`${backendUrl}/profile/${username}/projects/${project.projectId}/star`, {
+            const response = await fetch(`${backendUrl}/profile/${paramsUsername}/projects/${project.projectId}/star`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
             });
@@ -78,19 +81,18 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
 
     return (
         <Card>
-            {
-                project.imageUrl ? (
-                    <div className="h-40 w-full bg-primary rounded-tl-md rounded-tr-md" style={{backgroundImage: `url(${project.imageUrl})`}}></div>
-                ):
-                (
-                    <Skeleton className="h-40 w-full rounded-tl-md rounded-tr-md" />
-                )
-            }     
+            {project.imageUrl ? (
+                <div
+                    className="h-40 w-full bg-primary rounded-tl-md rounded-tr-md"
+                    style={{ backgroundImage: `url(${project.imageUrl})` }}
+                ></div>
+            ) : (
+                <Skeleton className="h-40 w-full rounded-tl-md rounded-tr-md" />
+            )}
             <CardHeader className="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0">
-                
                 <div className="space-y-1">
-                    <CardTitle 
-                        onClick={projectDetails} 
+                    <CardTitle
+                        onClick={projectDetails}
                         className="hover:underline cursor-pointer"
                     >
                         {project.title}
@@ -109,7 +111,7 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
                         ) : (
                             <StarIcon className="mr-2 h-4 w-4" />
                         )}
-                         Star
+                        Star
                     </Button>
                 </div>
             </CardHeader>
@@ -117,45 +119,58 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
                 <div className="flex space-x-4 text-sm text-muted-foreground">
                     <div className="flex items-center">
                         <GitHubLogoIcon className="mr-1" />
-                        <a href={project.repoLink} target="_blank">visit</a>
+                        <a href={project.repoLink} target="_blank" rel="noopener noreferrer">
+                            visit
+                        </a>
                     </div>
                     <div className="flex items-center">
                         <StarIcon className="mr-1" />
-                        {starCount === null ? "0" : starCount} Stars
+                        {starCount} Stars
                     </div>
                     <div className="flex-grow"></div>
-                    <div className="flex items-center">
-                        <AlertDialog>
-                            <AlertDialogTrigger>
-                                <Pencil2Icon className="mr-2 h-5 w-5" />
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <div className='flex'>
-                                    <AlertDialogHeader className='text-2xl'>Update Project</AlertDialogHeader>
-                                    <div className='flex-grow'></div>
-                                    <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
-                                </div>
-                                <UpdateProject project={project} onProjectChange={onProjectChange}/>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                        <AlertDialog>
-                            <AlertDialogTrigger>
-                                <TrashIcon className="mr-1 h-5 w-5 text-red-600" />
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <div className="flex">
-                                    <AlertDialogHeader className='text-2xl'>Delete Project</AlertDialogHeader>
-                                    <div className='flex-grow'></div>
-                                    <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
-                                </div>
-                                <AlertDialogDescription>
-                                    Are you sure?<br/>
-                                    This action cannot be undone.
-                                </AlertDialogDescription>
-                                <DeleteProject projectId={project.projectId} onProjectChange={onProjectChange}/>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    </div>
+
+                    {/* Only show edit and delete options if the logged-in user is the project owner */}
+                    {isProjectOwner && (
+                        <div className="flex items-center">
+                            <AlertDialog>
+                                <AlertDialogTrigger>
+                                    <Pencil2Icon className="mr-2 h-5 w-5" />
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <div className="flex">
+                                        <AlertDialogHeader className="text-2xl">
+                                            Update Project
+                                        </AlertDialogHeader>
+                                        <div className="flex-grow"></div>
+                                        <AlertDialogCancel>
+                                            <Cross1Icon className="h-3 w-3" />
+                                        </AlertDialogCancel>
+                                    </div>
+                                    <UpdateProject project={project} onProjectChange={onProjectChange} />
+                                </AlertDialogContent>
+                            </AlertDialog>
+                            <AlertDialog>
+                                <AlertDialogTrigger>
+                                    <TrashIcon className="mr-1 h-5 w-5 text-red-600" />
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <div className="flex">
+                                        <AlertDialogHeader className="text-2xl">
+                                            Delete Project
+                                        </AlertDialogHeader>
+                                        <div className="flex-grow"></div>
+                                        <AlertDialogCancel>
+                                            <Cross1Icon className="h-3 w-3" />
+                                        </AlertDialogCancel>
+                                    </div>
+                                    <AlertDialogDescription>
+                                        Are you sure? This action cannot be undone.
+                                    </AlertDialogDescription>
+                                    <DeleteProject projectId={project.projectId} onProjectChange={onProjectChange} />
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                    )}
                 </div>
             </CardContent>
         </Card>
