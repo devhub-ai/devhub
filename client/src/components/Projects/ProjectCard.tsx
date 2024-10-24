@@ -62,7 +62,7 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
         if (isStarred) return; // Prevent multiple stars
 
         try {
-            const response = await fetch(`${backendUrl}/profile/${paramsUsername}/projects/${project.projectId}/star`, {
+            const response = await fetch(`${backendUrl}/profile/${username}/projects/${project.projectId}/star`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
             });
@@ -97,7 +97,9 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
                     >
                         {project.title}
                     </CardTitle>
-                    <ReactMarkdown>{project.description}</ReactMarkdown>
+                    <ReactMarkdown>
+                        {project.description.split(' ').slice(0, 5).join(' ') + (project.description.split(' ').length > 5 ? '...' : '')}
+                    </ReactMarkdown>
                 </div>
                 <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
                     <Button
