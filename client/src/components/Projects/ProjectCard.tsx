@@ -17,6 +17,7 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { Skeleton } from "../ui/skeleton";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
+import { toast } from "sonner";
 
 interface Project {
     projectId: string;
@@ -38,6 +39,7 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 export function ProjectCard({ project, onProjectChange }: ProjectProps) {
     const [isStarred, setIsStarred] = useState(false);
     const [starCount, setStarCount] = useState(project.starCount);
+    const [isStarRequestInProgress, setIsStarRequestInProgress] = useState(false); // State to handle star request
     const username = localStorage.getItem('devhub_username'); // Logged-in user
     const { username: paramsUsername } = useParams<{ username: string }>(); // Extract username from URL
 
@@ -59,7 +61,9 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
     }, [project.projectId]);
 
     const handleStarClick = async () => {
-        if (isStarred) return; // Prevent multiple stars
+        if (isStarred || isStarRequestInProgress) return; // Prevent multiple stars and requests
+
+        setIsStarRequestInProgress(true); // Start request
 
         try {
             const response = await fetch(`${backendUrl}/profile/${username}/projects/${project.projectId}/star`, {
@@ -71,11 +75,18 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
                 setStarCount((prevCount) => prevCount + 1);
                 setIsStarred(true);
                 localStorage.setItem(`starred_${project.projectId}`, "true");
+
+                // Show success toast
+                toast.success("Project starred!");
             } else {
                 console.error("Failed to star the project");
+                toast.error("Failed to star the project");
             }
         } catch (error) {
             console.error("Error starring the project:", error);
+            toast.error("Failed to star the project");
+        } finally {
+            setIsStarRequestInProgress(false); // End request
         }
     };
 
@@ -104,16 +115,16 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
                 <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
                     <Button
                         variant="secondary"
-                        className=" shadow-none"
+                        className="shadow-none"
                         onClick={handleStarClick}
-                        disabled={isStarred}
+                        disabled={isStarred || isStarRequestInProgress} // Disable during star request
                     >
                         {isStarred ? (
                             <FilledStarIcon className="mr-2 h-4 w-4 text-yellow-400" />
                         ) : (
                             <StarIcon className="mr-2 h-4 w-4" />
                         )}
-                        Star
+                        {isStarRequestInProgress ? "Starring..." : "Star"} {/* Show loading text */}
                     </Button>
                 </div>
             </CardHeader>
