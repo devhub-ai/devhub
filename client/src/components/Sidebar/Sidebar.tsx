@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useNavigate } from 'react-router-dom';
 
-const username = typeof window !== 'undefined' ? localStorage.getItem('devhub_username') : null;
+const username = localStorage.getItem('devhub_username');
 
 export default function DevhubSidebar() {
     return (
@@ -72,7 +72,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
             },
             {
                 title: "Projects",
-                url: username ? `/projects/${username}` : "#",
+                url: `/projects/${username}`,
                 icon: Inbox,
             },
             {

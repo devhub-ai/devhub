@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Textarea } from '../ui/textarea';
 import { Icons } from "@/components/ui/icons";
+import UploadComponent from './UploadComponent'; 
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -14,7 +15,8 @@ interface Project {
     projectId: string;
     description: string;
     repoLink: string;
-    tags: string[];  // Now an array of strings
+    tags: string[];
+    imageUrl?: string;
 }
 
 interface UpdateProjectProps {
@@ -28,9 +30,11 @@ const UpdateProject: React.FC<UpdateProjectProps> = ({ project, onProjectChange 
         projectId: project.projectId,
         description: project.description,
         repoLink: project.repoLink,
-        tags: project.tags,  // Tags are passed as an array of strings
+        tags: project.tags,
+        imageUrl: project.imageUrl || '',
     });
 
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const username = localStorage.getItem('devhub_username');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -46,18 +50,24 @@ const UpdateProject: React.FC<UpdateProjectProps> = ({ project, onProjectChange 
         setIsLoading(true);
 
         try {
-            // Join the array of tags into a comma-separated string
-            const tagsString = updatedProject.tags.join(',');
+            // Upload the image and get the URL if an image is provided
+            const uploadedImageUrl = await uploadImage();
+
+            // Prepare the data for submission, filling in empty fields with previous data
+            const finalData = {
+                title: updatedProject.title || project.title,
+                description: updatedProject.description || project.description,
+                repo_link: updatedProject.repoLink || project.repoLink,
+                tags: updatedProject.tags.length > 0 ? updatedProject.tags.join(',') : project.tags.join(','),
+                imageUrl: uploadedImageUrl || project.imageUrl || ''
+            };
 
             const response = await axios.put(
                 `${backendUrl}/profile/${username}/projects/${updatedProject.projectId}`,
+                finalData,
                 {
-                    title: updatedProject.title,
-                    description: updatedProject.description,
-                    repo_link: updatedProject.repoLink,
-                    tags: tagsString,  // Send tags as a comma-separated string
-                },
-                { withCredentials: true },
+                    withCredentials: true,
+                }
             );
 
             if (response.status === 200) {
@@ -74,8 +84,32 @@ const UpdateProject: React.FC<UpdateProjectProps> = ({ project, onProjectChange 
         }
     };
 
+    const uploadImage = async () => {
+        if (!imageFile) return '';  // Return empty string if no image is uploaded
+
+        const formData = new FormData();
+        formData.append('image', imageFile);
+
+        try {
+            const response = await axios.post(`${backendUrl}/project/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            return response.data.imageUrl;  // Return the image URL
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            toast.error('Failed to upload image');
+            return '';
+        }
+    };
+
     return (
         <div className="grid gap-6 sm:w-80">
+            <div>
+                <UploadComponent onFileChange={setImageFile} />
+            </div>
             <div>
                 <Input
                     id="updatedProjectTitle"
@@ -84,7 +118,6 @@ const UpdateProject: React.FC<UpdateProjectProps> = ({ project, onProjectChange 
                     onChange={handleProjectChange}
                     disabled={isLoading}
                     placeholder="Project title"
-                    className=""
                 />
             </div>
             <div>
@@ -95,7 +128,6 @@ const UpdateProject: React.FC<UpdateProjectProps> = ({ project, onProjectChange 
                     onChange={handleProjectChange}
                     disabled={isLoading}
                     placeholder="Project description"
-                    className=""
                 />
             </div>
             <div>
@@ -112,9 +144,9 @@ const UpdateProject: React.FC<UpdateProjectProps> = ({ project, onProjectChange 
                     onChange={handleProjectChange}
                     disabled={isLoading}
                     placeholder="Repository link"
-                    className=""
                 />
             </div>
+            
             <Button onClick={handleUpdateProject} disabled={isLoading} className="w-full mt-4">
                 {isLoading ? (
                     <>

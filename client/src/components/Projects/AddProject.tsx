@@ -6,7 +6,6 @@ import {
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogHeader,
-    AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
@@ -16,6 +15,7 @@ import { toast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { Textarea } from '../ui/textarea';
+import UploadComponent from './UploadComponent'; 
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -24,6 +24,7 @@ interface Project {
     description: string;
     repoLink: string;
     tags: Tag[];
+    imageUrl?: string; 
 }
 
 interface Tag {
@@ -37,8 +38,10 @@ const AddProject: React.FC<{ onProjectChange: () => void }> = ({ onProjectChange
         description: '',
         repoLink: '',
         tags: [],
+        imageUrl: '', // Add image URL state
     });
 
+    const [imageFile, setImageFile] = useState<File | null>(null); // State for handling image file
     const username = localStorage.getItem('devhub_username');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -50,16 +53,39 @@ const AddProject: React.FC<{ onProjectChange: () => void }> = ({ onProjectChange
         }));
     };
 
+    // Function to upload image to Cloudinary via the backend
+    const uploadImage = async () => {
+        if (!imageFile) return ''; // Return empty string if no image is uploaded
+
+        const formData = new FormData();
+        formData.append('image', imageFile);
+
+        try {
+            const response = await axios.post(`${backendUrl}/project/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            return response.data.imageUrl; // Return the image URL
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            toast.error('Failed to upload image');
+            return '';
+        }
+    };
+
     const handleAddProject = async () => {
         if (!username) {
             toast.error('Username not found');
             return;
         }
 
-        setIsLoading(true); 
+        setIsLoading(true);
 
         try {
-            // Convert tags array to a comma-separated string
+            const imageUrl = await uploadImage(); // Upload the image and get the URL
+
             const tagsString = newProject.tags.map((tag) => tag.value).join(',');
 
             const response = await axios.post(
@@ -68,14 +94,16 @@ const AddProject: React.FC<{ onProjectChange: () => void }> = ({ onProjectChange
                     title: newProject.title,
                     description: newProject.description,
                     repo_link: newProject.repoLink,
-                    tags: tagsString,  // Send as comma-separated string
+                    tags: tagsString, // Send as comma-separated string
+                    imageUrl, // Include the uploaded image URL
                 },
                 { withCredentials: true },
             );
 
             if (response.status === 200 || response.status === 201) {
                 toast.success('Project added successfully');
-                setNewProject({ title: '', description: '', repoLink: '', tags: [] });  // Reset form
+                setNewProject({ title: '', description: '', repoLink: '', tags: [], imageUrl: '' }); // Reset form
+                setImageFile(null); // Reset the image file
                 onProjectChange();
             } else {
                 toast.error('Failed to add project');
@@ -84,12 +112,9 @@ const AddProject: React.FC<{ onProjectChange: () => void }> = ({ onProjectChange
             console.error('Failed to add project:', error);
             toast.error('An error occurred while adding the project');
         } finally {
-            setIsLoading(false);  // Reset loading state
+            setIsLoading(false); // Reset loading state
         }
     };
-
-
-
 
     return (
         <AlertDialog>
@@ -98,66 +123,67 @@ const AddProject: React.FC<{ onProjectChange: () => void }> = ({ onProjectChange
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <div className='flex'>
-                    <AlertDialogHeader className='text-2xl'>Add New Project</AlertDialogHeader>
+                    <AlertDialogHeader className='text-2xl mt-1.5'>Add New Project</AlertDialogHeader>
                     <div className='flex-grow'></div>
-                    <AlertDialogCancel><Cross1Icon className='h-3 w-3'/></AlertDialogCancel>
+                    <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
                 </div>
-                    <AlertDialogDescription>
-                        <AlertDialogTitle></AlertDialogTitle>
-                            <div className="grid gap-6 sm:w-80">
-                                <div>
-                                    <Input
-                                        id="newProjectTitle"
-                                        name="title"
-                                        value={newProject.title}
-                                        onChange={handleProjectChange}
-                                        disabled={isLoading}
-                                        placeholder="Project title"
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div>
-                                    <Textarea
-                                        id="newProjectDescription"
-                                        name="description"
-                                        value={newProject.description}
-                                        onChange={handleProjectChange}
-                                        disabled={isLoading}
-                                        placeholder="# Project description"
-                                        className=""
-                                    />
-                                </div>
-                                <div>
-                                    <TagInput
-                                        selectedTags={newProject.tags}
-                                        onTagsChange={(tags) => setNewProject({ ...newProject, tags })}
-                                    />
-                                </div>
-                                <div>
-                                    
-                                    <Input
-                                        id="newProjectRepoLink"
-                                        name="repoLink"
-                                        value={newProject.repoLink}
-                                        onChange={handleProjectChange}
-                                        disabled={isLoading}
-                                        placeholder="Repository link"
-                                        className=""
-                                    />
-                                </div>
-                                <Button onClick={handleAddProject} disabled={isLoading} className="w-full mt-4">
-                                    {isLoading ? (
-                                        <>
-                                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                            Adding...
-                                        </>
-                                    ) : (
-                                        'Add Project'
-                                    )}
-                                </Button>
-                            </div>
+                <AlertDialogDescription>
+                    <div className="grid gap-6 sm:w-80">
+                        <div>
+                            <UploadComponent onFileChange={setImageFile} /> 
+                        </div>
+                        <div>
+                            <Input
+                                id="newProjectTitle"
+                                name="title"
+                                value={newProject.title}
+                                onChange={handleProjectChange}
+                                disabled={isLoading}
+                                placeholder="Project title"
+                                className="mt-2"
+                            />
+                        </div>
+                        <div>
+                            <Textarea
+                                id="newProjectDescription"
+                                name="description"
+                                value={newProject.description}
+                                onChange={handleProjectChange}
+                                disabled={isLoading}
+                                placeholder="# Project description"
+                                className=""
+                            />
+                        </div>
+                        <div>
+                            <TagInput
+                                selectedTags={newProject.tags}
+                                onTagsChange={(tags) => setNewProject({ ...newProject, tags })}
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                id="newProjectRepoLink"
+                                name="repoLink"
+                                value={newProject.repoLink}
+                                onChange={handleProjectChange}
+                                disabled={isLoading}
+                                placeholder="Repository link"
+                                className=""
+                            />
+                        </div>
                         
-                    </AlertDialogDescription>
+                        <Button onClick={handleAddProject} disabled={isLoading} className="w-full mt-4">
+                            {isLoading ? (
+                                <>
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                    Adding...
+                                </>
+                            ) : (
+                                'Add Project'
+                            )}
+                        </Button>
+                    </div>
+                </AlertDialogDescription>
             </AlertDialogContent>
         </AlertDialog>
     );

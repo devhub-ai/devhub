@@ -18,6 +18,7 @@ interface Project {
     description: string;
     repoLink: string;
     starCount: number;
+    imageUrl: string;
     tags: string[];
 }
 
