@@ -34,6 +34,7 @@ const ProjectDisplay = () => {
   const [isStarred, setIsStarred] = useState(false);
   const [starCount, setStarCount] = useState(0); // Initialize as 0
   const [isStarRequestInProgress, setIsStarRequestInProgress] = useState(false); // To disable button during request
+  const loggedInUsername = localStorage.getItem("devhub_username");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -69,7 +70,7 @@ const ProjectDisplay = () => {
     setIsStarRequestInProgress(true); // Disable the button while the request is in progress
 
     try {
-      const response = await fetch(`${backendUrl}/profile/${username}/projects/${project.projectId}/star`, {
+      const response = await fetch(`${backendUrl}/profile/${loggedInUsername}/projects/${project.projectId}/star`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
