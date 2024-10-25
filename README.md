@@ -66,7 +66,7 @@ python -m venv venv
 ```
 
 ```bash
-## Intall dependencies
+## Install dependencies
 pip install -r requirements.txt
 ```
 ```bash
@@ -78,7 +78,7 @@ flask run or python server.py
 ## 2nd terminal for client
 cd client
 
-## Intall dependencies
+## Install dependencies
 npm install
 
 ## Run the client
