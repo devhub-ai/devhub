@@ -122,8 +122,8 @@ const AddProject: React.FC<{ onProjectChange: () => void }> = ({ onProjectChange
                 <Button variant="outline" className="h-[50px]">Add Project</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
-                <div className='flex'>
-                    <AlertDialogHeader className='text-2xl mt-1.5'>Add New Project</AlertDialogHeader>
+                <div className='flex items-center'>
+                    <AlertDialogHeader className='text-2xl'>Add New Project</AlertDialogHeader>
                     <div className='flex-grow'></div>
                     <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
                 </div>

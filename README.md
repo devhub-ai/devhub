@@ -51,6 +51,9 @@ NEO4J_URI=
 NEO4J_USER=
 NEO4J_PASSWORD=
 MONGODB_URI=
+CLOUDINARY_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
 ## Join our discord server to get Mirror Database Credentials.
 Discord Server Link : https://discord.gg/he8QHEC8WP
