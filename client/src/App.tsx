@@ -6,12 +6,12 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import { Toaster } from "@/components/ui/sonner";
-import EditProfileForm from './pages/EditProfileForm';
 import { MessagePage } from './pages/MessagePage';
 import Projects from './pages/Projects';
 import Visualization from './pages/Visualization';
 import PrivacyPolicy from './pages/Privacypolicy';
 import ProjectDisplay from './pages/ProjectDisplay';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 const App = () => {
 
@@ -23,13 +23,13 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/settings" element={<EditProfileForm />} />
           <Route path="/message" element={<MessagePage/>} />
           <Route path="/projects/:username" element={<Projects />} />
           <Route path="/projects/:username/:projectId" element={<ProjectDisplay />} />
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/relations/:username" element={<Visualization />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </Router>

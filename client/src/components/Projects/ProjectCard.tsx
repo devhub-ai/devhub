@@ -151,7 +151,7 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <div className="flex">
-                                        <AlertDialogHeader className="text-2xl">
+                                        <AlertDialogHeader className="text-2xl mt-1.5">
                                             Update Project
                                         </AlertDialogHeader>
                                         <div className="flex-grow"></div>
@@ -168,7 +168,7 @@ export function ProjectCard({ project, onProjectChange }: ProjectProps) {
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <div className="flex">
-                                        <AlertDialogHeader className="text-2xl">
+                                        <AlertDialogHeader className="text-2xl mt-1.5">
                                             Delete Project
                                         </AlertDialogHeader>
                                         <div className="flex-grow"></div>
