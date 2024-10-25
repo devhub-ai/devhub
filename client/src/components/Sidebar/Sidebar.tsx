@@ -18,7 +18,6 @@ import {
     SidebarHeader,
     SidebarInset,
     SidebarMenu,
-    SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarProvider,
@@ -26,6 +25,15 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { useNavigate } from 'react-router-dom';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import Settings from "@/components/Settings/Settings";
 
 const username = localStorage.getItem('devhub_username');
 
@@ -53,9 +61,9 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
     const navigate = useNavigate();
 
     const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();  
+        e.preventDefault();
         localStorage.removeItem('devhub_username');
-        navigate('/login'); 
+        navigate('/login');
     };
 
     const sidebarLeftData = {
@@ -80,30 +88,6 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 url: `/relations/${username}`,
                 icon: ChartNetwork,
             }
-        ],
-        navSecondary: [
-            
-            {
-                title: "Help",
-                url: "#",
-                icon: MessageCircleQuestion,
-            },
-            {
-                title: "Settings",
-                url: "/settings",
-                icon: Settings2,
-            },
-            {
-                title: username ? `${username}` : "profile",
-                url: username ? `/user/${username}` : "#",
-                icon: CircleUser,
-            },
-            {
-                title: "Logout",
-                url: "#",
-                icon: LogOut,
-                onClick: handleLogout, 
-            }
         ]
     };
 
@@ -116,10 +100,61 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 <NavMain items={sidebarLeftData.navMain} />
             </SidebarHeader>
             <SidebarContent>
-                <NavSecondary
-                    items={sidebarLeftData.navSecondary}
-                    className="mt-auto"
-                />
+                <SidebarGroup className="mt-auto">
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem >
+                                <SidebarMenuButton asChild>
+                                    <a href="#">
+                                        <MessageCircleQuestion />
+                                        <span>Help</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <AlertDialog>
+                                <AlertDialogTrigger>
+                                    <SidebarMenuItem >
+                                        <SidebarMenuButton asChild>
+                                            <div>
+                                                <Settings2 />
+                                                <span>Settings</span>
+                                            </div>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <div className="flex">
+                                        <AlertDialogHeader className="text-2xl mt-1.5">
+                                            Settings
+                                        </AlertDialogHeader>
+                                        <div className="flex-grow"></div>
+                                        <AlertDialogCancel>
+                                            <Cross1Icon className="h-3 w-3" />
+                                        </AlertDialogCancel>
+                                    </div>
+                                    <Settings />
+                                   
+                                </AlertDialogContent>
+                            </AlertDialog>
+                            <SidebarMenuItem >
+                                <SidebarMenuButton asChild>
+                                    <a href={username ? `/user/${username}` : "/login"}>
+                                        <CircleUser />
+                                        <span>{username ? `${username}` : "profile"}</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem >
+                                <SidebarMenuButton asChild>
+                                    <a onClick={handleLogout} href="#">
+                                        <LogOut />
+                                        <span>Logout</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarContent>
             <SidebarRail />
         </Sidebar>
@@ -152,35 +187,3 @@ function NavMain({
     )
 }
 
-function NavSecondary({
-    items,
-    ...props
-}: {
-    items: {
-        title: string
-        url: string
-        icon: LucideIcon
-        badge?: React.ReactNode
-        onClick?: React.MouseEventHandler<HTMLAnchorElement> 
-    }[]
-} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-    return (
-        <SidebarGroup {...props}>
-            <SidebarGroupContent>
-                <SidebarMenu>
-                    {items.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton asChild>
-                                <a href={item.url} onClick={item.onClick}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                </a>
-                            </SidebarMenuButton>
-                            {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
-                        </SidebarMenuItem>
-                    ))}
-                </SidebarMenu>
-            </SidebarGroupContent>
-        </SidebarGroup>
-    )
-}
