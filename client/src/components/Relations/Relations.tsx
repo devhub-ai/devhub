@@ -1,5 +1,18 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import { useParams } from "react-router-dom";
+import { Download, Share, Code } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { ShareRelation } from "./ShareRelation";
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import RelationCode from './RelationCode';
 
 interface NodeData extends d3.SimulationNodeDatum {
     id: string | number;
@@ -15,7 +28,7 @@ interface LinkData extends d3.SimulationLinkDatum<NodeData> {
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 const Relations = () => {
-    const username = localStorage.getItem('devhub_username');
+    const { username: username } = useParams<{ username: string }>();
     const d3Container = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -97,7 +110,6 @@ const Relations = () => {
                     .text((d: NodeData) => d.label);
 
                 node.append('title').text((d: NodeData) => d.id.toString());
-                
 
                 // Update positions on each tick
                 simulation.on('tick', () => {
@@ -148,8 +160,93 @@ const Relations = () => {
             });
     }, [username]);
 
+    // Function to handle the download of the SVG as an image
+    const handleDownload = () => {
+        const svgElement = d3.select(d3Container.current).select('svg').node();
+        if (!svgElement) return;
+
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(svgElement as Node);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const svgSize = (svgElement as SVGSVGElement).getBoundingClientRect();
+        canvas.width = svgSize.width;
+        canvas.height = svgSize.height;
+
+        const img = new Image();
+        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+
+        img.onload = () => {
+            ctx?.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+
+            // Trigger download
+            const a = document.createElement('a');
+            a.download = 'relation-graph.png';
+            a.href = canvas.toDataURL('image/png');
+            a.click();
+        };
+
+        img.src = url;
+    };
+
     return (
         <div style={{ width: '100%', height: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                <Button
+                    variant="secondary"
+                    className="shadow-none"
+                    onClick={handleDownload}
+                >
+                    <Download />
+                </Button>
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button
+                            variant="secondary"
+                            className="shadow-none"
+                        >
+                            <Code />
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <div className="flex items-center">
+                            <AlertDialogHeader className="text-2xl mt-1.5">
+                                Relation Query
+                            </AlertDialogHeader>
+                            <div className="flex-grow"></div>
+                            <AlertDialogCancel>
+                                <Cross1Icon className="h-3 w-3" />
+                            </AlertDialogCancel>
+                        </div>
+                        <RelationCode username={username || ''} />
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button
+                            variant="secondary"
+                            className="shadow-none"
+                        >
+                            <Share />
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <div className="flex items-center">
+                            <AlertDialogHeader className="text-2xl mt-1.5">
+                                Share Relations
+                            </AlertDialogHeader>
+                            <div className="flex-grow"></div>
+                            <AlertDialogCancel>
+                                <Cross1Icon className="h-3 w-3" />
+                            </AlertDialogCancel>
+                        </div>
+                        <ShareRelation username={username || ''} />
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
             <div ref={d3Container} style={{ width: '100%', height: '100%' }}></div>
         </div>
     );

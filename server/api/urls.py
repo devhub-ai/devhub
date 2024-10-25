@@ -7,6 +7,7 @@ from api.handlers.query.querymodel import chat,chat_history
 from api.handlers.user.friends import friends_bp
 from api.handlers.message.message import search_users, send_message, get_messages
 from api.handlers.visualization.visualization import get_user_relations
+from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
 
 def register_routes(app):
     # Authentication routes
@@ -55,6 +56,11 @@ def register_routes(app):
     # Visualization route
     app.add_url_rule('/profile/relations','get_user_relations',get_user_relations, methods=['GET'])
     
+    # New Neo4j Connection route
+    app.add_url_rule('/new-connection','connect_to_neo4j',connect_to_neo4j,methods=['POST'])
+    app.add_url_rule('/execute-cypher','execute_cypher',execute_cypher,methods=['POST'])
+    app.add_url_rule('/db-schema', 'schema', schema, methods=['POST'])
+     
     # Landing page route
     app.add_url_rule('/', 'index', index)
     

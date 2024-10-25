@@ -11,6 +11,7 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
+import CypherQueryExecutor from "@/components/ConnectNeo4j/ConnectNeo4j"
 
 const Visualization = () => {
     const username = localStorage.getItem('devhub_username');
@@ -29,13 +30,13 @@ const Visualization = () => {
                     <Tabs defaultValue="userRelation" className="mt-5 w-full">
                         <TabsList className="grid w-full grid-cols-2">
                             <TabsTrigger value="userRelation">{username} Relations</TabsTrigger>
-                            <TabsTrigger value="seeRelation">New Neo4j KGs</TabsTrigger>
+                            <TabsTrigger value="seeRelation">Exec. Cypher Query</TabsTrigger>
                         </TabsList>
                             <TabsContent value="userRelation">
                                 <Relations />
                         </TabsContent>
                             <TabsContent value="seeRelation">
-                            <p>Coming soon...</p>
+                            <CypherQueryExecutor />
                         </TabsContent>
                     </Tabs>
                 </div>  
