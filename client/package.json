@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.2",
@@ -39,8 +40,10 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "cobe": "^0.6.3",
+    "crypto-js": "^4.2.0",
     "d3": "^7.9.0",
     "framer-motion": "^11.3.8",
+    "input-otp": "^1.2.4",
     "lucide-react": "^0.414.0",
     "mini-svg-data-uri": "^1.4.4",
     "next-themes": "^0.3.0",
@@ -62,6 +65,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/d3": "^7.4.3",
     "@types/node": "^20.14.11",
     "@types/react": "^18.3.3",
