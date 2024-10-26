@@ -12,9 +12,10 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import CypherQueryExecutor from "@/components/ConnectNeo4j/ConnectNeo4j"
+import { useParams } from "react-router-dom"
 
 const Visualization = () => {
-    const username = localStorage.getItem('devhub_username');
+    const { username: paramsUsername } = useParams<{ username: string }>();
     return (
         <SidebarProvider>
             <SidebarLeft />
@@ -29,7 +30,7 @@ const Visualization = () => {
                     <div className="flex flex-1 flex-col gap-4 p-4">
                     <Tabs defaultValue="userRelation" className="mt-5 w-full">
                         <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="userRelation">{username} Relations</TabsTrigger>
+                                <TabsTrigger value="userRelation">{paramsUsername} Relations</TabsTrigger>
                             <TabsTrigger value="seeRelation">Exec. Cypher Query</TabsTrigger>
                         </TabsList>
                             <TabsContent value="userRelation">

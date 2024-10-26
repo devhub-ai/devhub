@@ -15,7 +15,7 @@ DevHub is an innovative platform designed to connect developers who share simila
 ## Features ✨
 
 
-- [ ] **OTP Based Authentication**
+- [x] **OTP Based Authentication**
 - [x] **Signin/Signup** (Unique Username check and follows NIST Guidlines Validation) 
 - [x] **Create Profile**
 - [x] **Add/update/delete projects**

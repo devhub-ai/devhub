@@ -318,19 +318,20 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               )}
             </div>
           </div>
-          <Button
+            <Button
             disabled={
               isLoading ||
               isUsernameAvailable === false ||
               usernameError !== "" ||
-              isPasswordValid === false
+              isPasswordValid === false ||
+              !isOtpVerified
             }
-          >
+            >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             Sign Up
-          </Button>
+            </Button>
         </div>
       </form>
     </div>
