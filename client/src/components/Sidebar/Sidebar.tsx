@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import Settings from "@/components/Settings/Settings";
+import Help from "../Help/Help";
 
 const username = localStorage.getItem('devhub_username');
 
@@ -103,14 +104,30 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 <SidebarGroup className="mt-auto">
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            <SidebarMenuItem >
-                                <SidebarMenuButton asChild>
-                                    <a href="#">
-                                        <MessageCircleQuestion />
-                                        <span>Help</span>
-                                    </a>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
+                            <AlertDialog>
+                                <AlertDialogTrigger>
+                                    <SidebarMenuItem >
+                                        <SidebarMenuButton asChild>
+                                            <div>
+                                                <MessageCircleQuestion />
+                                                <span>Help</span>
+                                            </div>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <div className="flex">
+                                        <AlertDialogHeader className="text-2xl mt-1.5">
+                                            Help
+                                        </AlertDialogHeader>
+                                        <div className="flex-grow"></div>
+                                        <AlertDialogCancel>
+                                            <Cross1Icon className="h-3 w-3" />
+                                        </AlertDialogCancel>
+                                    </div>
+                                    <Help />
+                                </AlertDialogContent>
+                            </AlertDialog>
                             <AlertDialog>
                                 <AlertDialogTrigger>
                                     <SidebarMenuItem >

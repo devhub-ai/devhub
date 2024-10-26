@@ -11,6 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Check, X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import OtpVerifier from "./OtpVerifier"; // OTP Verifier Component
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 interface PasswordRules {
@@ -36,9 +42,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const allRulesPassed = passwordRules && Object.values(passwordRules).every((passed) => passed === true);
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const navigate = useNavigate();
+  const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHasStartedTyping(true); 
+    setHasStartedTyping(true);
     handlePasswordChange(e);
   };
 
@@ -158,6 +166,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
   }
 
+  const handleOtpVerified = () => {
+    setIsOtpVerified(true);
+    console.log("OTP verified successfully!");
+  };
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
@@ -179,7 +192,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 disabled={isLoading}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="dark:bg-zinc-900 pr-10" // Add padding to the right for the icon
+                className="dark:bg-zinc-900 pr-10"
                 required
               />
 
@@ -199,10 +212,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                   <HoverCardTrigger asChild>
                     <X className="absolute right-3 text-red-500" />
                   </HoverCardTrigger>
-                    <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
-                      Username is not available
+                  <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
                     Username is not available
-                    </HoverCardContent>
+                  </HoverCardContent>
                 </HoverCard>
               )}
 
@@ -218,24 +230,40 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               )}
             </div>
           </div>
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <Input
               id="email"
               placeholder="name@example.com"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
+              disabled={isLoading || isOtpVerified}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='dark:bg-zinc-900'
+              className="w-full dark:bg-zinc-900"
               required
-            />
+              />
+            </div>
+            <div>
+              <AlertDialog open={isOtpDialogOpen} onOpenChange={setIsOtpDialogOpen}>
+                <AlertDialogTrigger asChild>
+                  {
+                  isOtpVerified ? (
+                    <Button className="bg-green-500" disabled>Verified</Button>
+                  ) : (
+                    <Button onClick={() => setIsOtpDialogOpen(true)}>Verify</Button>
+                  )
+                  }
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <OtpVerifier email={email} username={username} onClose={() => setIsOtpDialogOpen(false)} onVerified={handleOtpVerified} />
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
+
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="password">
               Password
@@ -290,19 +318,20 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               )}
             </div>
           </div>
-          <Button
+            <Button
             disabled={
               isLoading ||
               isUsernameAvailable === false ||
               usernameError !== "" ||
-              isPasswordValid === false
+              isPasswordValid === false ||
+              !isOtpVerified
             }
-          >
+            >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             Sign Up
-          </Button>
+            </Button>
         </div>
       </form>
     </div>
