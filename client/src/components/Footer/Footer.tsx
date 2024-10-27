@@ -1,3 +1,5 @@
+import { ModeToggle } from "../Theme/mode-toggle"
+
 const Footer = () => {
     return (
         <div>
@@ -41,7 +43,7 @@ const Footer = () => {
                                 <ul className="text-gray-500 dark:text-gray-400 font-medium">
                                     <li className="mb-4">
                                         <a
-                                            href="https://github.com/devhub-ai/devhub/"
+                                            href="https://github.com/devhub-ai/"
                                             className="hover:underline "
                                         >
                                             Github
@@ -49,7 +51,7 @@ const Footer = () => {
                                     </li>
                                     <li>
                                         <a
-                                            href="/"
+                                            href="https://discord.gg/u86Gy2qFHm"
                                             className="hover:underline"
                                         >
                                             Discord
@@ -88,11 +90,11 @@ const Footer = () => {
                         <div className="flex mt-4 sm:justify-center sm:mt-0">
 
                             <a
-                                href="#"
-                                className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
+                                href="https://discord.gg/u86Gy2qFHm"
+                                className="text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center"
                             >
                                 <svg
-                                    className="w-4 h-4"
+                                    className="w-6 h-6 items-center"
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor"
@@ -105,10 +107,10 @@ const Footer = () => {
 
                             <a
                                 href="https://github.com/devhub-ai/devhub/"
-                                className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5"
+                                className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5 flex items-center mr-5"
                             >
                                 <svg
-                                    className="w-4 h-4"
+                                    className="w-6 h-6 items-center"
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor"
@@ -122,6 +124,7 @@ const Footer = () => {
                                 </svg>
                                 <span className="sr-only">GitHub account</span>
                             </a>
+                            <ModeToggle/>
 
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 # DevHub: Intelligent Matchmaking Platform for Developers 💻🤝
 
-<center><a href="https://discord.gg/he8QHEC8WP" target="_blank"><img src="https://img.shields.io/discord/1259889923129999411?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff" /></a>
-</center>
+<a href="https://discord.gg/u86Gy2qFHm" target="_blank"><img src="https://img.shields.io/discord/1259889923129999411?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff" /></a>
+
 
 DevHub is an innovative platform designed to connect developers who share similar interests and complementary skills. By leveraging advanced technologies, it facilitates intelligent matchmaking and personalized recommendations, enabling devs to form effective teams and engage in meaningful collaborations. The platform provides a structured and user-friendly environment for networking, learning, and growth, ultimately enhancing the academic and professional experiences of developers.
 
@@ -18,13 +18,18 @@ DevHub is an innovative platform designed to connect developers who share simila
 - [x] **OTP Based Authentication**
 - [x] **Signin/Signup** (Unique Username check and follows NIST Guidlines Validation) 
 - [x] **Create Profile**
-- [x] **Add/update/delete projects**
+- [x] **Add/update/delete projects** (Supports Banner image,Markdown in Desc)
 - [x] **Add Github and Leetcode profiles** (Data in profile will be populated from the given handles)
 - [x] **Convert Profile into Knowledge Graphs** 
 - [x] **Use langchain to Chat with KGs**
 - [x] **Save Chat history**
 - [x] **Typing animation and Markdown response**  
-
+- [x] **Share projects with unique projectID**
+- [x] **Star your and other user's project**
+- [x] **Visualize your Relation in Graph using d3**
+- [x] **Add Neo4j account, get graph Schema and Execute your query**
+- [x] **Save image as png of graph and also share it with others using shareable link**
+ 
 ## Local Installation 🧑🏻‍💻
 
 Enter into the root directory.
@@ -56,7 +61,7 @@ CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 
 ## Join our discord server to get Mirror Database Credentials.
-Discord Server Link : https://discord.gg/he8QHEC8WP
+Discord Server Link : https://discord.gg/u86Gy2qFHm
 ```
 ```bash
 ## Create and activate Virtual Environment
