@@ -4,7 +4,7 @@ from api.handlers.projects.projects import add_project, update_project, delete_p
 from api.handlers.analyze.githubdata import github_data, top_languages, streak_stats, pinned_repos, streak_chart
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,chat_history
-from api.handlers.user.friends import friends_bp
+from api.handlers.user.friends import add_friend, remove_friend, get_friends
 from api.handlers.message.message import search_users, send_message, get_messages
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
@@ -23,6 +23,11 @@ def register_routes(app):
     # Profile routes
     app.add_url_rule('/profile/<username>', 'get_profile', get_profile, methods=['GET'])
     app.add_url_rule('/profile/<username>', 'update_profile', update_profile, methods=['PUT'])
+    
+    # Friends routes
+    app.add_url_rule('/profile/<username>/friends','add_friend',add_friend, methods=['POST'])
+    app.add_url_rule('/profile/<username>/friends','remove_friend',remove_friend, methods=['DELETE'])
+    app.add_url_rule('/profile/<username>/friends','get_friends',get_friends, methods=['GET'])
     
     # Analyze routes - Github
     app.add_url_rule('/analyze/github_data', 'github_data', github_data, methods=['POST'])
@@ -64,5 +69,3 @@ def register_routes(app):
     # Landing page route
     app.add_url_rule('/', 'index', index)
     
-    # Friends routes
-    app.register_blueprint(friends_bp)

@@ -71,7 +71,7 @@ const SkeletonOne = () => {
         className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 w-3/4 ml-auto bg-white dark:bg-black"
       >
         <Skeleton className="w-full bg-gray-100 h-4 rounded-full dark:bg-neutral-900" />
-        <img className="h-6 w-6 rounded-full flex-shrink-0" src="https://cdn3d.iconscout.com/3d/premium/thumb/happy-man-3d-icon-download-in-png-blend-fbx-gltf-file-formats--young-boy-stylist-character-avatar-pack-avatars-icons-4786136.png?f=webp"/>
+        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
       </motion.div>
       <motion.div
         variants={variants}
@@ -184,13 +184,7 @@ const SkeletonFour = () => {
         variants={first}
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
-        <img
-          src="https://cdn3d.iconscout.com/3d/premium/thumb/person-3d-icon-download-in-png-blend-fbx-gltf-file-formats--cap-hat-winter-man-avatar-male-pack-people-icons-5638294.png?f=webp"
-          alt="avatar"
-          height="100"
-          width="100"
-          className="rounded-full h-10 w-10"
-        />
+        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
           Just code in Vanilla Javascript
         </p>
@@ -199,13 +193,7 @@ const SkeletonFour = () => {
         </p>
       </motion.div>
       <motion.div className="h-full relative z-20 w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center">
-        <img
-          src="https://cdn3d.iconscout.com/3d/premium/thumb/happy-man-3d-icon-download-in-png-blend-fbx-gltf-file-formats--young-boy-stylist-character-avatar-pack-avatars-icons-4786136.png?f=webp"
-          alt="avatar"
-          height="100"
-          width="100"
-          className="rounded-full h-10 w-10"
-        />
+        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
           Tailwind CSS is cool, you know
         </p>
@@ -217,13 +205,7 @@ const SkeletonFour = () => {
         variants={second}
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
-        <img
-          src="https://cdn3d.iconscout.com/3d/premium/thumb/man-3d-illustration-download-in-png-blend-fbx-gltf-file-formats--fashion-human-person-avatar-pack-people-illustrations-4107676.png?f=webp"
-          alt="avatar"
-          height="100"
-          width="100"
-          className="rounded-full h-10 w-10"
-        />
+        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
           I love angular, RSC, and Redux.
         </p>
@@ -270,13 +252,7 @@ const SkeletonFive = () => {
         variants={variants}
         className="flex flex-row rounded-2xl border border-neutral-100 dark:border-white/[0.2] p-2  items-start space-x-2 bg-white dark:bg-black"
       >
-        <img
-          src="https://cdn3d.iconscout.com/3d/premium/thumb/happy-man-3d-icon-download-in-png-blend-fbx-gltf-file-formats--young-boy-stylist-character-avatar-pack-avatars-icons-4786136.png?f=webp"
-          alt="avatar"
-          height="100"
-          width="100"
-          className="rounded-full h-10 w-10"
-        />
+        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <p className="text-xs text-neutral-500">
           There are a lot of cool framerworks out there like React, Angular,
           Vue, Svelte that can make your life ....
@@ -287,7 +263,7 @@ const SkeletonFive = () => {
         className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center justify-end space-x-2 w-3/4 ml-auto bg-white dark:bg-black"
       >
         <p className="text-xs text-neutral-500">Use PHP.</p>
-        <img className="h-6 w-6 rounded-full flex-shrink-0" src="https://cdn3d.iconscout.com/3d/premium/thumb/person-3d-icon-download-in-png-blend-fbx-gltf-file-formats--cap-hat-winter-man-avatar-male-pack-people-icons-5638294.png?f=webp" />
+        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
       </motion.div>
     </motion.div>
   );
