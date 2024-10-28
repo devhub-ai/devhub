@@ -9,7 +9,7 @@ import {
     AlertDialogTrigger,
     AlertDialogDescription
 } from "@/components/ui/alert-dialog";
-import { Download } from 'lucide-react';
+import { Download, CirclePlay, Braces } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { Input } from '@/components/ui/input';
@@ -96,7 +96,7 @@ const CypherQueryExecutor = () => {
                     data.results.forEach((result: { nodeId1: string | number, nodeId2: string | number, nodeLabels1: string[], nodeLabels2: string[] }) => {
                         const { nodeId1, nodeId2, nodeLabels1, nodeLabels2 } = result;
 
-                        
+
                         if (!nodes.find(node => node.id === nodeId1)) {
                             nodes.push({ id: nodeId1, labels: nodeLabels1 });
                         }
@@ -260,13 +260,6 @@ const CypherQueryExecutor = () => {
     return (
         <div style={{ width: '100%', height: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                <Button
-                    variant="secondary"
-                    className="shadow-none"
-                    onClick={handleDownload}
-                >
-                    <Download />
-                </Button>
                 <AlertDialog>
                     <AlertDialogTrigger>
                         <Button
@@ -311,42 +304,90 @@ const CypherQueryExecutor = () => {
                         </Button>
                     </AlertDialogContent>
                 </AlertDialog>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className='mt-3'>
-                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '20px' }}>
-                    <div style={{ flex: '1', minWidth: '300px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <div className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring" style={{ flex: '0 1 auto' }}>
-                            <Textarea
-                                value={cypherQuery}
-                                onChange={(e) => setCypherQuery(e.target.value)}
-                                rows={10}
-                                cols={50}
-                                style={{ width: '100%' }}
-                                className="min-h-12 resize-none border-0 shadow-none focus-visible:ring-0"
-                                placeholder="Write Cypher Query"
-                            />
-                            <div className="flex items-center p-3 pt-0">
-                                <Button onClick={handleQueryExecution} size="sm" className="gap-1.5" disabled={loading}>
-                                    {loading ? (
-                                        <>
-                                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                            Executing...
-                                        </>
-                                    ) : (
-                                        'Execute Query'
-                                    )}
-                                </Button>
-                            </div>
-                        </div>
-                        <ScrollArea className=" rounded-md border p-4 mt-4 h-[200px]">
-                            <h1 className='text-lg'>Schema</h1>
-                            <pre>{JSON.stringify(schema, null, 2)}</pre>
-                        </ScrollArea>
-                    </div>
 
-                    <div id="result-visualization" style={{ flex: '1', minWidth: '300px', height: '100%' }}></div>
-                </div>
+                <div className="flex-grow"></div>
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button
+                            variant="secondary"
+                            className="shadow-none"
+                        >
+                            <CirclePlay />
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <div className="flex items-center">
+                            <AlertDialogHeader className="text-2xl">
+                                Cypher Query
+                            </AlertDialogHeader>
+                            <div className="flex-grow"></div>
+                            <AlertDialogCancel>
+                                <Cross1Icon className="h-3 w-3" />
+                            </AlertDialogCancel>
+                        </div>
+                        <AlertDialogDescription>
+                            <div className="grid gap-6 sm:w-80">
+                                <Textarea
+                                    value={cypherQuery}
+                                    onChange={(e) => setCypherQuery(e.target.value)}
+                                    rows={10}
+                                    cols={50}
+                                    style={{ width: '100%' }}
+                                    className="min-h-12 resize-none"
+                                    placeholder="Write Cypher Query"
+                                />
+                            </div>
+                        </AlertDialogDescription>
+                        <Button onClick={handleQueryExecution} size="sm" className="gap-1.5" disabled={loading}>
+                            {loading ? (
+                                <>
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                    Executing...
+                                </>
+                            ) : (
+                                'Execute Query'
+                            )}
+                        </Button>
+                    </AlertDialogContent>
+                </AlertDialog>
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button
+                            variant="secondary"
+                            className="shadow-none"
+                        >
+                            <Braces />
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <div className="flex items-center">
+                            <AlertDialogHeader className="text-2xl">
+                                Schema
+                            </AlertDialogHeader>
+                            <div className="flex-grow"></div>
+                            <AlertDialogCancel>
+                                <Cross1Icon className="h-3 w-3" />
+                            </AlertDialogCancel>
+                        </div>
+                        <AlertDialogDescription>
+                            <div className="grid gap-6 sm:w-80">
+                                <ScrollArea className=" rounded-md border p-4 mt-4 h-[200px]">
+                                    <pre>{JSON.stringify(schema, null, 2)}</pre>
+                                </ScrollArea>
+                            </div>
+                        </AlertDialogDescription>
+                    </AlertDialogContent>
+                </AlertDialog>
+                <Button
+                    variant="secondary"
+                    className="shadow-none"
+                    onClick={handleDownload}
+                >
+                    <Download />
+                </Button>
+
             </div>
+            <div id="result-visualization" style={{ width: '100%', height: '100%' }}></div>
         </div>
     );
 };
