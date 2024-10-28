@@ -152,3 +152,8 @@ class Comment:
             "created_at": datetime.utcnow()
         }
         return comments_collection.insert_one(comment)
+    
+    @staticmethod
+    def delete_comment(comment_id):
+        result = comments_collection.delete_one({"_id": ObjectId(comment_id)})
+        return result.deleted_count > 0
