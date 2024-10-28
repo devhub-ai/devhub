@@ -47,6 +47,24 @@ const Help = () => {
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="relations">
+                  <AccordionTrigger>Relations</AccordionTrigger>
+                  <AccordionContent>
+                    <h3 className="font-semibold mb-2">People You May Know:</h3>
+                    <ul className="list-disc pl-6 mb-4">
+                      <li>This section offers personalized recommendations based on mutual connections, shared interests, or skillsets.</li>
+                    </ul>
+                    <h3 className="font-semibold mb-2">Following Profiles:</h3>
+                    <ul className="list-disc pl-6 mb-4">
+                      <li>If you’re not ready to connect, you can choose to follow developers for updates on their activities without sending a connection request.</li>
+                    </ul>
+                    <h3 className="font-semibold mb-2">Messaging Connections:</h3>
+                    <ul className="list-disc pl-6">
+                      <li>Once connected, send messages to people in your network to initiate conversations or discuss collaborations.</li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="troubleshooting">
                   <AccordionTrigger>Troubleshooting</AccordionTrigger>
                   <AccordionContent>
