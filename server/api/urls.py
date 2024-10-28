@@ -8,7 +8,7 @@ from api.handlers.user.friends import friends_bp
 from api.handlers.message.message import search_users, send_message, get_messages
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
-from api.handlers.posts.posts import create_post, update_post, delete_post
+from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment
 
 def register_routes(app):
     # Authentication routes
@@ -72,4 +72,6 @@ def register_routes(app):
     app.add_url_rule('/posts', 'create_post', create_post, methods=['POST'])
     app.add_url_rule('/posts/<post_id>', 'update_post', update_post, methods=['PUT'])
     app.add_url_rule('/posts/<post_id>', 'delete_post', delete_post, methods=['DELETE'])
-
+    app.add_url_rule('/posts/<post_id>/<vote_type>', 'vote_post', vote_post, methods=['POST'])
+    app.add_url_rule('/posts/<post_id>/comments', 'add_comment', add_comment, methods=['POST'])
+    app.add_url_rule('/posts/<post_id>/comments/<comment_id>', 'delete_comment', delete_comment, methods=['DELETE'])

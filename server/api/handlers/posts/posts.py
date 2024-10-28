@@ -50,3 +50,10 @@ def add_comment(post_id):
     text = data['text']
     comment = Comment.add_comment(post_id, user_id, text)
     return jsonify({"comment_id": str(comment.inserted_id)}), 201
+
+def delete_comment(post_id, comment_id):
+    success = Comment.delete_comment(comment_id)
+    if success:
+        return jsonify({"message": "Comment deleted"}), 200
+    else:
+        return jsonify({"error": "Comment not found"}), 404
