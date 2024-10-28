@@ -11,9 +11,7 @@ DevHub is an innovative platform designed to connect developers who share simila
 - **Frontend**: Vite + React (TypeScript) ⚛️  
 - **Database**: Neo4j + MongoDB 
 
-
 ## Features ✨
-
 
 - [x] **OTP Based Authentication**
 - [x] **Signin/Signup** (Unique Username check and follows NIST Guidlines Validation) 
@@ -41,54 +39,68 @@ You can use `setup.bat` to automate the installation and running process of the 
 ```bash
 ./setup.bat
 ```
-### Manual Installation
+### Manual Installation ⚒️
 
-Open two terminal for server and client and enter into the directories.
-```bash
-## 1st terminal for server
-cd server
+1. Open two terminal for server and client and enter into the directories.
 
-## create .env file with following details (you can create your neo4j account or use our mirror database credentials)
+    ```bash
+    ## 1st terminal for server
+    cd server
 
-GOOGLE_API_KEY= 
-SECRET_KEY=
-NEO4J_URI= 
-NEO4J_USER=
-NEO4J_PASSWORD=
-MONGODB_URI=
-CLOUDINARY_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+    ## create .env file with following details (you can create your neo4j account or use our mirror database credentials)
 
-## Join our discord server to get Mirror Database Credentials.
-Discord Server Link : https://discord.gg/u86Gy2qFHm
-```
-```bash
-## Create and activate Virtual Environment
-python -m venv venv
+    GOOGLE_API_KEY= 
+    SECRET_KEY=
+    NEO4J_URI= 
+    NEO4J_USER=
+    NEO4J_PASSWORD=
+    MONGODB_URI=
+    CLOUDINARY_NAME=
+    CLOUDINARY_API_KEY=
+    CLOUDINARY_API_SECRET=
 
-./venv/Scripts/activate
-```
+    ## Join our discord server to get Mirror Database Credentials.
+    Discord Server Link : https://discord.gg/u86Gy2qFHm
+    ```
+    ```bash
+    ## Create and activate Virtual Environment
+    python -m venv venv
 
-```bash
-## Install dependencies
-pip install -r requirements.txt
-```
-```bash
-## Run the Server
-flask run or python server.py
-```
+    ./venv/Scripts/activate
+    ```
 
-```bash
-## 2nd terminal for client
-cd client
+    ```bash
+    ## Install dependencies
+    pip install -r requirements.txt
+    ```
+    ```bash
+    ## Run the Server
+    flask run or python server.py
+    ```
 
-## Install dependencies
-npm install
+    ```bash
+    ## 2nd terminal for client
+    cd client
 
-## Run the client
-npm run dev
-```
+    ## Install dependencies
+    npm install
+
+    ## Run the client
+    npm run dev
+    ```
+
+### Docker Installation 🐋
+
+1. Pull the devhub-server image from the dockerhub
+
+    ```bash
+    docker pull deepraj21/devhub-server:latest
+    ```
+2. Go into the server directory having .env file to run the image into a container
+
+    ```bash
+    docker run -d -p 5000:5000 --name devhub-server --env-file .env deepraj21/devhub-server:latest
+    ```
 
 ## API Documentation 📜
 

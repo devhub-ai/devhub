@@ -63,7 +63,7 @@ const SkeletonOne = () => {
         variants={variants}
         className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2  items-center space-x-2 bg-white dark:bg-black"
       >
-        <img className="h-6 w-6 rounded-full flex-shrink-0" src="https://i.ibb.co/kh28sVv/cropped-image.png" alt="devhub-logo" />
+        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <Skeleton className="w-full bg-gray-100 h-4 rounded-full dark:bg-neutral-900" />
       </motion.div>
       <motion.div
@@ -77,7 +77,7 @@ const SkeletonOne = () => {
         variants={variants}
         className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 bg-white dark:bg-black"
       >
-        <img className="h-6 w-6 rounded-full flex-shrink-0" src="https://i.ibb.co/kh28sVv/cropped-image.png" alt="devhub-logo" />
+        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <Skeleton className="w-full bg-gray-100 h-4 rounded-full dark:bg-neutral-900" />
       </motion.div>
     </motion.div>
@@ -184,7 +184,7 @@ const SkeletonFour = () => {
         variants={first}
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
-        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
+        <Skeleton className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
           Just code in Vanilla Javascript
         </p>
@@ -193,7 +193,7 @@ const SkeletonFour = () => {
         </p>
       </motion.div>
       <motion.div className="h-full relative z-20 w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center">
-        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
+        <Skeleton className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
           Tailwind CSS is cool, you know
         </p>
@@ -205,7 +205,7 @@ const SkeletonFour = () => {
         variants={second}
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
-        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
+        <Skeleton className="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
           I love angular, RSC, and Redux.
         </p>

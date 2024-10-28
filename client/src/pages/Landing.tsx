@@ -3,10 +3,8 @@ import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import Footer from '@/components/Footer/Footer';
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Hero } from '@/components/Hero/Hero';
-import { Cover } from '@/components/ui/cover';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ReactLenis from 'lenis/react';
 
 const Landing: React.FC = () => {
 
@@ -19,8 +17,8 @@ const Landing: React.FC = () => {
     }
   }, [navigate]);
   return (
-    <ReactLenis root>
-      <div className="rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-zinc-900 bg-white dark:bg-dot-white/[0.2] bg-dot-black/[0.2] items-center justify-center bg-fixed">
+    <>
+      <div className="rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-zinc-900 bg-white dark:bg-dot-white/[0.2] bg-dot-black/[0.5] items-center justify-center bg-fixed">
         <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_bottom,transparent_40%,black)]"></div>
         <div className="fixed top-0 left-0 w-full z-50">
           <Navbar />
@@ -60,11 +58,11 @@ const Landing: React.FC = () => {
           <Hero />
         </div>
         <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 p-4 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white mb-10">
-          Build amazing connections <br /> at <Cover>Devhub</Cover>
+          Build amazing connections <br /> at Devhub
         </h1>
       </div>
       <Footer />
-    </ReactLenis>
+    </>
   );
 };
 

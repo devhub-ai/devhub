@@ -7,6 +7,7 @@ import {
     LogOut,
     MessagesSquare,
     ChartNetwork,
+    SquarePlus,
     type LucideIcon,
 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
@@ -88,6 +89,11 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 title: "KGs",
                 url: `/relations/${username}`,
                 icon: ChartNetwork,
+            },
+            {
+                title: "Posts",
+                url: "/posts",
+                icon: SquarePlus,
             }
         ]
     };
