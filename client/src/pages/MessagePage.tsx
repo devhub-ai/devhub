@@ -7,7 +7,6 @@ import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 import { Message } from "../components/Messages/Message";
 
 export const MessagePage: React.FC = () => {
-    
     return (
         <SidebarProvider>
             <SidebarLeft />

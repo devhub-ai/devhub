@@ -8,7 +8,8 @@ import {
     MessagesSquare,
     ChartNetwork,
     SquarePlus,
-    type LucideIcon,
+    Rss,
+    House
 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -24,6 +25,9 @@ import {
     SidebarProvider,
     SidebarRail,
     SidebarTrigger,
+    SidebarMenuSub,
+    SidebarMenuSubItem,
+    SidebarMenuSubButton
 } from "@/components/ui/sidebar"
 import { useNavigate } from 'react-router-dom';
 import {
@@ -68,43 +72,72 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
         navigate('/login');
     };
 
-    const sidebarLeftData = {
-        navMain: [
-            {
-                title: "Ask dh",
-                url: "/home",
-                icon: Sparkles,
-            },
-            {
-                title: "Message",
-                url: "/message",
-                icon: MessagesSquare,
-            },
-            {
-                title: "Projects",
-                url: `/projects/${username}`,
-                icon: Inbox,
-            },
-            {
-                title: "KGs",
-                url: `/relations/${username}`,
-                icon: ChartNetwork,
-            },
-            {
-                title: "Posts",
-                url: "/posts",
-                icon: SquarePlus,
-            }
-        ]
-    };
-
     return (
         <Sidebar className="border-r-0" {...props}>
             <SidebarHeader>
                 <h1 className="ml-2 text-4xl mt-4">DevHub</h1>
             </SidebarHeader>
             <SidebarHeader>
-                <NavMain items={sidebarLeftData.navMain} />
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <a href={'/home'}>
+                                <Sparkles />
+                                <span>Ask dh</span>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <a href={'/message'}>
+                                <MessagesSquare />
+                                <span>Message</span>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <a href={`/projects/${username}`}>
+                                <Inbox />
+                                <span>Projects</span>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <a href={`/relations/${username}`}>
+                                <ChartNetwork />
+                                <span>KGs</span>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <a href={'/posts'}>
+                                <Rss />
+                                <span>Feed</span>
+                            </a>
+                        </SidebarMenuButton>
+                        <SidebarMenuSub>
+                            <SidebarMenuSubItem>
+                                <SidebarMenuSubButton asChild>
+                                    <a href={''}>
+                                        <House />
+                                        <span> Your Posts</span>
+                                    </a>
+                                </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                            <SidebarMenuSubItem>
+                                <SidebarMenuSubButton asChild>
+                                    <a href={''}>
+                                        <SquarePlus />
+                                        <span> Add Post</span>
+                                    </a>
+                                </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                        </SidebarMenuSub>
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup className="mt-auto">
@@ -156,7 +189,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                         </AlertDialogCancel>
                                     </div>
                                     <Settings />
-                                   
+
                                 </AlertDialogContent>
                             </AlertDialog>
                             <SidebarMenuItem >
@@ -183,30 +216,3 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
         </Sidebar>
     )
 }
-
-function NavMain({
-    items,
-}: {
-    items: {
-        title: string
-        url: string
-        icon: LucideIcon
-        isActive?: boolean
-    }[]
-}) {
-    return (
-        <SidebarMenu>
-            {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                        <a href={item.url}>
-                            <item.icon />
-                            <span>{item.title}</span>
-                        </a>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            ))}
-        </SidebarMenu>
-    )
-}
-
