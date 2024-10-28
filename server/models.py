@@ -2,6 +2,14 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref, Session
 from datetime import datetime
+from pymongo import MongoClient
+from bson import ObjectId
+from config import Config
+
+mongo_client = MongoClient(Config.MONGODB_URI)
+mongo_db = mongo_client['devhub']
+posts_collection = mongo_db['posts']
+comments_collection = mongo_db['comments']
 
 Base = declarative_base()
 
@@ -99,4 +107,48 @@ class Chat:
         self.message = message
         self.timestamp = datetime.utcnow()
 
+class Post:
+    @staticmethod
+    def create_post(author_id, description, tags, image_link):
+        post = {
+            "author_id": author_id,
+            "description": description,
+            "tags": tags,
+            "image_link": image_link,
+            "upvotes": 0,
+            "downvotes": 0,
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        }
+        return posts_collection.insert_one(post)
 
+    @staticmethod
+    def update_post(post_id, description=None, tags=None, image_link=None):
+        updates = {"updated_at": datetime.utcnow()}
+        if description: updates["description"] = description
+        if tags: updates["tags"] = tags
+        if image_link: updates["image_link"] = image_link
+        return posts_collection.update_one({"_id": ObjectId(post_id)}, {"$set": updates})
+
+    @staticmethod
+    def delete_post(post_id):
+        posts_collection.delete_one({"_id": ObjectId(post_id)})
+        comments_collection.delete_many({"post_id": ObjectId(post_id)})
+
+    @staticmethod
+    def vote_post(post_id, vote_type):
+        if vote_type == "upvote":
+            posts_collection.update_one({"_id": ObjectId(post_id)}, {"$inc": {"upvotes": 1}})
+        elif vote_type == "downvote":
+            posts_collection.update_one({"_id": ObjectId(post_id)}, {"$inc": {"downvotes": 1}})
+
+class Comment:
+    @staticmethod
+    def add_comment(post_id, user_id, text):
+        comment = {
+            "post_id": ObjectId(post_id),
+            "user_id": user_id,
+            "text": text,
+            "created_at": datetime.utcnow()
+        }
+        return comments_collection.insert_one(comment)
