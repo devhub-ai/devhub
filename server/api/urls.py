@@ -8,6 +8,7 @@ from api.handlers.user.friends import add_friend, remove_friend, get_friends
 from api.handlers.message.message import search_users, send_message, get_messages
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
+from api.handlers.posts.posts import create_post, update_post, delete_post
 
 def register_routes(app):
     # Authentication routes
@@ -65,7 +66,11 @@ def register_routes(app):
     app.add_url_rule('/new-connection','connect_to_neo4j',connect_to_neo4j,methods=['POST'])
     app.add_url_rule('/execute-cypher','execute_cypher',execute_cypher,methods=['POST'])
     app.add_url_rule('/db-schema', 'schema', schema, methods=['POST'])
-     
+    
+    # Posts routes
+    app.add_url_rule('/posts', 'create_post', create_post, methods=['POST'])
+    app.add_url_rule('/posts/<post_id>', 'update_post', update_post, methods=['PUT'])
+    app.add_url_rule('/posts/<post_id>', 'delete_post', delete_post, methods=['DELETE'])
+    
     # Landing page route
     app.add_url_rule('/', 'index', index)
-    

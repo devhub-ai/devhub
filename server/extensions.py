@@ -24,3 +24,5 @@ mongo_client = MongoClient(Config.MONGODB_URI)
 mongo_db = mongo_client['devhub']
 users_chat = mongo_db['users']
 chat_collection = mongo_db['chats']
+posts_collection = mongo_db['posts']
+comments_collection = mongo_db['comments']
