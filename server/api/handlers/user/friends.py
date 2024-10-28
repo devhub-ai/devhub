@@ -1,9 +1,6 @@
 from flask import Blueprint, request, jsonify
 from extensions import neo4j_db
 
-friends_bp = Blueprint('friends', __name__)
-
-@friends_bp.route('/profile/<username>/friends', methods=['POST'])
 def add_friend(username):
     data = request.get_json()
     friend_username = data.get('friend_username')
@@ -38,7 +35,6 @@ def add_friend(username):
 
     return jsonify({'message': 'Friend added successfully'}), 200
 
-@friends_bp.route('/profile/<username>/friends', methods=['DELETE'])
 def remove_friend(username):
     data = request.get_json()
     friend_username = data.get('friend_username')
@@ -77,7 +73,6 @@ def remove_friend(username):
 
     return jsonify({'message': 'Friend removed successfully'}), 200
 
-@friends_bp.route('/profile/<username>/friends', methods=['GET'])
 def get_friends(username):
     with neo4j_db.driver.session() as session:
         result = session.run(

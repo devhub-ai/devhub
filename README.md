@@ -1,7 +1,7 @@
 # DevHub: Intelligent Matchmaking Platform for Developers 💻🤝
 
-<center><a href="https://discord.gg/he8QHEC8WP" target="_blank"><img src="https://img.shields.io/discord/1259889923129999411?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff" /></a>
-</center>
+<a href="https://discord.gg/u86Gy2qFHm" target="_blank"><img src="https://img.shields.io/discord/1259889923129999411?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff" /></a>
+
 
 DevHub is an innovative platform designed to connect developers who share similar interests and complementary skills. By leveraging advanced technologies, it facilitates intelligent matchmaking and personalized recommendations, enabling devs to form effective teams and engage in meaningful collaborations. The platform provides a structured and user-friendly environment for networking, learning, and growth, ultimately enhancing the academic and professional experiences of developers.
 
@@ -11,20 +11,23 @@ DevHub is an innovative platform designed to connect developers who share simila
 - **Frontend**: Vite + React (TypeScript) ⚛️  
 - **Database**: Neo4j + MongoDB 
 
-
 ## Features ✨
-
 
 - [x] **OTP Based Authentication**
 - [x] **Signin/Signup** (Unique Username check and follows NIST Guidlines Validation) 
 - [x] **Create Profile**
-- [x] **Add/update/delete projects**
+- [x] **Add/update/delete projects** (Supports Banner image,Markdown in Desc)
 - [x] **Add Github and Leetcode profiles** (Data in profile will be populated from the given handles)
 - [x] **Convert Profile into Knowledge Graphs** 
 - [x] **Use langchain to Chat with KGs**
 - [x] **Save Chat history**
 - [x] **Typing animation and Markdown response**  
-
+- [x] **Share projects with unique projectID**
+- [x] **Star your and other user's project**
+- [x] **Visualize your Relation in Graph using d3**
+- [x] **Add Neo4j account, get graph Schema and Execute your query**
+- [x] **Save image as png of graph and also share it with others using shareable link**
+ 
 ## Local Installation 🧑🏻‍💻
 
 Enter into the root directory.
@@ -36,54 +39,68 @@ You can use `setup.bat` to automate the installation and running process of the 
 ```bash
 ./setup.bat
 ```
-### Manual Installation
+### Manual Installation ⚒️
 
-Open two terminal for server and client and enter into the directories.
-```bash
-## 1st terminal for server
-cd server
+1. Open two terminal for server and client and enter into the directories.
 
-## create .env file with following details (you can create your neo4j account or use our mirror database credentials)
+    ```bash
+    ## 1st terminal for server
+    cd server
 
-GOOGLE_API_KEY= 
-SECRET_KEY=
-NEO4J_URI= 
-NEO4J_USER=
-NEO4J_PASSWORD=
-MONGODB_URI=
-CLOUDINARY_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+    ## create .env file with following details (you can create your neo4j account or use our mirror database credentials)
 
-## Join our discord server to get Mirror Database Credentials.
-Discord Server Link : https://discord.gg/he8QHEC8WP
-```
-```bash
-## Create and activate Virtual Environment
-python -m venv venv
+    GOOGLE_API_KEY= 
+    SECRET_KEY=
+    NEO4J_URI= 
+    NEO4J_USER=
+    NEO4J_PASSWORD=
+    MONGODB_URI=
+    CLOUDINARY_NAME=
+    CLOUDINARY_API_KEY=
+    CLOUDINARY_API_SECRET=
 
-./venv/Scripts/activate
-```
+    ## Join our discord server to get Mirror Database Credentials.
+    Discord Server Link : https://discord.gg/u86Gy2qFHm
+    ```
+    ```bash
+    ## Create and activate Virtual Environment
+    python -m venv venv
 
-```bash
-## Install dependencies
-pip install -r requirements.txt
-```
-```bash
-## Run the Server
-flask run or python server.py
-```
+    ./venv/Scripts/activate
+    ```
 
-```bash
-## 2nd terminal for client
-cd client
+    ```bash
+    ## Install dependencies
+    pip install -r requirements.txt
+    ```
+    ```bash
+    ## Run the Server
+    flask run or python server.py
+    ```
 
-## Install dependencies
-npm install
+    ```bash
+    ## 2nd terminal for client
+    cd client
 
-## Run the client
-npm run dev
-```
+    ## Install dependencies
+    npm install
+
+    ## Run the client
+    npm run dev
+    ```
+
+### Docker Installation 🐋
+
+1. Pull the devhub-server image from the dockerhub
+
+    ```bash
+    docker pull deepraj21/devhub-server:latest
+    ```
+2. Go into the server directory having .env file to run the image into a container
+
+    ```bash
+    docker run -d -p 5000:5000 --name devhub-server --env-file .env deepraj21/devhub-server:latest
+    ```
 
 ## API Documentation 📜
 
