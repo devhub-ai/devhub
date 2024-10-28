@@ -12,7 +12,7 @@ import Visualization from './pages/Visualization';
 import PrivacyPolicy from './pages/Privacypolicy';
 import ProjectDisplay from './pages/ProjectDisplay';
 import TermsAndConditions from './pages/TermsAndConditions';
-import Posts from './pages/Posts';
+import Feed from './pages/Feed';
 
 const App = () => {
 
@@ -29,7 +29,7 @@ const App = () => {
           <Route path="/projects/:username/:projectId" element={<ProjectDisplay />} />
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/relations/:username" element={<Visualization />} />
-          <Route path="/posts" element={<Posts />} />
+          <Route path="/posts" element={<Feed />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
           <Route path="*" element={<div>404</div>} />

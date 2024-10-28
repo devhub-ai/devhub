@@ -109,9 +109,9 @@ class Chat:
 
 class Post:
     @staticmethod
-    def create_post(author_id, description, tags, image_link):
+    def create_post(author_username, description, tags, image_link):
         post = {
-            "author_id": author_id,
+            "author_username": author_username,
             "description": description,
             "tags": tags,
             "image_link": image_link,
@@ -144,10 +144,10 @@ class Post:
 
 class Comment:
     @staticmethod
-    def add_comment(post_id, user_id, text):
+    def add_comment(post_id, user_username, text):
         comment = {
             "post_id": ObjectId(post_id),
-            "user_id": user_id,
+            "user_username": user_username,
             "text": text,
             "created_at": datetime.utcnow()
         }
