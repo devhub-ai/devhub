@@ -9,7 +9,7 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { HoverClickCard, HoverClickCardTrigger, HoverClickCardContent } from "@/components/ui/hover-card";
 import { Check, X } from "lucide-react";
 import {
   AlertDialog,
@@ -44,10 +44,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const navigate = useNavigate();
   const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHasStartedTyping(true);
     handlePasswordChange(e);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    setIsEmailValid(newEmail.includes('@'));
   };
 
   // Username availability check with debounce
@@ -198,35 +205,35 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
               {/* HoverCard for the green tick */}
               {isUsernameAvailable && (
-                <HoverCard>
-                  <HoverCardTrigger asChild>
+                <HoverClickCard>
+                  <HoverClickCardTrigger asChild>
                     <Check className="absolute right-3 text-green-500" />
-                  </HoverCardTrigger>
-                  <HoverCardContent className="text-green-500 text-sm bg-zinc-900">
+                  </HoverClickCardTrigger>
+                  <HoverClickCardContent className="text-green-500 text-sm bg-zinc-900">
                     Username is available
-                  </HoverCardContent>
-                </HoverCard>
+                  </HoverClickCardContent>
+                </HoverClickCard>
               )}
               {isUsernameAvailable === false && (
-                <HoverCard>
-                  <HoverCardTrigger asChild>
+                <HoverClickCard>
+                  <HoverClickCardTrigger asChild>
                     <X className="absolute right-3 text-red-500" />
-                  </HoverCardTrigger>
-                  <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
+                  </HoverClickCardTrigger>
+                  <HoverClickCardContent className="text-red-500 text-sm bg-zinc-900">
                     Username is not available
-                  </HoverCardContent>
-                </HoverCard>
+                  </HoverClickCardContent>
+                </HoverClickCard>
               )}
 
               {usernameError && (
-                <HoverCard>
-                  <HoverCardTrigger asChild>
+                <HoverClickCard>
+                  <HoverClickCardTrigger asChild>
                     <X className="absolute right-3 text-red-500" />
-                  </HoverCardTrigger>
-                  <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
+                  </HoverClickCardTrigger>
+                  <HoverClickCardContent className="text-red-500 text-sm bg-zinc-900">
                     {usernameError}
-                  </HoverCardContent>
-                </HoverCard>
+                  </HoverClickCardContent>
+                </HoverClickCard>
               )}
             </div>
           </div>
@@ -241,7 +248,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading || isOtpVerified}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               className="w-full dark:bg-zinc-900"
               required
               />
@@ -253,7 +260,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                   isOtpVerified ? (
                     <Button className="bg-green-500" disabled>Verified</Button>
                   ) : (
-                    <Button onClick={() => setIsOtpDialogOpen(true)}>Verify</Button>
+                        <Button disabled={!email || !isEmailValid} onClick={() => setIsOtpDialogOpen(true)}>
+                          Verify
+                        </Button>
                   )
                   }
                 </AlertDialogTrigger>
@@ -286,33 +295,33 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               {hasStartedTyping && (
                 <>
                   {allRulesPassed ? (
-                    <HoverCard>
-                      <HoverCardTrigger asChild>
+                    <HoverClickCard>
+                      <HoverClickCardTrigger asChild>
                         <Check className="absolute right-3 text-green-500" />
-                      </HoverCardTrigger>
-                      <HoverCardContent className="text-green-500 text-sm bg-zinc-900">
+                      </HoverClickCardTrigger>
+                      <HoverClickCardContent className="text-green-500 text-sm bg-zinc-900">
                         {passwordRules &&
                           Object.entries(passwordRules).map(([rule, passed]) => (
                             <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
                               {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
                             </p>
                           ))}
-                      </HoverCardContent>
-                    </HoverCard>
+                      </HoverClickCardContent>
+                    </HoverClickCard>
                   ) : (
-                    <HoverCard>
-                      <HoverCardTrigger asChild>
+                    <HoverClickCard>
+                        <HoverClickCardTrigger asChild>
                         <X className="absolute right-3 text-red-500" />
-                      </HoverCardTrigger>
-                      <HoverCardContent className="text-red-500 text-sm bg-zinc-900">
+                      </HoverClickCardTrigger>
+                      <HoverClickCardContent className="text-red-500 text-sm bg-zinc-900">
                         {passwordRules &&
                           Object.entries(passwordRules).map(([rule, passed]) => (
                             <p key={rule} className={passed ? "text-green-500" : "text-red-500"}>
                               {passwordRuleMessages[rule as keyof typeof passwordRuleMessages]}
                             </p>
                           ))}
-                      </HoverCardContent>
-                    </HoverCard>
+                      </HoverClickCardContent>
+                    </HoverClickCard>
                   )}
                 </>
               )}
