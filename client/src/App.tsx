@@ -29,7 +29,7 @@ const App = () => {
           <Route path="/projects/:username/:projectId" element={<ProjectDisplay />} />
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/relations/:username" element={<Visualization />} />
-          <Route path="/posts" element={<Feed />} />
+          <Route path="/feed" element={<Feed />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
           <Route path="*" element={<div>404</div>} />

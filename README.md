@@ -27,6 +27,8 @@ DevHub is an innovative platform designed to connect developers who share simila
 - [x] **Visualize your Relation in Graph using d3**
 - [x] **Add Neo4j account, get graph Schema and Execute your query**
 - [x] **Save image as png of graph and also share it with others using shareable link**
+- [x] **Users can post images with description and tags**
+- [x] **Users can see and share particular post**
  
 ## Local Installation 🧑🏻‍💻
 

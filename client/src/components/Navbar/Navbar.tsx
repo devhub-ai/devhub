@@ -11,11 +11,17 @@ export function Navbar() {
   const gotoDiscord = () => {
     window.location.href = "https://discord.gg/u86Gy2qFHm"
   }
+  const gotoFeed = () => {
+    window.location.href = "https://devhub.page/feed"
+  }
   return (
     <div className="relative">
       <Dock magnification={60} distance={100}>
         <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
           <Icons.Devhub className="size-full" />
+        </DockIcon>
+        <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
+          <Icons.Feed className="size-full" onClick={gotoFeed}/>
         </DockIcon>
         <Separator orientation="vertical" className="h-full" />
         <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
@@ -44,6 +50,11 @@ const Icons = {
       alt="Devhub"
       {...props}
     />
+  ),
+  Feed: (props: IconProps) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" {...props}>
+      <path d="M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-3-8.5a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1 6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1-1-1" />
+    </svg>
   ),
   Discord:(props: IconProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" {...props}>
