@@ -44,10 +44,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const navigate = useNavigate();
   const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHasStartedTyping(true);
     handlePasswordChange(e);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    setIsEmailValid(newEmail.includes('@'));
   };
 
   // Username availability check with debounce
@@ -241,7 +248,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading || isOtpVerified}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               className="w-full dark:bg-zinc-900"
               required
               />
@@ -253,7 +260,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                   isOtpVerified ? (
                     <Button className="bg-green-500" disabled>Verified</Button>
                   ) : (
-                    <Button onClick={() => setIsOtpDialogOpen(true)}>Verify</Button>
+                        <Button disabled={!email || !isEmailValid} onClick={() => setIsOtpDialogOpen(true)}>
+                          Verify
+                        </Button>
                   )
                   }
                 </AlertDialogTrigger>
