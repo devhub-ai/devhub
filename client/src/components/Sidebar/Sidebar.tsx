@@ -40,6 +40,7 @@ import {
 import { Cross1Icon } from "@radix-ui/react-icons";
 import Settings from "@/components/Settings/Settings";
 import Help from "../Help/Help";
+import AddPosts from "../Posts/AddPosts";
 
 const username = localStorage.getItem('devhub_username');
 
@@ -107,13 +108,13 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                         <SidebarMenuButton asChild>
                             <a href={`/relations/${username}`}>
                                 <ChartNetwork />
-                                <span>KGs</span>
+                                <span>Visualize</span>
                             </a>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild>
-                            <a href={'/posts'}>
+                            <a href={'/feed'}>
                                 <Rss />
                                 <span>Feed</span>
                             </a>
@@ -127,14 +128,30 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                     </a>
                                 </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
-                            <SidebarMenuSubItem>
-                                <SidebarMenuSubButton asChild>
-                                    <a href={''}>
-                                        <SquarePlus />
-                                        <span> Add Post</span>
-                                    </a>
-                                </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
+                            <AlertDialog>
+                                <AlertDialogTrigger>
+                                    <SidebarMenuSubItem>
+                                        <SidebarMenuSubButton asChild>
+                                            <div>
+                                                <SquarePlus />
+                                                <span> Add Post</span>
+                                            </div>
+                                        </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <div className="flex">
+                                        <AlertDialogHeader className="text-2xl mt-1.5">
+                                            Add Post
+                                        </AlertDialogHeader>
+                                        <div className="flex-grow"></div>
+                                        <AlertDialogCancel>
+                                            <Cross1Icon className="h-3 w-3" />
+                                        </AlertDialogCancel>
+                                    </div>
+                                    <AddPosts />
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </SidebarMenuSub>
                     </SidebarMenuItem>
                 </SidebarMenu>

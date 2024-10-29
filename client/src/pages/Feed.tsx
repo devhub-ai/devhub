@@ -16,7 +16,7 @@ const Feed = () => {
             <SidebarTrigger />
           </div>
         </header>
-        <main className="flex flex-col flex-grow p-4 overflow-hidden">
+        <main className="flex flex-col flex-grow overflow-hidden">
           <div className=" h-full">
             <ShowPosts />
           </div>
