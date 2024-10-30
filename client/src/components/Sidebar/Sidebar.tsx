@@ -122,9 +122,9 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                         <SidebarMenuSub>
                             <SidebarMenuSubItem>
                                 <SidebarMenuSubButton asChild>
-                                    <a href={''}>
+                                    <a href={`/posts/${username}`}>
                                         <House />
-                                        <span> Your Posts</span>
+                                        <span>Your Posts</span>
                                     </a>
                                 </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
@@ -134,20 +134,16 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                         <SidebarMenuSubButton asChild>
                                             <div>
                                                 <SquarePlus />
-                                                <span> Add Post</span>
+                                                <span>Add Post</span>
                                             </div>
                                         </SidebarMenuSubButton>
                                     </SidebarMenuSubItem>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
-                                    <div className="flex">
-                                        <AlertDialogHeader className="text-2xl mt-1.5">
-                                            Add Post
-                                        </AlertDialogHeader>
-                                        <div className="flex-grow"></div>
-                                        <AlertDialogCancel>
-                                            <Cross1Icon className="h-3 w-3" />
-                                        </AlertDialogCancel>
+                                    <div className='flex items-center'>
+                                        <AlertDialogHeader className='text-2xl'>Create Post</AlertDialogHeader>
+                                        <div className='flex-grow'></div>
+                                        <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
                                     </div>
                                     <AddPosts />
                                 </AlertDialogContent>

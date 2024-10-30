@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { Textarea } from '../ui/textarea';
-import UploadComponent from './UploadComponent'; 
+import UploadComponent from '../UploadComponent/UploadComponent'; 
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 

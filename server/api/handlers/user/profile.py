@@ -1,5 +1,7 @@
 from flask import request, jsonify
 from extensions import neo4j_db
+import cloudinary.uploader
+import logging
 
 def get_profile(username):
     logged_in_user = request.args.get('logged_in_user')
@@ -17,7 +19,8 @@ def get_profile(username):
             'bio': user["bio"],
             'githubUsername': user["github_username"],
             'leetcodeUsername': user["leetcode_username"],
-            'email': user["email"]
+            'email': user["email"],
+            'profileImage' : user["profile_image"]
         }
 
         projects_query = """
@@ -46,12 +49,26 @@ def get_profile(username):
             profile_data['isFriend'] = is_friend
 
         return jsonify(profile_data)
-
+    
+def upload_image_to_cloudinary(image):
+    try:
+        upload_result = cloudinary.uploader.upload(image, folder="Devhub/Posts")
+        return upload_result['secure_url']
+    except Exception as e:
+        logging.error(f"Error uploading image: {str(e)}")
+        return None
 
 def update_profile(username):
-    data = request.get_json()
+    data = request.form
+    profile_image = request.files.get('profileImage')  
     query = "MATCH (u:User {username: $username}) SET u += $properties RETURN u"
     properties = {}
+
+    if profile_image: 
+        image_url = upload_image_to_cloudinary(profile_image) 
+        if image_url: 
+            properties['profile_image'] = image_url  
+
     if 'name' in data:
         properties['name'] = data['name']
     if 'bio' in data:
@@ -66,4 +83,3 @@ def update_profile(username):
         if result.single():
             return jsonify({'message': 'Profile updated successfully'}), 200
         return jsonify({'message': 'User not found'}), 404
-

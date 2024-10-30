@@ -32,6 +32,7 @@ class User(Base):
     password = Column(String, nullable=False)
     name = Column(String, nullable=True)
     bio = Column(Text, nullable=True)
+    profile_image = Column(String, nullable=True)
     github_username = Column(String, nullable=True)
     leetcode_username = Column(String, nullable=True)
     
@@ -46,12 +47,13 @@ class User(Base):
         lazy='dynamic'
     )
 
-    def __init__(self, username, email, password, name=None, bio=None, github_username=None, leetcode_username=None):
+    def __init__(self, username, email, password, name=None, bio=None, github_username=None, leetcode_username=None, profile_image=None):
         self.username = username
         self.email = email
         self.password = password
         self.name = name
         self.bio = bio
+        self.profile_image = profile_image
         self.github_username = github_username
         self.leetcode_username = leetcode_username
 
@@ -109,9 +111,10 @@ class Chat:
 
 class Post:
     @staticmethod
-    def create_post(author_username, description, tags, image_link):
+    def create_post(author_username,author_profile_image, description, tags, image_link):
         post = {
             "author_username": author_username,
+            "author_profileImage": author_profile_image,
             "description": description,
             "tags": tags,
             "image_link": image_link,
