@@ -52,9 +52,6 @@ export default function ShowPosts() {
         }
 
         fetchPosts()
-
-        const intervalId = setInterval(fetchPosts, 5000)
-        return () => clearInterval(intervalId)
     }, [])
 
     const handleCommentSubmit = (postId: string) => {

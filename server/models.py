@@ -2,14 +2,8 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref, Session
 from datetime import datetime
-from pymongo import MongoClient
+from extensions import posts_collection, comments_collection, chat_collection
 from bson import ObjectId
-from config import Config
-
-mongo_client = MongoClient(Config.MONGODB_URI)
-mongo_db = mongo_client['devhub']
-posts_collection = mongo_db['posts']
-comments_collection = mongo_db['comments']
 
 Base = declarative_base()
 
@@ -76,7 +70,7 @@ class Project(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     repo_link = Column(String, nullable=True)
-    image_link = Column(String, nullable=True)  # New field to store image links
+    image_link = Column(String, nullable=True) 
     star = Column(Integer, default=0, nullable=False)
     
     user_id = Column(Integer, ForeignKey('users.id'))
@@ -103,11 +97,69 @@ class Tag(Base):
         self.name = name
         
 class Chat:
-    def __init__(self, sender_id, receiver_id, message):
-        self.sender_id = sender_id
-        self.receiver_id = receiver_id
-        self.message = message
-        self.timestamp = datetime.utcnow()
+    def send_message(self, sender_username, receiver_username, message):
+        chat_message = {
+            'sender_username': sender_username,
+            'message': message,
+            'timestamp': datetime.utcnow()
+        }
+
+        # Check if the receiver exists in the sender's chatted_users
+        sender_exists = chat_collection.find_one(
+            {'username': sender_username, 'chatted_users.username': receiver_username}
+        )
+
+        # If the receiver is not already in sender's chatted_users, add them
+        if not sender_exists:
+            chat_collection.update_one(
+                {'username': sender_username},
+                {'$addToSet': {'chatted_users': {'username': receiver_username, 'chat_history': []}}},
+                upsert=True
+            )
+
+        # Check if the sender exists in the receiver's chatted_users
+        receiver_exists = chat_collection.find_one(
+            {'username': receiver_username, 'chatted_users.username': sender_username}
+        )
+
+        # If the sender is not already in receiver's chatted_users, add them
+        if not receiver_exists:
+            chat_collection.update_one(
+                {'username': receiver_username},
+                {'$addToSet': {'chatted_users': {'username': sender_username, 'chat_history': []}}},
+                upsert=True
+            )
+
+        # Append the message to the sender's chat history with the receiver
+        chat_collection.update_one(
+            {'username': sender_username, 'chatted_users.username': receiver_username},
+            {'$push': {'chatted_users.$.chat_history': chat_message}}
+        )
+
+        # Append the message to the receiver's chat history with the sender
+        chat_collection.update_one(
+            {'username': receiver_username, 'chatted_users.username': sender_username},
+            {'$push': {'chatted_users.$.chat_history': chat_message}}
+        )
+
+    def get_messages(self, user1, user2):
+        try:
+            # Find the chat history for both users (user1 and user2)
+            user = chat_collection.find_one({'username': user1})
+            if user:
+                for chatted_user in user.get('chatted_users', []):
+                    if chatted_user['username'] == user2:
+                        return chatted_user['chat_history']
+            return []
+        except Exception as e:
+            raise Exception(f"Error retrieving chat history: {str(e)}")
+
+    def get_chatted_users(self, username):
+        user = chat_collection.find_one({'username': username})
+        if user:
+            return user.get('chatted_users', [])
+        return []
+
 
 class Post:
     @staticmethod

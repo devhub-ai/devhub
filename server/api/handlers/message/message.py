@@ -1,44 +1,47 @@
 from flask import request, jsonify
-from models import Chat
-from extensions import users_chat, chat_collection
+from models import Chat  
+from extensions import users_chat
 
-def save_message(sender_id, receiver_id, message):
-    chat = Chat(sender_id, receiver_id, message)
-    chat_collection.insert_one(chat.__dict__)
+chat_instance = Chat()  
 
-def get_messages(user_id):
-    messages = chat_collection.find({"$or": [{"sender_id": user_id}, {"receiver_id": user_id}]})
-    return list(messages)
+def send_message():
+    data = request.json
+    sender = data.get('sender_username')
+    receiver = data.get('receiver_username')
+    message = data.get('message')
 
+    if not sender or not receiver or not message:
+        return jsonify({'error': 'Sender, receiver, and message are required.'}), 400
+
+    chat_instance.send_message(sender, receiver, message)
+    return jsonify({'status': 'Message sent successfully.'}), 200
+
+def get_messages():
+    user1 = request.args.get('user1')
+    user2 = request.args.get('user2')
+
+    if not user1 or not user2:
+        return jsonify({'error': 'Both users are required.'}), 400
+
+    messages = chat_instance.get_messages(user1, user2)
+    return jsonify(messages), 200
+
+def get_chatted_users(username):
+    chatted_users = chat_instance.get_chatted_users(username)
+    return jsonify(chatted_users), 200
+
+def get_chat_history(user1, user2):
+    try:
+        chat_history = chat_instance.get_messages(user1, user2)  
+        return jsonify(chat_history), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 def search_users():
     username = request.args.get('username')
-    
-    users = users_chat.find({"username": {"$regex": username, "$options": "i"}})  # Case-insensitive search
-    
-    return jsonify([{"username": user['username']} for user in users])
 
-def send_message():
-    data = request.get_json()
-    sender_username = data['sender_username']
-    receiver_username = data['receiver_username']
-    message = data['message']
-    
-    # Fetch the sender and receiver users based on their usernames
-    sender = users_chat.find_one({"username": sender_username})
-    receiver = users_chat.find_one({"username": receiver_username})
-    
-    if sender and receiver:
-        save_message(sender['_id'], receiver['_id'], message) 
-        return jsonify({"status": "Message sent!"}), 200
-    else:
-        return jsonify({"error": "User not found!"}), 404
+    if not username:
+        return jsonify({'error': 'Username parameter is required.'}), 400
 
-def get_messages(username):
-    user = users_chat.find_one({"username": username})
-    
-    if user:
-        messages = get_messages(user['_id']) 
-        return jsonify(messages), 200
-    else:
-        return jsonify({"error": "User not found!"}), 404
+    users = users_chat.find({"username": {"$regex": username, "$options": "i"}})  
+    return jsonify([{"username": user['username']} for user in users]), 200

@@ -47,16 +47,8 @@ const ShowUserPosts = () => {
           console.error('Error fetching posts:', error)
         })
     }
-
-    // Fetch posts when component mounts
     fetchPosts()
-
-    // Set up polling every 5 seconds
-    const intervalId = setInterval(fetchPosts, 5000)
-
-    // Cleanup the interval when component unmounts
-    return () => clearInterval(intervalId)
-  })
+  }, [username])
 
   return (
     <div className="max-w-2xl mx-auto space-y-0 md:space-y-8">

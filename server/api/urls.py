@@ -5,7 +5,7 @@ from api.handlers.analyze.githubdata import github_data, top_languages, streak_s
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,chat_history
 from api.handlers.user.friends import add_friend, remove_friend, get_friends
-from api.handlers.message.message import search_users, send_message, get_messages
+from api.handlers.message.message import search_users, send_message, get_messages, get_chatted_users, get_chat_history
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
 from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment, get_posts, get_posts_by_author
@@ -56,8 +56,10 @@ def register_routes(app):
     
     # Messaging routes
     app.add_url_rule('/search_users', 'search_users', search_users, methods=['GET'])
-    app.add_url_rule('/send_message', 'send_message', send_message, methods=['POST']) 
-    app.add_url_rule('/get_messages/<username>', 'get_messages', get_messages, methods=['GET'])
+    app.add_url_rule('/send', 'send_message', send_message, methods=['POST']) 
+    app.add_url_rule('/messages', 'get_messages', get_messages, methods=['GET'])
+    app.add_url_rule('/chatted_users/<username>', 'get_chatted_users', get_chatted_users, methods=['GET'])
+    app.add_url_rule('/chat_history/<user1>/<user2>','get_chat_history',get_chat_history, methods=['GET'])
     
     # Visualization route
     app.add_url_rule('/profile/relations','get_user_relations',get_user_relations, methods=['GET'])
