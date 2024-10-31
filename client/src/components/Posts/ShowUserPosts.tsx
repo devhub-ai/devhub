@@ -65,13 +65,15 @@ const ShowUserPosts = () => {
               </p>
             </div>
           </div>
-          {post.image_link && (
+            <a href={`/post/${post._id}`}>
+            {post.image_link && (
             <img
               src={post.image_link}
               alt="Post image"
               className="w-full h-96 object-cover mb-1 border-b"
             />
           )}
+          </a>
           <div className="flex items-center gap-4 ml-1">
             <Button
               variant="ghost"

@@ -24,6 +24,21 @@ def get_posts():
         logging.error(f"Error retrieving posts: {str(e)}")
         return jsonify({"error": "Failed to retrieve posts"}), 500
     
+def get_post_by_id(post_id):
+    try:
+        if ObjectId.is_valid(post_id):
+            post_id = ObjectId(post_id)
+        else:
+            return {"error": "Invalid post_id format"}
+
+        post = posts_collection.find_one({"_id": post_id})
+        if post:
+            return post
+        else:
+            return {"error": "Post not found"}
+    except Exception as e:
+        return {"error": str(e)}
+
 def get_posts_by_author(author_username):
     try:
         posts = list(posts_collection.find({"author_username": author_username}).sort("created_at", -1))

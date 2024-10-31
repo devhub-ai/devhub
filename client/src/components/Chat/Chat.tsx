@@ -166,11 +166,16 @@ export const Chat: React.FC = () => {
 					</div>
 				</div>
 			</main>
-			<div className="p-4">
+			<div className="pt-4 pr-4 pl-4 pb-1">
 				<PlaceholdersAndVanishInput
 					placeholders={placeholders}
 					onSubmit={onSubmit}
 				/>
+			</div>
+			<div className='text-[10px] items-center flex justify-center mb-1'>
+				<span>
+					<a href="/terms-and-conditions">T&C</a> | *Response may not be accurate everytime 
+				</span>
 			</div>
 		</>
 	)

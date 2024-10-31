@@ -6,7 +6,6 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { SidebarLeft } from '@/components/Sidebar/Sidebar'
-import { SidebarRight } from '@/components/Recomendations/RecomendationSidebar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -25,7 +24,6 @@ const Home = () => {
       <SidebarInset>
         <Chat />
       </SidebarInset>
-      <SidebarRight />
     </SidebarProvider>
   );
 };

@@ -8,7 +8,7 @@ from api.handlers.user.friends import add_friend, remove_friend, get_friends
 from api.handlers.message.message import search_users, send_message, get_messages, get_chatted_users, get_chat_history
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
-from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment, get_posts, get_posts_by_author
+from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment, get_posts, get_posts_by_author, get_post_by_id
 from api.handlers.suggestions.usersuggestions import get_user_suggestions
 
 def register_routes(app):
@@ -73,6 +73,7 @@ def register_routes(app):
     # Posts routes
     app.add_url_rule('/posts', 'get_posts', get_posts, methods=['GET'])
     app.add_url_rule('/posts/<author_username>','get_posts_by_author',get_posts_by_author,methods=['GET'])
+    app.add_url_rule('/posts/<post_id>','get_post_by_id',get_post_by_id,methods=['GET'])
     app.add_url_rule('/posts', 'create_post', create_post, methods=['POST'])
     app.add_url_rule('/posts/<post_id>', 'update_post', update_post, methods=['PUT'])
     app.add_url_rule('/posts/<post_id>', 'delete_post', delete_post, methods=['DELETE'])

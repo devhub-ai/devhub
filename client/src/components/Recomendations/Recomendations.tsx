@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Marquee from "@/components/ui/marquee";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -37,10 +38,21 @@ const Recomendations: React.FC = () => {
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
             {suggestions.length > 0 && (
-                <ul>
-                    {suggestions.map((suggestion, index) => (
-                        <li key={index}>{suggestion}</li>
-                    ))}
+                <ul className='flex items-center justify-center'>
+                    <Marquee pauseOnHover vertical className="[--duration:20s]">
+                            {suggestions.map((suggestion, index) => (
+                                <div className="flex items-center border border-gray-300 rounded-lg">
+                                    <div className="p-4 flex items-center space-x-4">
+                                        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
+                                        <a href={`/user/${suggestion}`}>
+                                            <li key={index} className="list-none">@{suggestion}</li>
+                                        </a>
+                                        
+                                    </div>
+                                </div>
+                            ))}
+                    </Marquee>
+                    
                 </ul>
             )}
             {suggestions.length === 0 && !loading && <p>No suggestions available.</p>}
