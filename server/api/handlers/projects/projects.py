@@ -23,33 +23,57 @@ def add_project(username):
     image_url = data.get('imageUrl', '') 
     project_id = str(uuid.uuid4())
 
+    # Clean and prepare the tags
     domain_tags = [tag.strip() for tag in tags.split(',') if tag.strip()]
 
     create_project_query = """
     MATCH (u:User {username: $username})
     CREATE (p:Project {project_id: $project_id, title: $title, description: $description, repo_link: $repo_link, star: 0, image_url: $image_url})
     CREATE (u)-[:OWNS]->(p)
+    WITH u, p
+    FOREACH (tagName IN $tags |
+        MERGE (t:Tag {name: tagName})
+        MERGE (p)-[:TAGGED_WITH]->(t)
+        MERGE (u)-[:HAS_SKILL]->(t)
+    )
     RETURN p
     """
+    
     try:
         with neo4j_db.driver.session() as session:
-            result = session.run(create_project_query, username=username, project_id=project_id, title=title, description=description, repo_link=repo_link, image_url=image_url)
+            # Create the project
+            result = session.run(create_project_query, username=username, project_id=project_id, title=title, description=description, repo_link=repo_link, image_url=image_url, tags=domain_tags)
             project_record = result.single()
             
             if project_record:
                 project = project_record["p"]
+
+                # Mutual suggestion update logic
+                mutual_update_query = """
+                MATCH (u:User {username: $username})-[:HAS_SKILL]->(t:Tag)
+                WITH u, collect(DISTINCT t.name) AS skills
+                SET u.skillset = skills
+                WITH u
+                MATCH (other:User)-[:HAS_SKILL]->(t) 
+                WHERE other.username <> u.username AND t.name IN u.skillset
+                WITH u, other, count(t) AS matching_skills
+                // Update suggestions regardless of previous state
+                FOREACH (_ IN CASE WHEN matching_skills >= 2 THEN [1] ELSE [] END |
+                    SET u.suggestions = coalesce(u.suggestions, []) + other.username
+                )
+                FOREACH (_ IN CASE WHEN matching_skills >= 2 AND NOT other.username IN u.suggestions THEN [1] ELSE [] END |
+                    SET other.suggestions = coalesce(other.suggestions, []) + u.username
+                )
+                RETURN u, other
+                """
                 
-                if domain_tags:
-                    update_project_query = """
-                    MATCH (p:Project {project_id: $project_id})
-                    WITH p, $tags AS tags
-                    UNWIND tags AS tagName
-                    MERGE (t:Tag {name: tagName})
-                    CREATE (p)-[:TAGGED_WITH]->(t)
-                    RETURN p
-                    """
-                    session.run(update_project_query, project_id=project_id, tags=domain_tags)
+                suggestion_result = session.run(mutual_update_query, username=username)
                 
+                # Check if any suggestions were made
+                suggestions_updated = suggestion_result.data()
+                if not suggestions_updated:
+                    current_app.logger.info(f"No users matched for suggestions for {username}.")
+
                 return jsonify({
                     'message': 'Project added successfully',
                     'project': {
@@ -61,12 +85,13 @@ def add_project(username):
                         'imageUrl': project.get("image_url", ""), 
                         'star': 0
                     }
-                }), 201
+                }), 201 
             else:
                 return jsonify({'message': 'User not found'}), 404
     except Exception as e:
         current_app.logger.error(f"Error adding project: {e}")
         return jsonify({'message': 'An error occurred while adding the project'}), 500
+
 
 def get_projects(username):
     query = """

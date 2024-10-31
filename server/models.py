@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref, Session
 from datetime import datetime
@@ -30,8 +30,8 @@ class User(Base):
     github_username = Column(String, nullable=True)
     leetcode_username = Column(String, nullable=True)
     
+    # Relationships
     projects = relationship('Project', back_populates='user')
-    
     friends = relationship(
         'User',
         secondary=friend_association,
@@ -40,6 +40,10 @@ class User(Base):
         backref=backref('friend_of', lazy='dynamic'),
         lazy='dynamic'
     )
+
+    # New fields for Neo4j
+    skillset = Column(ARRAY(String), default=[])
+    suggestions = Column(ARRAY(String), default=[])
 
     def __init__(self, username, email, password, name=None, bio=None, github_username=None, leetcode_username=None, profile_image=None):
         self.username = username
@@ -50,6 +54,8 @@ class User(Base):
         self.profile_image = profile_image
         self.github_username = github_username
         self.leetcode_username = leetcode_username
+        self.skillset = []        # Initialize with empty skillset
+        self.suggestions = []      # Initialize with empty suggestions
 
     def add_friend(self, friend_user):
         if friend_user not in self.friends:
@@ -62,6 +68,7 @@ class User(Base):
             self.friends.remove(friend_user)
         if self in friend_user.friends:
             friend_user.friends.remove(self)
+
 
 class Project(Base):
     __tablename__ = 'projects'

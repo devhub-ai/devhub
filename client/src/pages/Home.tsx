@@ -1,6 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chat } from '@/components/Chat/Chat';
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+import { SidebarLeft } from '@/components/Sidebar/Sidebar'
+import { SidebarRight } from '@/components/Recomendations/RecomendationSidebar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -14,9 +20,13 @@ const Home = () => {
   }, [navigate]);
 
   return (
-    <div>
-      <Chat />
-    </div>
+    <SidebarProvider>
+      <SidebarLeft />
+      <SidebarInset>
+        <Chat />
+      </SidebarInset>
+      <SidebarRight />
+    </SidebarProvider>
   );
 };
 

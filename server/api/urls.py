@@ -9,6 +9,7 @@ from api.handlers.message.message import search_users, send_message, get_message
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
 from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment, get_posts, get_posts_by_author
+from api.handlers.suggestions.usersuggestions import get_user_suggestions
 
 def register_routes(app):
     # Authentication routes
@@ -78,6 +79,9 @@ def register_routes(app):
     app.add_url_rule('/posts/<post_id>/<vote_type>', 'vote_post', vote_post, methods=['POST'])
     app.add_url_rule('/posts/<post_id>/comments', 'add_comment', add_comment, methods=['POST'])
     app.add_url_rule('/posts/<post_id>/comments/<comment_id>', 'delete_comment', delete_comment, methods=['DELETE'])
+    
+    # Suggestions routes
+    app.add_url_rule('/suggestions/<username>', 'get_user_suggestions', get_user_suggestions, methods=['GET'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)
