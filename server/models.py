@@ -26,6 +26,7 @@ class User(Base):
     password = Column(String, nullable=False)
     name = Column(String, nullable=True)
     bio = Column(Text, nullable=True)
+    location = Column(String, nullable=True)
     profile_image = Column(String, nullable=True)
     github_username = Column(String, nullable=True)
     leetcode_username = Column(String, nullable=True)
@@ -45,17 +46,18 @@ class User(Base):
     skillset = Column(ARRAY(String), default=[])
     suggestions = Column(ARRAY(String), default=[])
 
-    def __init__(self, username, email, password, name=None, bio=None, github_username=None, leetcode_username=None, profile_image=None):
+    def __init__(self, username, email, password, name=None, bio=None,location=None, github_username=None, leetcode_username=None, profile_image=None):
         self.username = username
         self.email = email
         self.password = password
         self.name = name
         self.bio = bio
+        self.location = location
         self.profile_image = profile_image
         self.github_username = github_username
         self.leetcode_username = leetcode_username
-        self.skillset = []        # Initialize with empty skillset
-        self.suggestions = []      # Initialize with empty suggestions
+        self.skillset = []        
+        self.suggestions = []     
 
     def add_friend(self, friend_user):
         if friend_user not in self.friends:
@@ -103,6 +105,8 @@ class Tag(Base):
     def __init__(self, name):
         self.name = name
         
+from datetime import datetime
+
 class Chat:
     def send_message(self, sender_username, receiver_username, message):
         chat_message = {
@@ -120,7 +124,7 @@ class Chat:
         if not sender_exists:
             chat_collection.update_one(
                 {'username': sender_username},
-                {'$addToSet': {'chatted_users': {'username': receiver_username, 'chat_history': []}}},
+                {'$addToSet': {'chatted_users': {'username': receiver_username, 'chat_history': [], 'last_interaction': datetime.utcnow()}}},
                 upsert=True
             )
 
@@ -133,25 +137,27 @@ class Chat:
         if not receiver_exists:
             chat_collection.update_one(
                 {'username': receiver_username},
-                {'$addToSet': {'chatted_users': {'username': sender_username, 'chat_history': []}}},
+                {'$addToSet': {'chatted_users': {'username': sender_username, 'chat_history': [], 'last_interaction': datetime.utcnow()}}},
                 upsert=True
             )
 
         # Append the message to the sender's chat history with the receiver
         chat_collection.update_one(
             {'username': sender_username, 'chatted_users.username': receiver_username},
-            {'$push': {'chatted_users.$.chat_history': chat_message}}
+            {'$push': {'chatted_users.$.chat_history': chat_message},
+             '$set': {'chatted_users.$.last_interaction': datetime.utcnow()}}
         )
 
         # Append the message to the receiver's chat history with the sender
         chat_collection.update_one(
             {'username': receiver_username, 'chatted_users.username': sender_username},
-            {'$push': {'chatted_users.$.chat_history': chat_message}}
+            {'$push': {'chatted_users.$.chat_history': chat_message},
+             '$set': {'chatted_users.$.last_interaction': datetime.utcnow()}}
         )
 
     def get_messages(self, user1, user2):
         try:
-            # Find the chat history for both users (user1 and user2)
+            # Retrieve the chat history for both users (user1 and user2)
             user = chat_collection.find_one({'username': user1})
             if user:
                 for chatted_user in user.get('chatted_users', []):
@@ -164,9 +170,14 @@ class Chat:
     def get_chatted_users(self, username):
         user = chat_collection.find_one({'username': username})
         if user:
-            return user.get('chatted_users', [])
+            return [
+                {
+                    "username": chatted_user['username'],
+                    "last_interaction": chatted_user.get('last_interaction')
+                }
+                for chatted_user in user.get('chatted_users', [])
+            ]
         return []
-
 
 class Post:
     @staticmethod

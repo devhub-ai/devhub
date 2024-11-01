@@ -1,8 +1,8 @@
 from flask import request, jsonify
-from models import Chat  
+from models import Chat
 from extensions import users_chat
 
-chat_instance = Chat()  
+chat_instance = Chat()
 
 def send_message():
     data = request.json
@@ -27,8 +27,12 @@ def get_messages():
     return jsonify(messages), 200
 
 def get_chatted_users(username):
-    chatted_users = chat_instance.get_chatted_users(username)
-    return jsonify(chatted_users), 200
+    try:
+        chatted_users = chat_instance.get_chatted_users(username)
+        return jsonify(chatted_users), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 def get_chat_history(user1, user2):
     try:

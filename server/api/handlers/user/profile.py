@@ -73,6 +73,8 @@ def update_profile(username):
         properties['name'] = data['name']
     if 'bio' in data:
         properties['bio'] = data['bio']
+    if 'location' in data:
+        properties['location'] = data['location']
     if 'githubUsername' in data:
         properties['github_username'] = data['githubUsername']
     if 'leetcodeUsername' in data:
@@ -83,3 +85,24 @@ def update_profile(username):
         if result.single():
             return jsonify({'message': 'Profile updated successfully'}), 200
         return jsonify({'message': 'User not found'}), 404
+
+def delete_account(username):
+    try:
+        with neo4j_db.driver.session() as session:
+            delete_projects_query = """
+            MATCH (u:User {username: $username})-[:OWNS]->(p:Project)
+            DETACH DELETE p
+            """
+            session.run(delete_projects_query, username=username)
+
+            delete_user_query = """
+            MATCH (u:User {username: $username})
+            DETACH DELETE u
+            """
+            session.run(delete_user_query, username=username)
+
+            return jsonify({'message': 'Account and associated projects deleted successfully'}), 200
+        
+    except Exception as e:
+        logging.error(f"Error deleting account: {str(e)}")
+        return jsonify({'message': 'An error occurred while deleting the account'}), 500

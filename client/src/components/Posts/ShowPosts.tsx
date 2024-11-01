@@ -11,6 +11,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
 
@@ -86,9 +87,9 @@ export default function ShowPosts() {
             {posts.map((post) => (
                 <div key={post._id} className="bg-background shadow-lg md:rounded-lg overflow-hidden border">
                     <div className="flex items-center border-b p-4">
-                        <div className="h-10 w-10 rounded-full overflow-hidden">
-                            <img src={post.author_profileImage} alt={post.author_username} />
-                        </div>
+                        <Avatar>
+                            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${post.author_username}`} />
+                        </Avatar>
                         <div className="ml-3">
                             <p className="text-sm font-medium">{post.author_username}</p>
                             <p className="text-xs text-muted-foreground">

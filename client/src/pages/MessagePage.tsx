@@ -17,7 +17,7 @@ export const MessagePage: React.FC = () => {
                     </div>
                 </header>
                 <main className="flex flex-col flex-grow p-4 overflow-hidden">
-                    <div className=" h-full">
+                    <div className="flex flex-col h-full">
                         <Message />
                     </div>
                 </main>

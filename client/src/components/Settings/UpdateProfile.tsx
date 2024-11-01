@@ -13,9 +13,10 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 interface ProfileData {
   name: string;
   bio: string;
+  location: string;
   githubUsername: string;
   leetcodeUsername: string;
-  profileImage?: File | null; // New field for the profile image
+  profileImage?: File | null; 
 }
 
 const UpdateProfile = () => {
@@ -23,9 +24,10 @@ const UpdateProfile = () => {
   const [profileData, setProfileData] = useState<ProfileData>({
     name: '',
     bio: '',
+    location: '',
     githubUsername: '',
     leetcodeUsername: '',
-    profileImage: null // Initialize as null
+    profileImage: null 
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,6 +74,7 @@ const UpdateProfile = () => {
     const formData = new FormData();
     formData.append('name', profileData.name);
     formData.append('bio', profileData.bio);
+    formData.append('location', profileData.location);
     formData.append('githubUsername', profileData.githubUsername);
     formData.append('leetcodeUsername', profileData.leetcodeUsername);
     if (profileData.profileImage) {
@@ -133,6 +136,20 @@ const UpdateProfile = () => {
             onChange={handleChange}
             disabled={isLoading}
             placeholder='Write something about yourself'
+            className='mt-1'
+          />
+        </div>
+        <div>
+          <Label htmlFor='location' className='dark:text-neutral-200'>
+            Location
+          </Label>
+          <Input
+            id='location'
+            name='location'
+            value={profileData.location || ''}
+            onChange={handleChange}
+            disabled={isLoading}
+            placeholder='Your location'
             className='mt-1'
           />
         </div>
