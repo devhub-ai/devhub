@@ -40,6 +40,8 @@ export function Message() {
     const [showMessages, setShowMessages] = useState(false)
     const messageInputRef = useRef<HTMLTextAreaElement>(null)
 
+    const username = localStorage.getItem('devhub_username') || "";
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobileView(window.innerWidth < 768)
@@ -67,7 +69,7 @@ export function Message() {
 
     const fetchChattedUsers = async () => {
         try {
-            const response = await fetch(`${backendUrl}/chatted_users/${currentUserId}`)
+            const response = await fetch(`${backendUrl}/chatted_users/${username}`)
             const data = await response.json()
             setChattedUsers(data)
         } catch (error) {
