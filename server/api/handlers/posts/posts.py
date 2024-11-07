@@ -4,6 +4,7 @@ import cloudinary.uploader
 import logging
 from models import Post, Comment
 from extensions import posts_collection, comments_collection
+from extensions import neo4j_db
 
 def get_posts():
     try:
@@ -22,6 +23,39 @@ def get_posts():
     except Exception as e:
         logging.error(f"Error retrieving posts: {str(e)}")
         return jsonify({"error": "Failed to retrieve posts"}), 500
+    
+def get_post_by_id(post_id):
+    try:
+        if ObjectId.is_valid(post_id):
+            post_id = ObjectId(post_id)
+        else:
+            return {"error": "Invalid post_id format"}
+
+        post = posts_collection.find_one({"_id": post_id})
+        if post:
+            return post
+        else:
+            return {"error": "Post not found"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def get_posts_by_author(author_username):
+    try:
+        posts = list(posts_collection.find({"author_username": author_username}).sort("created_at", -1))
+        for post in posts:
+            post['_id'] = str(post['_id'])
+
+            comments = list(comments_collection.find({"post_id": ObjectId(post['_id'])}))
+            for comment in comments:
+                comment['_id'] = str(comment['_id'])
+                comment['post_id'] = str(comment['post_id'])
+                comment['user_username'] = str(comment['user_username'])
+            post['comments'] = comments
+
+        return jsonify(posts), 200
+    except Exception as e:
+        logging.error(f"Error retrieving posts by author {author_username}: {str(e)}")
+        return jsonify({"error": "Failed to retrieve posts by author"}), 500
 
 def upload_image_to_cloudinary(image):
     try:
@@ -40,6 +74,12 @@ def create_post():
         
         if not author_username or not description:
             return jsonify({'error': 'Author username and description are required'}), 400
+        
+        with neo4j_db.driver.session() as session:
+            query = "MATCH (u:User {username: $username}) RETURN u.profile_image AS profile_image"
+            result = session.run(query, username=author_username)
+            user_record = result.single()
+            author_profile_image = user_record['profile_image'] if user_record else None
 
         image_url = None
         if 'image' in request.files:
@@ -49,7 +89,7 @@ def create_post():
                 if image_url is None:
                     return jsonify({'error': 'Image upload failed'}), 500
 
-        post = Post.create_post(author_username, description, tags, image_url)
+        post = Post.create_post(author_username, author_profile_image, description, tags, image_url)
         return jsonify({"post_id": str(post.inserted_id)}), 201
     except Exception as e:
         logging.error(f"Error creating post: {str(e)}")

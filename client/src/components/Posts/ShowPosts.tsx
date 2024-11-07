@@ -8,17 +8,19 @@ import {
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogHeader,
-    AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Cross1Icon } from "@radix-ui/react-icons";
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
 
 interface Post {
     _id: string
     author_username: string
+    author_profileImage: string
     description: string
-    tags: string[]
+    tags: string
     image_link?: string
     upvotes: number
     downvotes: number
@@ -33,19 +35,24 @@ interface Comment {
     text: string
     created_at: string
 }
+
 export default function ShowPosts() {
     const [posts, setPosts] = useState<Post[]>([])
     const [commentText, setCommentText] = useState<string>('')
     const [selectedPost, setSelectedPost] = useState<string | null>(null)
 
     useEffect(() => {
-        axios.get(`${backendUrl}/posts`)
-            .then(response => {
-                setPosts(response.data)
-            })
-            .catch(error => {
-                console.error('Error fetching posts:', error)
-            })
+        const fetchPosts = () => {
+            axios.get(`${backendUrl}/posts`)
+                .then(response => {
+                    setPosts(response.data)
+                })
+                .catch(error => {
+                    console.error('Error fetching posts:', error)
+                })
+        }
+
+        fetchPosts()
     }, [])
 
     const handleCommentSubmit = (postId: string) => {
@@ -76,13 +83,13 @@ export default function ShowPosts() {
     }
 
     return (
-        <div className="max-w-2xl mx-auto space-y-0 md:space-y-8"> {/* Remove space-y on mobile */}
+        <div className="max-w-2xl mx-auto space-y-0 md:space-y-8">
             {posts.map((post) => (
                 <div key={post._id} className="bg-background shadow-lg md:rounded-lg overflow-hidden border">
                     <div className="flex items-center border-b p-4">
-                        <div className="h-10 w-10 rounded-full overflow-hidden">
-                            <img src="" alt={post.author_username} />
-                        </div>
+                        <Avatar>
+                            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${post.author_username}`} />
+                        </Avatar>
                         <div className="ml-3">
                             <p className="text-sm font-medium">{post.author_username}</p>
                             <p className="text-xs text-muted-foreground">
@@ -116,21 +123,27 @@ export default function ShowPosts() {
                         </Button>
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="flex items-center gap-1"
-                                >
+                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
                                     <MessageCircle className="h-5 w-5" />
                                     <span>{post.comments.length}</span>
                                 </Button>
                             </AlertDialogTrigger>
-                            <AlertDialogContent className="max-w-2xl">
+
+                            <AlertDialogContent className="grid gap-6 sm:w-80">
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Comments</AlertDialogTitle>
+                                    <div className='flex items-center'>
+                                        <AlertDialogHeader className='text-2xl'>Comments</AlertDialogHeader>
+                                        <div className='flex-grow'></div>
+                                        <AlertDialogCancel>
+                                            <Cross1Icon className='h-3 w-3' />
+                                        </AlertDialogCancel>
+                                    </div>
                                 </AlertDialogHeader>
-                                <div className="max-h-96 overflow-y-auto">
-                                    {post.comments.map((comment) => (
+
+                                {/* Set max height and make it scrollable if needed */}
+                                <div className="max-h-56 overflow-y-auto">
+                                    {/* Reverse the comments to display the latest on top */}
+                                    {post.comments.slice().reverse().map((comment) => (
                                         <div key={comment._id} className="flex items-start gap-2 mb-4">
                                             <div className="h-8 w-8">
                                                 <img src="/placeholder.svg?height=32&width=32" alt={comment.user_username} />
@@ -142,19 +155,23 @@ export default function ShowPosts() {
                                         </div>
                                     ))}
                                 </div>
+
                                 <div className="border-t pt-4 mt-4">
-                                    <form onSubmit={(e) => {
-                                        e.preventDefault()
-                                        handleCommentSubmit(post._id)
-                                    }} className="flex items-center gap-2">
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            handleCommentSubmit(post._id);
+                                        }}
+                                        className="flex items-center gap-2"
+                                    >
                                         <Input
                                             type="text"
                                             placeholder="Add a comment..."
                                             value={commentText}
                                             onChange={(e) => {
-                                                setCommentText(e.target.value)
-                                                setSelectedPost(post._id)
-                                                console.log(selectedPost)
+                                                setCommentText(e.target.value);
+                                                setSelectedPost(post._id);
+                                                console.log(selectedPost);
                                             }}
                                             className="flex-grow"
                                         />
@@ -164,15 +181,17 @@ export default function ShowPosts() {
                                         </Button>
                                     </form>
                                 </div>
-                                <AlertDialogCancel className="mt-4">Close</AlertDialogCancel>
                             </AlertDialogContent>
                         </AlertDialog>
                     </div>
                     <div className='p-4'>
                         <p className="text-sm mb-2">{post.description}</p>
                         <div className="flex flex-wrap gap-2 mb-2">
-                            {post.tags.map((tag, index) => (
-                                <span key={index} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
+                            {JSON.parse(post.tags).map((tag: string, index: number) => (
+                                <span
+                                    key={index}
+                                    className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full"
+                                >
                                     #{tag}
                                 </span>
                             ))}

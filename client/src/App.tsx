@@ -13,6 +13,8 @@ import PrivacyPolicy from './pages/Privacypolicy';
 import ProjectDisplay from './pages/ProjectDisplay';
 import TermsAndConditions from './pages/TermsAndConditions';
 import Feed from './pages/Feed';
+import UserPosts from './pages/UserPosts';
+import ShowPostByID from './components/Posts/ShowPostByID';
 
 const App = () => {
 
@@ -30,6 +32,8 @@ const App = () => {
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/relations/:username" element={<Visualization />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/posts/:username" element={<UserPosts />} />
+          <Route path="/post/:postId" element={<ShowPostByID />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
           <Route path="*" element={<div>404</div>} />

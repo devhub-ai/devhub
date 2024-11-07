@@ -37,7 +37,7 @@ export default function UploadComponent({ onFileChange }: UploadComponentProps) 
         >
             <Upload className="w-12 h-12 text-gray-400 mb-2" />
             <p className="text-sm text-gray-500">
-                {file ? file.name : 'Upload Banner'}
+                {file ? file.name : 'Upload Image'}
             </p>
             <Input
                 ref={fileInputRef}

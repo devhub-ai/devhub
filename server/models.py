@@ -1,15 +1,9 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref, Session
 from datetime import datetime
-from pymongo import MongoClient
+from extensions import posts_collection, comments_collection, chat_collection
 from bson import ObjectId
-from config import Config
-
-mongo_client = MongoClient(Config.MONGODB_URI)
-mongo_db = mongo_client['devhub']
-posts_collection = mongo_db['posts']
-comments_collection = mongo_db['comments']
 
 Base = declarative_base()
 
@@ -32,11 +26,13 @@ class User(Base):
     password = Column(String, nullable=False)
     name = Column(String, nullable=True)
     bio = Column(Text, nullable=True)
+    location = Column(String, nullable=True)
+    profile_image = Column(String, nullable=True)
     github_username = Column(String, nullable=True)
     leetcode_username = Column(String, nullable=True)
     
+    # Relationships
     projects = relationship('Project', back_populates='user')
-    
     friends = relationship(
         'User',
         secondary=friend_association,
@@ -46,14 +42,22 @@ class User(Base):
         lazy='dynamic'
     )
 
-    def __init__(self, username, email, password, name=None, bio=None, github_username=None, leetcode_username=None):
+    # New fields for Neo4j
+    skillset = Column(ARRAY(String), default=[])
+    suggestions = Column(ARRAY(String), default=[])
+
+    def __init__(self, username, email, password, name=None, bio=None,location=None, github_username=None, leetcode_username=None, profile_image=None):
         self.username = username
         self.email = email
         self.password = password
         self.name = name
         self.bio = bio
+        self.location = location
+        self.profile_image = profile_image
         self.github_username = github_username
         self.leetcode_username = leetcode_username
+        self.skillset = []        
+        self.suggestions = []     
 
     def add_friend(self, friend_user):
         if friend_user not in self.friends:
@@ -67,6 +71,7 @@ class User(Base):
         if self in friend_user.friends:
             friend_user.friends.remove(self)
 
+
 class Project(Base):
     __tablename__ = 'projects'
 
@@ -74,7 +79,7 @@ class Project(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     repo_link = Column(String, nullable=True)
-    image_link = Column(String, nullable=True)  # New field to store image links
+    image_link = Column(String, nullable=True) 
     star = Column(Integer, default=0, nullable=False)
     
     user_id = Column(Integer, ForeignKey('users.id'))
@@ -100,18 +105,86 @@ class Tag(Base):
     def __init__(self, name):
         self.name = name
         
+from datetime import datetime
+
 class Chat:
-    def __init__(self, sender_id, receiver_id, message):
-        self.sender_id = sender_id
-        self.receiver_id = receiver_id
-        self.message = message
-        self.timestamp = datetime.utcnow()
+    def send_message(self, sender_username, receiver_username, message):
+        chat_message = {
+            'sender_username': sender_username,
+            'message': message,
+            'timestamp': datetime.utcnow()
+        }
+
+        # Check if the receiver exists in the sender's chatted_users
+        sender_exists = chat_collection.find_one(
+            {'username': sender_username, 'chatted_users.username': receiver_username}
+        )
+
+        # If the receiver is not already in sender's chatted_users, add them
+        if not sender_exists:
+            chat_collection.update_one(
+                {'username': sender_username},
+                {'$addToSet': {'chatted_users': {'username': receiver_username, 'chat_history': [], 'last_interaction': datetime.utcnow()}}},
+                upsert=True
+            )
+
+        # Check if the sender exists in the receiver's chatted_users
+        receiver_exists = chat_collection.find_one(
+            {'username': receiver_username, 'chatted_users.username': sender_username}
+        )
+
+        # If the sender is not already in receiver's chatted_users, add them
+        if not receiver_exists:
+            chat_collection.update_one(
+                {'username': receiver_username},
+                {'$addToSet': {'chatted_users': {'username': sender_username, 'chat_history': [], 'last_interaction': datetime.utcnow()}}},
+                upsert=True
+            )
+
+        # Append the message to the sender's chat history with the receiver
+        chat_collection.update_one(
+            {'username': sender_username, 'chatted_users.username': receiver_username},
+            {'$push': {'chatted_users.$.chat_history': chat_message},
+             '$set': {'chatted_users.$.last_interaction': datetime.utcnow()}}
+        )
+
+        # Append the message to the receiver's chat history with the sender
+        chat_collection.update_one(
+            {'username': receiver_username, 'chatted_users.username': sender_username},
+            {'$push': {'chatted_users.$.chat_history': chat_message},
+             '$set': {'chatted_users.$.last_interaction': datetime.utcnow()}}
+        )
+
+    def get_messages(self, user1, user2):
+        try:
+            # Retrieve the chat history for both users (user1 and user2)
+            user = chat_collection.find_one({'username': user1})
+            if user:
+                for chatted_user in user.get('chatted_users', []):
+                    if chatted_user['username'] == user2:
+                        return chatted_user['chat_history']
+            return []
+        except Exception as e:
+            raise Exception(f"Error retrieving chat history: {str(e)}")
+
+    def get_chatted_users(self, username):
+        user = chat_collection.find_one({'username': username})
+        if user:
+            return [
+                {
+                    "username": chatted_user['username'],
+                    "last_interaction": chatted_user.get('last_interaction')
+                }
+                for chatted_user in user.get('chatted_users', [])
+            ]
+        return []
 
 class Post:
     @staticmethod
-    def create_post(author_username, description, tags, image_link):
+    def create_post(author_username,author_profile_image, description, tags, image_link):
         post = {
             "author_username": author_username,
+            "author_profileImage": author_profile_image,
             "description": description,
             "tags": tags,
             "image_link": image_link,

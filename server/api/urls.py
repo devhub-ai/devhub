@@ -1,14 +1,15 @@
 from api.handlers.auth.userauth import signup, login, check_auth, home, logout, index, check_username
-from api.handlers.user.profile import get_profile, update_profile
+from api.handlers.user.profile import get_profile, update_profile, delete_account
 from api.handlers.projects.projects import add_project, update_project, delete_project, get_projects, increment_star, project_details, upload_image
 from api.handlers.analyze.githubdata import github_data, top_languages, streak_stats, pinned_repos, streak_chart
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,chat_history
 from api.handlers.user.friends import add_friend, remove_friend, get_friends
-from api.handlers.message.message import search_users, send_message, get_messages
+from api.handlers.message.message import search_users, send_message, get_messages, get_chatted_users, get_chat_history
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
-from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment, get_posts
+from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment, get_posts, get_posts_by_author, get_post_by_id
+from api.handlers.suggestions.usersuggestions import get_user_suggestions
 
 def register_routes(app):
     # Authentication routes
@@ -24,6 +25,7 @@ def register_routes(app):
     # Profile routes
     app.add_url_rule('/profile/<username>', 'get_profile', get_profile, methods=['GET'])
     app.add_url_rule('/profile/<username>', 'update_profile', update_profile, methods=['PUT'])
+    app.add_url_rule('/profile/delete/<username>', 'delete_account', delete_account, methods=['DELETE'])
     
     # Friends routes
     app.add_url_rule('/profile/<username>/friends','add_friend',add_friend, methods=['POST'])
@@ -56,9 +58,12 @@ def register_routes(app):
     
     # Messaging routes
     app.add_url_rule('/search_users', 'search_users', search_users, methods=['GET'])
-    app.add_url_rule('/send_message', 'send_message', send_message, methods=['POST']) 
-    app.add_url_rule('/get_messages/<username>', 'get_messages', get_messages, methods=['GET'])
-    
+    app.add_url_rule('/send', 'send_message', send_message, methods=['POST'])
+    app.add_url_rule('/messages', 'get_messages', get_messages, methods=['GET'])
+    app.add_url_rule('/chatted_users/<username>', 'get_chatted_users', get_chatted_users, methods=['GET'])
+    app.add_url_rule('/chat_history/<user1>/<user2>', 'get_chat_history', get_chat_history, methods=['GET'])
+
+
     # Visualization route
     app.add_url_rule('/profile/relations','get_user_relations',get_user_relations, methods=['GET'])
     
@@ -69,12 +74,17 @@ def register_routes(app):
     
     # Posts routes
     app.add_url_rule('/posts', 'get_posts', get_posts, methods=['GET'])
+    app.add_url_rule('/posts/<author_username>','get_posts_by_author',get_posts_by_author,methods=['GET'])
+    app.add_url_rule('/posts/<post_id>','get_post_by_id',get_post_by_id,methods=['GET'])
     app.add_url_rule('/posts', 'create_post', create_post, methods=['POST'])
     app.add_url_rule('/posts/<post_id>', 'update_post', update_post, methods=['PUT'])
     app.add_url_rule('/posts/<post_id>', 'delete_post', delete_post, methods=['DELETE'])
     app.add_url_rule('/posts/<post_id>/<vote_type>', 'vote_post', vote_post, methods=['POST'])
     app.add_url_rule('/posts/<post_id>/comments', 'add_comment', add_comment, methods=['POST'])
     app.add_url_rule('/posts/<post_id>/comments/<comment_id>', 'delete_comment', delete_comment, methods=['DELETE'])
+    
+    # Suggestions routes
+    app.add_url_rule('/suggestions/<username>', 'get_user_suggestions', get_user_suggestions, methods=['GET'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)

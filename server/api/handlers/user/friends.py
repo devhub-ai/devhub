@@ -33,7 +33,16 @@ def add_friend(username):
             username=username, friend_username=friend_username
         )
 
+        # Remove each other from suggestions
+        session.run(
+            "MATCH (u:User {username: $username}), (f:User {username: $friend_username}) "
+            "SET u.suggestions = [s IN u.suggestions WHERE s <> $friend_username], "
+            "f.suggestions = [s IN f.suggestions WHERE s <> $username]",
+            username=username, friend_username=friend_username
+        )
+
     return jsonify({'message': 'Friend added successfully'}), 200
+
 
 def remove_friend(username):
     data = request.get_json()
