@@ -1,95 +1,122 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ChevronUp, ChevronDown, MessageCircle, Send } from "lucide-react"
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ChevronUp, ChevronDown, MessageCircle, Send } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogHeader,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 interface Post {
-    _id: string
-    author_username: string
-    author_profileImage: string
-    description: string
-    tags: string
-    image_link?: string
-    upvotes: number
-    downvotes: number
-    created_at: string
-    comments: Comment[]
+    _id: string;
+    author_username: string;
+    author_profileImage: string;
+    description: string;
+    tags: string;
+    image_link?: string;
+    upvotes: number;
+    downvotes: number;
+    created_at: string;
+    comments: Comment[];
 }
 
 interface Comment {
-    _id: string
-    post_id: string
-    user_username: string
-    text: string
-    created_at: string
+    _id: string;
+    post_id: string;
+    user_username: string;
+    text: string;
+    created_at: string;
 }
 
 export default function ShowPosts() {
-    const [posts, setPosts] = useState<Post[]>([])
-    const [commentText, setCommentText] = useState<string>('')
-    const [selectedPost, setSelectedPost] = useState<string | null>(null)
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [commentText, setCommentText] = useState<string>('');
+    const [selectedPost, setSelectedPost] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchPosts = () => {
             axios.get(`${backendUrl}/posts`)
                 .then(response => {
-                    setPosts(response.data)
+                    setPosts(response.data);
                 })
                 .catch(error => {
-                    console.error('Error fetching posts:', error)
-                })
-        }
+                    console.error('Error fetching posts:', error);
+                });
+        };
 
-        fetchPosts()
-    }, [])
+        fetchPosts();
+    }, []);
+
+    // New function to handle voting
+    const handleVote = async (postId: string, voteType: 'upvote' | 'downvote') => {
+        try {
+            const response = await axios.post(`${backendUrl}/posts/${postId}/${voteType}`);
+            if (response.status === 200) {
+                // const updatedPosts = posts.map(post => {
+                //     if (post._id === postId) {
+                //         // Update the vote count based on voteType
+                //         if (voteType === 'upvote') {
+                //             return { ...post, upvotes: post.upvotes + 1 };
+                //         } else if (voteType === 'downvote') {
+                //             return { ...post, downvotes: post.downvotes + 1 };
+                //         }
+                //     }
+                //     return post;
+                // });
+                // setPosts(updatedPosts);
+            }
+        } catch (error) {
+            console.error(`Error ${voteType}ing post:`, error);
+        }
+    };
 
     const handleCommentSubmit = (postId: string) => {
-        if (!commentText) return
+        if (!commentText) return;
 
         const commentData = {
             user_username: localStorage.getItem('devhub_username'),
             text: commentText,
-        }
+        };
 
         axios.post(`${backendUrl}/posts/${postId}/comments`, commentData)
             .then(response => {
+                // Update the post with the new comment
                 const updatedPosts = posts.map(post => {
                     if (post._id === postId) {
                         return {
                             ...post,
-                            comments: [...post.comments, response.data],
-                        }
+                            comments: [...post.comments, response.data], // Add the new comment
+                        };
                     }
-                    return post
-                })
-                setPosts(updatedPosts)
-                setCommentText('')
+                    return post;
+                });
+
+                setPosts(updatedPosts);  // Update the state
+                setCommentText('');  // Clear the input field
             })
             .catch(error => {
-                console.error('Error adding comment:', error)
-            })
-    }
+                console.error('Error adding comment:', error);
+            });
+    };
+
+    useEffect(() => {
+    }, [posts, selectedPost]); // This will re-run whenever `posts` or `selectedPost` changes
 
     return (
         <div className="max-w-2xl mx-auto space-y-0 md:space-y-8">
             {posts.map((post) => (
                 <div key={post._id} className="bg-background shadow-lg md:rounded-lg overflow-hidden border">
                     <div className="flex items-center border-b p-4">
-                        <Avatar>
-                            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${post.author_username}`} />
-                        </Avatar>
+                        <div className='h-8 w-8 rounded-full overflow-hidden'>
+                            <img src={`https://api.dicebear.com/6.x/initials/svg?seed=${post.author_username}`} />
+                        </div>
                         <div className="ml-3">
                             <p className="text-sm font-medium">{post.author_username}</p>
                             <p className="text-xs text-muted-foreground">
@@ -109,6 +136,7 @@ export default function ShowPosts() {
                             variant="ghost"
                             size="sm"
                             className="flex items-center gap-1"
+                            onClick={() => handleVote(post._id, 'upvote')}  
                         >
                             <ChevronUp className="h-5 w-5" />
                             <span>{post.upvotes}</span>
@@ -117,6 +145,7 @@ export default function ShowPosts() {
                             variant="ghost"
                             size="sm"
                             className="flex items-center gap-1"
+                            onClick={() => handleVote(post._id, 'downvote')} 
                         >
                             <ChevronDown className="h-5 w-5" />
                             <span>{post.downvotes}</span>
@@ -140,13 +169,11 @@ export default function ShowPosts() {
                                     </div>
                                 </AlertDialogHeader>
 
-                                {/* Set max height and make it scrollable if needed */}
                                 <div className="max-h-56 overflow-y-auto">
-                                    {/* Reverse the comments to display the latest on top */}
                                     {post.comments.slice().reverse().map((comment) => (
                                         <div key={comment._id} className="flex items-start gap-2 mb-4">
-                                            <div className="h-8 w-8">
-                                                <img src="/placeholder.svg?height=32&width=32" alt={comment.user_username} />
+                                            <div className='h-8 w-8 rounded-full overflow-hidden'>
+                                                <img src={`https://api.dicebear.com/6.x/initials/svg?seed=${comment.user_username}`} />
                                             </div>
                                             <div>
                                                 <p className="text-sm font-medium">{comment.user_username}</p>
@@ -171,7 +198,6 @@ export default function ShowPosts() {
                                             onChange={(e) => {
                                                 setCommentText(e.target.value);
                                                 setSelectedPost(post._id);
-                                                console.log(selectedPost);
                                             }}
                                             className="flex-grow"
                                         />
@@ -201,5 +227,5 @@ export default function ShowPosts() {
                 </div>
             ))}
         </div>
-    )
+    );
 }

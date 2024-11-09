@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Marquee from "@/components/ui/marquee";
 
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 const Recomendations: React.FC = () => {
@@ -11,16 +12,17 @@ const Recomendations: React.FC = () => {
 
     useEffect(() => {
         const fetchSuggestions = async () => {
-            const username = localStorage.getItem('devhub_username');
+            const currentUser = localStorage.getItem('devhub_username');
 
-            if (!username) {
+            if (!currentUser) {
                 setError('Username not found in local storage');
                 setLoading(false);
                 return;
             }
 
             try {
-                const response = await axios.get(`${backendUrl}/suggestions/${username}`);
+                const response = await axios.get(`${backendUrl}/suggestions/${currentUser}`);
+
                 setSuggestions(response.data.suggestions);
             } catch (err) {
                 setError('Error fetching suggestions');
@@ -35,27 +37,45 @@ const Recomendations: React.FC = () => {
 
     return (
         <div>
-            {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
-            {suggestions.length > 0 && (
-                <ul className='flex items-center justify-center'>
-                    <Marquee pauseOnHover vertical className="[--duration:20s]">
-                            {suggestions.map((suggestion, index) => (
-                                <div className="flex items-center border border-gray-300 rounded-lg">
+            {loading &&
+                <>
+                    <ul className='flex items-center justify-center'>
+                        <Marquee pauseOnHover vertical className="[--duration:20s]">
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <div key={index} className="flex items-center border border-gray-300 rounded-lg">
                                     <div className="p-4 flex items-center space-x-4">
-                                        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 flex-shrink-0" />
-                                        <a href={`/user/${suggestion}`}>
-                                            <li key={index} className="list-none">@{suggestion}</li>
-                                        </a>
-                                        
+                                        <div className="h-8 w-8 rounded-full bg-gray-300 animate-pulse"></div>
+                                        <div className="w-24 h-6 bg-gray-300 animate-pulse rounded-lg"></div>
                                     </div>
                                 </div>
                             ))}
+                        </Marquee>
+                    </ul>
+                </>}
+            {suggestions.length > 0 && (
+                <ul className='flex items-center justify-center'>
+                    <Marquee pauseOnHover vertical className="[--duration:20s]">
+                        {suggestions.map((suggestion, index) => (
+                            <div className="flex items-center border border-gray-300 rounded-lg">
+                                <div className="p-4 flex items-center space-x-4">
+                                    <div className='h-8 w-8 rounded-full overflow-hidden'>
+                                        <img src={`https://api.dicebear.com/6.x/initials/svg?seed=${suggestion}`} alt="user avatar" />
+                                    </div>
+                                    <a href={`/user/${suggestion}`}>
+                                        <li key={index} className="list-none">@{suggestion}</li>
+                                    </a>
+
+                                </div>
+                            </div>
+                        ))}
                     </Marquee>
-                    
                 </ul>
             )}
-            {suggestions.length === 0 && !loading && <p>No suggestions available.</p>}
+            {suggestions.length === 0 && !loading &&
+                <>
+                    <p>No suggestion Available</p>
+                </>}
         </div>
     );
 };
