@@ -128,9 +128,7 @@ def vote_post(post_id, vote_type):
     if vote_type not in ['upvote', 'downvote']:
         return jsonify({"error": "Invalid vote type"}), 400
     try:
-        success = Post.vote_post(post_id, vote_type)
-        if not success:
-            return jsonify({"error": "Post not found"}), 404
+        Post.vote_post(post_id, vote_type)
         return jsonify({"message": f"Post {vote_type}d"}), 200
     except Exception as e:
         logging.error(f"Error voting on post: {str(e)}")

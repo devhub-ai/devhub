@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
@@ -17,6 +17,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import Recomendations from "../Recomendations/Recomendations"
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import UpdateProfile from "../Settings/UpdateProfile"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -297,11 +305,27 @@ const SidebarTrigger = React.forwardRef<
             <SheetTitle>Recomendations</SheetTitle>
             <Recomendations />
           </SheetHeader>
+          <div className="fixed bottom-5">
+            <SheetFooter>
+              <div className="bg-zinc-900 items-center justify-center p-4 rounded-lg border-gray-300 mr-5">
+              <p>Complete your profile and add projects and tags to help others discover you! 🚀💼✨"</p> 
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button className="w-full mt-2">
+                      Update Profile
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
+                    <UpdateProfile />
+                  </AlertDialogContent>
+                </AlertDialog>
+            </div>
+          </SheetFooter>
+          </div>
         </SheetContent>
       </Sheet>
-      
     </>
-    
   )
 })
 SidebarTrigger.displayName = "SidebarTrigger"
