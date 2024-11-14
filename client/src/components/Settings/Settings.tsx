@@ -7,7 +7,7 @@ import {
 import UpdateProfile from "./UpdateProfile"
 import WebappSettings from "./WebappSettings"
 
-const Settings = () => {
+const Setting = () => {
     return (
         <Tabs defaultValue="profile" className="mt-5 w-full">
             <TabsList className="grid w-full grid-cols-2">
@@ -24,4 +24,4 @@ const Settings = () => {
     )
 }
 
-export default Settings
+export default Setting

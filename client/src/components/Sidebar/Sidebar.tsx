@@ -1,7 +1,7 @@
 import {
     Inbox,
     MessageCircleQuestion,
-    Settings2,
+    Settings,
     Sparkles,
     CircleUser,
     LogOut,
@@ -38,11 +38,17 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import Settings from "@/components/Settings/Settings";
+import Setting from "@/components/Settings/Settings";
 import Help from "../Help/Help";
 import AddPosts from "../Posts/AddPosts";
+import { useContext } from 'react';
+import React from 'react'
 
 const username = localStorage.getItem('devhub_username');
+
+export const PostContext = React.createContext({
+    refreshPosts: () => { }
+});
 
 export default function DevhubSidebar() {
     return (
@@ -66,6 +72,11 @@ export default function DevhubSidebar() {
 
 export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const navigate = useNavigate();
+    const { refreshPosts } = useContext(PostContext);
+
+    const handlePostCreated = () => {
+        refreshPosts(); // This will trigger the posts refresh
+    };
 
     const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
@@ -145,7 +156,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                         <div className='flex-grow'></div>
                                         <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
                                     </div>
-                                    <AddPosts />
+                                    <AddPosts onPostCreated={handlePostCreated} />
                                 </AlertDialogContent>
                             </AlertDialog>
                         </SidebarMenuSub>
@@ -185,7 +196,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                     <SidebarMenuItem >
                                         <SidebarMenuButton asChild>
                                             <div>
-                                                <Settings2 />
+                                                <Settings />
                                                 <span>Settings</span>
                                             </div>
                                         </SidebarMenuButton>
@@ -201,7 +212,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                             <Cross1Icon className="h-3 w-3" />
                                         </AlertDialogCancel>
                                     </div>
-                                    <Settings />
+                                    <Setting />
 
                                 </AlertDialogContent>
                             </AlertDialog>

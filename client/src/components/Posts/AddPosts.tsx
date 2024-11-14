@@ -9,7 +9,7 @@ import { Icons } from "@/components/ui/icons";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
-const CreatePost = () => {
+const CreatePost = ({ onPostCreated }: { onPostCreated: () => void }) => {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -62,6 +62,7 @@ const CreatePost = () => {
 
       if (response.status === 201) {
         toast.success('Post created successfully!');
+        onPostCreated();
       }
     } catch (error) {
       console.error('Error creating post:', error);
