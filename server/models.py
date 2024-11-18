@@ -181,7 +181,7 @@ class Chat:
 
 class Post:
     @staticmethod
-    def create_post(author_username,author_profile_image, description, tags, image_link):
+    def create_post(author_username, author_profile_image, description, tags, image_link):
         post = {
             "author_username": author_username,
             "author_profileImage": author_profile_image,
@@ -190,6 +190,8 @@ class Post:
             "image_link": image_link,
             "upvotes": 0,
             "downvotes": 0,
+            "upvoted_by": [],  # Add array to track who upvoted
+            "downvoted_by": [],  # Add array to track who downvoted
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow()
         }
@@ -209,11 +211,31 @@ class Post:
         comments_collection.delete_many({"post_id": ObjectId(post_id)})
 
     @staticmethod
-    def vote_post(post_id, vote_type):
+    def vote_post(post_id, vote_type, username):
+        post = posts_collection.find_one({"_id": ObjectId(post_id)})
+        if not post:
+            raise Exception("Post not found")
+
+        # Check if user has already voted
+        if username in post.get('upvoted_by', []) or username in post.get('downvoted_by', []):
+            raise Exception("User has already voted on this post")
+
+        update_query = {}
         if vote_type == "upvote":
-            posts_collection.update_one({"_id": ObjectId(post_id)}, {"$inc": {"upvotes": 1}})
+            update_query = {
+                "$inc": {"upvotes": 1},
+                "$push": {"upvoted_by": username}
+            }
         elif vote_type == "downvote":
-            posts_collection.update_one({"_id": ObjectId(post_id)}, {"$inc": {"downvotes": 1}})
+            update_query = {
+                "$inc": {"downvotes": 1},
+                "$push": {"downvoted_by": username}
+            }
+
+        return posts_collection.update_one(
+            {"_id": ObjectId(post_id)},
+            update_query
+        )
 
 class Comment:
     @staticmethod

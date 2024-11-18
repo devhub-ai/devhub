@@ -128,9 +128,17 @@ def vote_post(post_id, vote_type):
     if vote_type not in ['upvote', 'downvote']:
         return jsonify({"error": "Invalid vote type"}), 400
     try:
-        Post.vote_post(post_id, vote_type)
+        # Get username from request
+        data = request.get_json()
+        username = data.get('username')
+        if not username:
+            return jsonify({"error": "Username is required"}), 400
+
+        Post.vote_post(post_id, vote_type, username)
         return jsonify({"message": f"Post {vote_type}d"}), 200
     except Exception as e:
+        if "User has already voted" in str(e):
+            return jsonify({"error": str(e)}), 400
         logging.error(f"Error voting on post: {str(e)}")
         return jsonify({"error": f"Failed to {vote_type} post"}), 500
 
