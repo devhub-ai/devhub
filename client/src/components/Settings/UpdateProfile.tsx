@@ -101,19 +101,19 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className='p-2 mt-4 grid gap-6 sm:w-80'>
+    <div className=' mt-4 grid gap-6 sm:w-80'>
       <h2 className='text-xl font-semibold dark:text-neutral-100'>
         Update Profile
       </h2>
       <form onSubmit={handleSubmit} className='grid gap-4'>
-        <ScrollArea className='h-60 overflow-y-auto p-4'>
-          <div>
+        <ScrollArea className='h-60 overflow-y-auto p-2'>
+          <div className='p-2'>
             <Label htmlFor='profileImage' className='dark:text-neutral-200 mb-1'>
               Profile Image
             </Label>
             <UploadComponent onFileChange={handleFileChange} />
           </div>
-          <div>
+          <div className='p-2'>
             <Label htmlFor='name' className='dark:text-neutral-200'>
               Name
             </Label>
@@ -127,7 +127,7 @@ const UpdateProfile = () => {
               className='mt-1'
             />
           </div>
-          <div>
+          <div className='p-2'>
             <Label htmlFor='bio' className='dark:text-neutral-200'>
               Bio
             </Label>
@@ -141,7 +141,7 @@ const UpdateProfile = () => {
               className='mt-1'
             />
           </div>
-          <div>
+          <div className='p-2'>
             <Label htmlFor='location' className='dark:text-neutral-200'>
               Location
             </Label>
@@ -155,7 +155,7 @@ const UpdateProfile = () => {
               className='mt-1'
             />
           </div>
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 p-2'>
             <div>
               <Label htmlFor='githubUsername' className='dark:text-neutral-200'>
                 GitHub

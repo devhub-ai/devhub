@@ -20,7 +20,8 @@ def get_profile(username):
             'githubUsername': user["github_username"],
             'leetcodeUsername': user["leetcode_username"],
             'email': user["email"],
-            'profileImage' : user["profile_image"]
+            'profileImage' : user["profile_image"],
+            'profileBanner' : user["profile_banner"]
         }
 
         projects_query = """
@@ -57,10 +58,26 @@ def upload_image_to_cloudinary(image):
     except Exception as e:
         logging.error(f"Error uploading image: {str(e)}")
         return None
+    
+def update_banner(username):
+    data = request.form
+    profile_banner = request.files.get('profile_banner') 
+    query = "MATCH (u:User {username: $username}) SET u += $properties RETURN u"
+    properties = {}
+    if profile_banner:
+        banner_url = upload_image_to_cloudinary(profile_banner)
+        if banner_url:
+            properties['profile_banner'] = banner_url
+    with neo4j_db.driver.session() as session:
+        result = session.run(query, username=username, properties=properties)
+        if result.single():
+            return jsonify({'message': 'Profile updated successfully'}), 200
+        return jsonify({'message': 'User not found'}), 404
 
 def update_profile(username):
     data = request.form
-    profile_image = request.files.get('profileImage')  
+    
+    profile_image = request.files.get('profileImage')   
     query = "MATCH (u:User {username: $username}) SET u += $properties RETURN u"
     properties = {}
 
@@ -68,7 +85,7 @@ def update_profile(username):
         image_url = upload_image_to_cloudinary(profile_image) 
         if image_url: 
             properties['profile_image'] = image_url  
-
+            
     if 'name' in data:
         properties['name'] = data['name']
     if 'bio' in data:

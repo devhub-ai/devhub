@@ -28,6 +28,7 @@ class User(Base):
     bio = Column(Text, nullable=True)
     location = Column(String, nullable=True)
     profile_image = Column(String, nullable=True)
+    profile_banner = Column(String, nullable=True)
     github_username = Column(String, nullable=True)
     leetcode_username = Column(String, nullable=True)
     
@@ -46,7 +47,7 @@ class User(Base):
     skillset = Column(ARRAY(String), default=[])
     suggestions = Column(ARRAY(String), default=[])
 
-    def __init__(self, username, email, password, name=None, bio=None,location=None, github_username=None, leetcode_username=None, profile_image=None):
+    def __init__(self, username, email, password, name=None, bio=None,location=None, github_username=None, leetcode_username=None, profile_image=None, profile_banner=None):
         self.username = username
         self.email = email
         self.password = password
@@ -54,6 +55,7 @@ class User(Base):
         self.bio = bio
         self.location = location
         self.profile_image = profile_image
+        self.profile_banner = profile_banner
         self.github_username = github_username
         self.leetcode_username = leetcode_username
         self.skillset = []        

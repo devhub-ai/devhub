@@ -9,7 +9,7 @@ const WebappSettings = () => {
       </h2>
       <ModeToggle />
       <h2 className='text-xl font-semibold mb-4 dark:text-neutral-100 mt-4'>
-        Delete Acc
+        Delete Account
       </h2>
       <DeleteAccount />
     </div>  
