@@ -17,7 +17,6 @@ import UserPosts from './pages/UserPosts';
 import ShowPostByID from './components/Posts/ShowPostByID';
 
 const App = () => {
-
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Router>
