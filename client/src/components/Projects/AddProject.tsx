@@ -104,7 +104,7 @@ const AddProject: React.FC<{ onProjectChange: () => void }> = ({ onProjectChange
                 toast.success('Project added successfully');
                 setNewProject({ title: '', description: '', repoLink: '', tags: [], imageUrl: '' }); // Reset form
                 setImageFile(null); // Reset the image file
-                onProjectChange();
+                onProjectChange(); // Trigger refresh
             } else {
                 toast.error('Failed to add project');
             }

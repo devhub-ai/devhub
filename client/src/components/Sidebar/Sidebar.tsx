@@ -1,6 +1,6 @@
 import {
     Inbox,
-    MessageCircleQuestion,
+    CircleHelp,
     Settings,
     Sparkles,
     CircleUser,
@@ -8,7 +8,7 @@ import {
     MessagesSquare,
     ChartNetwork,
     SquarePlus,
-    Rss,
+    GalleryVerticalEnd,
     House
 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
@@ -126,7 +126,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild>
                             <a href={'/feed'}>
-                                <Rss />
+                                <GalleryVerticalEnd />
                                 <span>Feed</span>
                             </a>
                         </SidebarMenuButton>
@@ -172,7 +172,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                     <SidebarMenuItem >
                                         <SidebarMenuButton asChild>
                                             <div>
-                                                <MessageCircleQuestion />
+                                                <CircleHelp />
                                                 <span>Help</span>
                                             </div>
                                         </SidebarMenuButton>

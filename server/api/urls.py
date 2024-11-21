@@ -1,5 +1,5 @@
 from api.handlers.auth.userauth import signup, login, check_auth, home, logout, index, check_username
-from api.handlers.user.profile import get_profile, update_profile, delete_account
+from api.handlers.user.profile import get_profile, update_profile, delete_account, update_banner
 from api.handlers.projects.projects import add_project, update_project, delete_project, get_projects, increment_star, project_details, upload_image
 from api.handlers.analyze.githubdata import github_data, top_languages, streak_stats, pinned_repos, streak_chart
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
@@ -25,6 +25,7 @@ def register_routes(app):
     # Profile routes
     app.add_url_rule('/profile/<username>', 'get_profile', get_profile, methods=['GET'])
     app.add_url_rule('/profile/<username>', 'update_profile', update_profile, methods=['PUT'])
+    app.add_url_rule('/profile/update_banner/<username>', 'update_banner', update_banner, methods=['PUT'])
     app.add_url_rule('/profile/delete/<username>', 'delete_account', delete_account, methods=['DELETE'])
     
     # Friends routes

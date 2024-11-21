@@ -1,14 +1,10 @@
-import {
-    SidebarInset,
-    SidebarProvider,
-    SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 import { useEffect, useState } from "react";
-import { ProjectCard } from "@/components/Projects/ProjectCard";
 import { useParams } from "react-router-dom";
-import AddProject from "../components/Projects/AddProject";
-import { Skeleton } from '@/components/ui/skeleton';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarLeft } from "@/components/Sidebar/Sidebar";
+import { ProjectCard } from "@/components/Projects/ProjectCard";
+import AddProject from "@/components/Projects/AddProject";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -28,31 +24,25 @@ const Projects = () => {
     const [refresh, setRefresh] = useState(false); // Refresh trigger
     const { username } = useParams<{ username: string }>();
 
-    // Fetch user projects
-    const fetchUserProjects = async () => {
-        try {
-            const response = await fetch(`${backendUrl}/profile/${username}/projects`);
-            if (!response.ok) {
-                throw new Error("Failed to fetch projects");
-            }
-            const data = await response.json();
-            setProjects(data.projects || []);
-        } catch (error) {
-            console.error("Error fetching projects:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
-        if (username) {
-            fetchUserProjects();
-        }
-    }, [username, refresh]); // Re-fetch projects on refresh trigger
+        // Fetch user projects
+        const fetchUserProjects = async () => {
+            try {
+                const response = await fetch(`${backendUrl}/profile/${username}/projects`);
+                const data = await response.json();
+                setProjects(data.projects);
+            } catch (error) {
+                console.error('Failed to fetch projects:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    // Callback to trigger refresh
+        fetchUserProjects();
+    }, [username, refresh]);
+
     const handleRefresh = () => {
-        setRefresh(!refresh); // Toggle refresh state to re-trigger useEffect
+        setRefresh((prev) => !prev); 
     };
 
     return (
@@ -68,23 +58,22 @@ const Projects = () => {
                     <h1 className="ml-5 text-5xl mt-2">Projects</h1>
                     <AddProject onProjectChange={handleRefresh} />
                     <div className="flex flex-1 flex-col gap-4 p-4">
-                        {!projects.length ? (
+                        {!projects ? (
                             <div className="flex flex-col justify-center items-center">
                                 <h1 className="text-3xl">No Projects yet.</h1>
                             </div>
-                        ) :
-                        loading ? (
+                        ) : loading ? (
                             <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                            {Array.from({ length: 3 }).map((_, index) => (
-                                <Skeleton key={index} className="h-32 w-100"/>
-                            ))}
+                                {Array.from({ length: 3 }).map((_, index) => (
+                                    <Skeleton key={index} className="h-32 w-100" />
+                                ))}
                             </div>
                         ) : (
-                        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                            {projects.map((project) => (
-                                <ProjectCard key={project.projectId} project={project} onProjectChange={handleRefresh} />
-                            ))}
-                        </div>
+                            <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                                {projects.map((project) => (
+                                    <ProjectCard key={project.projectId} project={project} onProjectChange={handleRefresh} />
+                                ))}
+                            </div>
                         )}
                     </div>
                 </main>

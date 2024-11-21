@@ -110,9 +110,6 @@ Our API is designed to give you access to all core functionalities of DevHub pro
 
 <a href="https://documenter.getpostman.com/view/37803453/2sAXxP9Cxo" target="_blank"><img src="https://img.shields.io/badge/Postman-View%20Documentation-orange?style=flat&logo=postman" /></a>
 
-For the full API documentation, visit the following link:  
-[Postman API Documentation](https://documenter.getpostman.com/view/37803453/2sAXxP9Cxo)
-
 ## Conclusion 🎉
 By integrating LLMs for natural language understanding, LangChain for workflow enhancement, and Neo4j for advanced data storage and querying, DevHub offers a comprehensive solution for devs seeking meaningful collaborations. This combination not only enhances user experience but also ensures that connections are based on relevant skills and interests, leading to more effective teamwork.
 

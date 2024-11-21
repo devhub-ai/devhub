@@ -6,13 +6,13 @@ export type IconProps = React.HTMLAttributes<SVGElement> & React.ImgHTMLAttribut
 
 export function Navbar() {
   const gotoGithub = () => {
-    window.location.href = "https://github.com"
+    window.location.href = "https://github.com/devhub-ai/devhub"
   }
   const gotoDiscord = () => {
     window.location.href = "https://discord.gg/u86Gy2qFHm"
   }
   const gotoFeed = () => {
-    window.location.href = "https://devhub.page/feed"
+    window.location.href = "https://devhub.page/feed" 
   }
   return (
     <div className="relative">
@@ -52,9 +52,7 @@ const Icons = {
     />
   ),
   Feed: (props: IconProps) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" {...props}>
-      <path d="M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-3-8.5a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1 6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1-1-1" />
-    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-gallery-vertical-end" {...props}><path d="M7 2h10" /><path d="M5 6h14" /><rect width="18" height="12" x="3" y="10" rx="2" /></svg>
   ),
   Discord:(props: IconProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" {...props}>

@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { Textarea } from '../ui/textarea';
 import { Icons } from "@/components/ui/icons";
 import UploadComponent from '@/components/UploadComponent/UploadComponent';
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -100,89 +101,91 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className='p-2 mt-4 h-full overflow-auto'>
-      <h2 className='text-xl font-semibold mb-4 dark:text-neutral-100'>
+    <div className=' mt-4 grid gap-6 sm:w-80'>
+      <h2 className='text-xl font-semibold dark:text-neutral-100'>
         Update Profile
       </h2>
       <form onSubmit={handleSubmit} className='grid gap-4'>
-        <div>
-          <Label htmlFor='profileImage' className='dark:text-neutral-200 mb-1'>
-            Profile Image
-          </Label>
-          <UploadComponent onFileChange={handleFileChange}/>
-        </div>
-        <div>
-          <Label htmlFor='name' className='dark:text-neutral-200'>
-            Name
-          </Label>
-          <Input
-            id='name'
-            name='name'
-            value={profileData.name || ''}
-            onChange={handleChange}
-            disabled={isLoading}
-            placeholder='Your name'
-            className='mt-1'
-          />
-        </div>
-        <div>
-          <Label htmlFor='bio' className='dark:text-neutral-200'>
-            Bio
-          </Label>
-          <Textarea
-            id='bio'
-            name='bio'
-            value={profileData.bio || ''}
-            onChange={handleChange}
-            disabled={isLoading}
-            placeholder='Write something about yourself'
-            className='mt-1'
-          />
-        </div>
-        <div>
-          <Label htmlFor='location' className='dark:text-neutral-200'>
-            Location
-          </Label>
-          <Input
-            id='location'
-            name='location'
-            value={profileData.location || ''}
-            onChange={handleChange}
-            disabled={isLoading}
-            placeholder='Your location'
-            className='mt-1'
-          />
-        </div>
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
-          <div>
-            <Label htmlFor='githubUsername' className='dark:text-neutral-200'>
-              GitHub Username
+        <ScrollArea className='h-60 overflow-y-auto p-2'>
+          <div className='p-2'>
+            <Label htmlFor='profileImage' className='dark:text-neutral-200 mb-1'>
+              Profile Image
+            </Label>
+            <UploadComponent onFileChange={handleFileChange} />
+          </div>
+          <div className='p-2'>
+            <Label htmlFor='name' className='dark:text-neutral-200'>
+              Name
             </Label>
             <Input
-              id='githubUsername'
-              name='githubUsername'
-              value={profileData.githubUsername || ''}
+              id='name'
+              name='name'
+              value={profileData.name || ''}
               onChange={handleChange}
               disabled={isLoading}
-              placeholder='GitHub username'
+              placeholder='Your name'
               className='mt-1'
             />
           </div>
-          <div>
-            <Label htmlFor='leetcodeUsername' className='dark:text-neutral-200'>
-              Leetcode Username
+          <div className='p-2'>
+            <Label htmlFor='bio' className='dark:text-neutral-200'>
+              Bio
             </Label>
-            <Input
-              id='leetcodeUsername'
-              name='leetcodeUsername'
-              value={profileData.leetcodeUsername || ''}
+            <Textarea
+              id='bio'
+              name='bio'
+              value={profileData.bio || ''}
               onChange={handleChange}
               disabled={isLoading}
-              placeholder='Leetcode username'
+              placeholder='Write something about yourself'
               className='mt-1'
             />
           </div>
-        </div>
+          <div className='p-2'>
+            <Label htmlFor='location' className='dark:text-neutral-200'>
+              Location
+            </Label>
+            <Input
+              id='location'
+              name='location'
+              value={profileData.location || ''}
+              onChange={handleChange}
+              disabled={isLoading}
+              placeholder='Your location'
+              className='mt-1'
+            />
+          </div>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 p-2'>
+            <div>
+              <Label htmlFor='githubUsername' className='dark:text-neutral-200'>
+                GitHub
+              </Label>
+              <Input
+                id='githubUsername'
+                name='githubUsername'
+                value={profileData.githubUsername || ''}
+                onChange={handleChange}
+                disabled={isLoading}
+                placeholder='GitHub username'
+                className='mt-1'
+              />
+            </div>
+            <div>
+              <Label htmlFor='leetcodeUsername' className='dark:text-neutral-200'>
+                Leetcode
+              </Label>
+              <Input
+                id='leetcodeUsername'
+                name='leetcodeUsername'
+                value={profileData.leetcodeUsername || ''}
+                onChange={handleChange}
+                disabled={isLoading}
+                placeholder='Leetcode username'
+                className='mt-1'
+              />
+            </div>
+          </div>
+        </ScrollArea>
         <Button type='submit' disabled={isLoading} className='w-full mt-4'>
           {isLoading ? (
             <>
