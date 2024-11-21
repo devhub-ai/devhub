@@ -24,7 +24,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Eye, MessageSquare, PenLine, Plus, Search, Verified } from 'lucide-react'
+import { MapPin, Copy, Check,Github, Code, Mail, Eye, MessageSquare, PenLine, Plus, Search, Verified } from 'lucide-react'
 import BannerUpdate from '@/components/Settings/BannerUpdate';
 import { FaExternalLinkAlt, FaStar, FaCodeBranch } from 'react-icons/fa';
 
@@ -61,6 +61,7 @@ interface UserResponse {
 	username: string;
 	profileImage: string;
 	profileBanner: string;
+	location : string;
 }
 
 interface GitHubData {
@@ -130,8 +131,9 @@ const Dashboard = () => {
 	const [streakStat, setStreakStat] = useState<string | null>(null);
 	const [pinnedRepos, setPinnedRepos] = useState<Project[]>([]);
 	const [githubStreakSvg, setGithubStreakSvg] = useState<string | null>(null);
-	const [isFriend, setIsFriend] = useState<boolean>(false);  // State for friend status
+	const [isFriend, setIsFriend] = useState<boolean>(false);  
 	const [friends, setFriendsList] = useState<string[]>([]);
+	const [copied, setCopied] = useState(false)
 
 	useEffect(() => {
 		if (username) {
@@ -183,6 +185,18 @@ const Dashboard = () => {
 		}
 	}, [profileData]);
 
+	const copyToClipboard = async () => {
+		try {
+			if (profileData?.username) {
+				await navigator.clipboard.writeText(`https://www.devhub.page/user/${profileData.username}`);
+			}
+			setCopied(true)
+			setTimeout(() => setCopied(false), 2000) 
+		} catch (err) {
+			console.error('Failed to copy text: ', err)
+		}
+	}
+
 	const handleFriendRequest = async () => {
 		try {
 			if (isFriend) {
@@ -213,33 +227,36 @@ const Dashboard = () => {
 	const isOwnProfile = loggedInUsername === username;
 
 	return (
-		<div className="min-h-screen bg-background">
+		<div className="bg-background">
 			<div className="grid gap-6 p-4 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_400px] max-w-7xl mx-auto">
 				<div className="space-y-6">
 
 					<Card>
 						<div className="relative">
 							<div>
-								{profileData ? (
+								{profileData?.profileBanner ? (
 									<img
 										src={profileData.profileBanner}
 										alt="profile_banner"
 										className='h-48 rounded-t-lg w-full object-cover'
 									/>
 								) : (
-									<div className="h-[138px] bg-gradient-to-r from-gray-700 to-gray-900 rounded-t-lg" />
+									<div className="h-48 bg-gradient-to-r from-gray-700 to-gray-900 rounded-t-lg" />
 								)}
 							</div>
 							<div className="absolute -bottom-12 left-4">
 								<div className="relative">
-									{profileData ? (
+									{profileData?.profileImage ? (
 										<Avatar className="w-32 h-32 border-4 border-background">
 											<AvatarImage alt="Profile picture" src={profileData.profileImage} />
 											<AvatarFallback>{profileData.name}</AvatarFallback>
 										</Avatar>
 
 									) : (
-										<Skeleton className="w-24 h-24 rounded-full" />
+										<Avatar className="w-32 h-32 border-4 border-background">
+
+											<AvatarFallback>{profileData?.username}</AvatarFallback>
+										</Avatar>
 									)}
 									<Button size="icon" variant="secondary" className="absolute bottom-0 right-0 rounded-full">
 										<Plus className="h-4 w-4" />
@@ -291,24 +308,50 @@ const Dashboard = () => {
 							<div className="flex flex-wrap gap-2">
 								{profileData ? (
 									<>
-										<Button variant="outline">{profileData.email}</Button>
-										{
-											githubData ? (
-												<>
-													<Button onClick={() => window.location.href = `https://github.com/${profileData?.githubUsername}`} variant="outline">GitHub</Button>
-													<Button onClick={() => window.location.href = `https://github.com/${profileData?.githubUsername}`} variant="outline">Leetcode</Button>
-												</>
-											) : (
-												<>
-													<Skeleton className="h-6 w-20" />
-													<Skeleton className="h-6 w-20" />
-												</>
-											)
-										}
-
+										<Button variant="outline">
+											<Mail className="mr-2 h-4 w-4" />
+											{profileData.email}
+										</Button>
+										{profileData.location ? (
+											<Button
+												variant="outline"
+											>
+												<MapPin className="mr-2 h-4 w-4" />
+												{profileData.location}
+											</Button>
+										) : (
+											<></>
+										)}
+										{profileData.githubUsername ? (
+											<Button
+												variant="outline"
+												onClick={() => window.open(`https://github.com/${profileData.githubUsername}`, '_blank')}
+											>
+												<Github className="mr-2 h-4 w-4" />
+												GitHub
+											</Button>
+										) : (
+											<></>
+										)}
+										{profileData.leetcodeUsername ? (
+											<Button
+												variant="outline"
+												onClick={() => window.open(`https://leetcode.com/${profileData.leetcodeUsername}`, '_blank')}
+											>
+												<Code className="mr-2 h-4 w-4" />
+												LeetCode
+											</Button>
+										) : (
+											<></>
+										)}
+										
 									</>
 								) : (
-									<Skeleton className="h-6 w-40" />
+									<>
+										<Skeleton className="h-10 w-[200px]" />
+										<Skeleton className="h-10 w-[100px]" />
+										<Skeleton className="h-10 w-[100px]" />
+									</>
 								)}
 							</div>
 						</div>
@@ -345,115 +388,127 @@ const Dashboard = () => {
 						</CardContent>
 					</Card>
 
+					{
+						githubData ? (
+							<>
+								{/* Top Languages */}
+								<Card>
+									<CardHeader>
+										<CardTitle className="text-lg">Top Languages</CardTitle>
+									</CardHeader>
+									<CardContent>
+										{languages.length > 0 ? (
+											<div className="flex flex-wrap gap-2">
+												{languages.map((lang, index) => (
+													<Badge key={index} variant="secondary">
+														{lang.language}: {lang.percentage}
+													</Badge>
+												))}
+											</div>
+										) : (
+											<div className="flex flex-wrap gap-2">
+												{[1, 2, 3].map((i) => (
+													<Skeleton key={i} className="h-6 w-20 rounded-full" />
+												))}
+											</div>
+										)}
+									</CardContent>
+								</Card>
+								{/* GitHub Stats */}
+								<Card>
+									<CardHeader>
+										<CardTitle className="text-lg">GitHub Stats</CardTitle>
+									</CardHeader>
+									<CardContent className="space-y-8">
+										<div>
+											<h3 className="font-semibold mb-2">GitHub Streak Stats</h3>
+											{streakStat ? (
+													<div
+														dangerouslySetInnerHTML={{ __html: streakStat }}
+														className="overflow-x-auto"
+													/>
+											) : (
+												<></>
+											)}
+										</div>
+										<div>
+											<h3 className="font-semibold mb-2">GitHub Streak</h3>
+											{githubStreakSvg ? (
+													<div
+														dangerouslySetInnerHTML={{ __html: githubStreakSvg }}
+														className="overflow-x-auto"
+													/>
+											) : (
+												<></>
+											)}
+										</div>
+									</CardContent>
+								</Card>
 
-					{/* Top Languages */}
-					<Card>
-						<CardHeader>
-							<CardTitle className="text-lg">Top Languages</CardTitle>
-						</CardHeader>
-						<CardContent>
-							{languages.length > 0 ? (
-								<div className="flex flex-wrap gap-2">
-									{languages.map((lang, index) => (
-										<Badge key={index} variant="secondary">
-											{lang.language}: {lang.percentage}
-										</Badge>
-									))}
-								</div>
-							) : (
-								<div className="flex flex-wrap gap-2">
-									{[1, 2, 3].map((i) => (
-										<Skeleton key={i} className="h-6 w-20 rounded-full" />
-									))}
-								</div>
-							)}
-						</CardContent>
-					</Card>
+								{/* Pinned Repositories */}
+								<Card>
+									<CardHeader>
+										<CardTitle className="text-lg">Pinned Repositories</CardTitle>
+									</CardHeader>
+									<CardContent>
+										{pinnedRepos.length > 0 ? (
+											<div className="grid gap-4 sm:grid-cols-2">
+												{pinnedRepos.map((repo, index) => (
+													<Card key={index} className="overflow-hidden">
+														<CardHeader>
+															<CardTitle className="text-base">{repo.repo.trim()}</CardTitle>
+															<p className="text-sm text-muted-foreground">{repo.owner}</p>
+														</CardHeader>
+														<CardContent>
+															<p className="text-sm text-muted-foreground mb-2 h-12 overflow-hidden">
+																{repo.description}
+															</p>
+															<div className="flex items-center space-x-4 text-sm mb-2">
+																{repo.language && (
+																	<span className="flex items-center">
+																		<span
+																			className="w-3 h-3 rounded-full mr-1"
+																			style={{ backgroundColor: repo.languageColor }}
+																		/>
+																		{repo.language}
+																	</span>
+																)}
+																<span className="flex items-center">
+																	<FaStar className="mr-1" /> {repo.stars}
+																</span>
+																<span className="flex items-center">
+																	<FaCodeBranch className="mr-1" /> {repo.forks}
+																</span>
+															</div>
+															<div className="flex justify-between items-center">
+																<Button variant="link" asChild>
+																	<a href={repo.link} target="_blank" rel="noopener noreferrer">
+																		View Repository <FaExternalLinkAlt className="ml-1" />
+																	</a>
+																</Button>
+																{repo.website && repo.website.length > 0 && (
+																	<Button variant="link" asChild>
+																		<a href={repo.website[0]} target="_blank" rel="noopener noreferrer">
+																			Live Demo <FaExternalLinkAlt className="ml-1" />
+																		</a>
+																	</Button>
+																)}
+															</div>
+														</CardContent>
+													</Card>
+												))}
+											</div>
+										) : (
+											<Skeleton className="h-32 w-full" />
+										)}
+									</CardContent>
+								</Card>
+							</>
+						) : (<></>)
+					}
 
 
-					{/* GitHub Stats */}
-					<Card>
-						<CardHeader>
-							<CardTitle className="text-lg">GitHub Stats</CardTitle>
-						</CardHeader>
-						<CardContent className="space-y-4">
-							<div>
-								<h3 className="font-semibold mb-2">GitHub Streak Stats</h3>
-								{streakStat ? (
-									<div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: streakStat }} />
-								) : (
-									<Skeleton className="h-48 w-full" />
-								)}
-							</div>
-							<div>
-								<h3 className="font-semibold mb-2">GitHub Streak</h3>
-								{githubStreakSvg ? (
-									<div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: githubStreakSvg }} />
-								) : (
-									<Skeleton className="h-48 w-full" />
-								)}
-							</div>
-						</CardContent>
-					</Card>
-
-					{/* Pinned Repositories */}
-					<Card>
-						<CardHeader>
-							<CardTitle className="text-lg">Pinned Repositories</CardTitle>
-						</CardHeader>
-						<CardContent>
-							{pinnedRepos.length > 0 ? (
-								<div className="grid gap-4 sm:grid-cols-2">
-									{pinnedRepos.map((repo, index) => (
-										<Card key={index} className="overflow-hidden">
-											<CardHeader>
-												<CardTitle className="text-base">{repo.repo.trim()}</CardTitle>
-												<p className="text-sm text-muted-foreground">{repo.owner}</p>
-											</CardHeader>
-											<CardContent>
-												<p className="text-sm text-muted-foreground mb-2 h-12 overflow-hidden">
-													{repo.description}
-												</p>
-												<div className="flex items-center space-x-4 text-sm mb-2">
-													{repo.language && (
-														<span className="flex items-center">
-															<span
-																className="w-3 h-3 rounded-full mr-1"
-																style={{ backgroundColor: repo.languageColor }}
-															/>
-															{repo.language}
-														</span>
-													)}
-													<span className="flex items-center">
-														<FaStar className="mr-1" /> {repo.stars}
-													</span>
-													<span className="flex items-center">
-														<FaCodeBranch className="mr-1" /> {repo.forks}
-													</span>
-												</div>
-												<div className="flex justify-between items-center">
-													<Button variant="link" asChild>
-														<a href={repo.link} target="_blank" rel="noopener noreferrer">
-															View Repository <FaExternalLinkAlt className="ml-1" />
-														</a>
-													</Button>
-													{repo.website && repo.website.length > 0 && (
-														<Button variant="link" asChild>
-															<a href={repo.website[0]} target="_blank" rel="noopener noreferrer">
-																Live Demo <FaExternalLinkAlt className="ml-1" />
-															</a>
-														</Button>
-													)}
-												</div>
-											</CardContent>
-										</Card>
-									))}
-								</div>
-							) : (
-								<Skeleton className="h-32 w-full" />
-							)}
-						</CardContent>
-					</Card>
+					
 				</div>
 
 				{/* Right Sidebar */}
@@ -473,13 +528,13 @@ const Dashboard = () => {
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between">
 							<CardTitle className="text-lg">Public profile & URL</CardTitle>
-							<Button size="icon" variant="ghost">
-								<PenLine className="h-4 w-4" />
+							<Button size="icon" variant="ghost" onClick={copyToClipboard}>
+								{copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
 							</Button>
 						</CardHeader>
 						<CardContent>
 							<p className="text-sm text-muted-foreground break-all">
-								www.linkedin.com/in/deepraj-bera-b64996231
+								{`https://www.devhub.page/user/${profileData?.username}`}
 							</p>
 						</CardContent>
 					</Card>
@@ -498,7 +553,7 @@ const Dashboard = () => {
 											<AvatarImage alt={friend} src="/placeholder.svg" />
 											<AvatarFallback>{friend[0]}</AvatarFallback>
 										</Avatar>
-										<span>{friend}</span>
+										<a href={`https://www.devhub.page/user/${friend}`}><span>{friend}</span></a>
 									</div>
 								))
 							) : (

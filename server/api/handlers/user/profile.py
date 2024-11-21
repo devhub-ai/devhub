@@ -21,7 +21,8 @@ def get_profile(username):
             'leetcodeUsername': user["leetcode_username"],
             'email': user["email"],
             'profileImage' : user["profile_image"],
-            'profileBanner' : user["profile_banner"]
+            'profileBanner' : user["profile_banner"],
+            'location' : user["location"]
         }
 
         projects_query = """
