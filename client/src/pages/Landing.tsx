@@ -1,10 +1,11 @@
 import React from 'react';
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import Footer from '@/components/Footer/Footer';
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Hero } from '@/components/Hero/Hero';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button"
+import { ChevronRight } from 'lucide-react'
 
 const Landing: React.FC = () => {
 
@@ -24,42 +25,42 @@ const Landing: React.FC = () => {
           <Navbar />
         </div>
         <div id="top" className="p-4 max-w-7xl mx-auto relative z-20 w-full pt-20 md:pt-0 flex flex-col items-center md:mt-24 mt-14">
-          <button className="bg-slate-800 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-900 rounded-full p-px text-xs font-semibold leading-6 text-white inline-block mb-8 md:mt-10">
-            <span className="absolute inset-0 overflow-hidden rounded-full">
-              <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-            </span>
-            <div className="relative flex space-x-2 items-center z-10 rounded-full dark:bg-zinc-950 py-0.5 px-4 ring-1 ring-white/10 bg-white text-zinc-800 dark:text-white">
-              <span>
-                Connect | Collaborate | Create
-              </span>
+          <div className="py-2 mt-16 grid hidden md:block">
+            <div className="container mx-auto px-4">
+              <div className="flex items-center justify-center gap-2 text-sm">
+                <span className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded-full text-xs font-medium uppercase">
+                  New
+                </span>
+                <span className="text-gray-300">
+                  v0 Enterprise and Team plans are now available.
+                </span>
+                <Button variant="link" size="sm" className="text-white font-normal inline-flex items-center">
+                  Get Started
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
             </div>
-            <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-emerald-400/0 via-emerald-400/90 to-emerald-400/0 transition-opacity duration-500 group-hover:opacity-40" />
-          </button>
-          <h1 className="text-4xl md:text-8xl lg:text-8xl font-semibold max-w-7xl mx-auto text-center relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
-            DevHub
+          </div>
+          <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 p-4 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white mb-6">
+            Build amazing connections
           </h1>
-          <p className="mt-4 font-normal text-base text-neutral-300 max-w-lg text-center mx-auto bg-clip-text text-transparent dark:bg-white bg-black from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+          <p className="mt-2 font-normal text-base text-neutral-300 max-w-[650px] text-center mx-auto bg-clip-text text-transparent dark:bg-white bg-black from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
             The platform offers intelligent matchmaking and personalized recommendations to form effective teams and engage in meaningful collaborations.
           </p>
-          <div className='mt-8'>
-            <HoverBorderGradient
-              containerClassName="rounded-full"
-              as="button"
-              className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
-              onClick={() => {
+          <div className='mt-8 flex space-x-4'>
+            <div className="flex items-center gap-4">
+              <Button>Get Started</Button>
+            </div>
+            <div className="flex items-center gap-4">
+              <Button variant='outline' onClick={() => {
                 window.location.href = '/login';
-              }}
-            >
-              <span>Login to Continue</span>
-            </HoverBorderGradient>
+              }}>Sign in</Button>
+            </div>
           </div>
         </div>
-        <div className='mt-10 p-10' id='features'>
+        <div className='mt-10 p-10 flex justify-center' id='features'>
           <Hero />
         </div>
-        <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 p-4 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white mb-10">
-          Build amazing connections <br /> at Devhub
-        </h1>
       </div>
       <Footer />
     </>
