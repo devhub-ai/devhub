@@ -38,7 +38,7 @@ const App = () => {
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </Router>
-      <Toaster />
+      <Toaster richColors closeButton/>
     </ThemeProvider>
   );
 };

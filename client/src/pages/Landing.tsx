@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
 import { ChevronRight } from 'lucide-react'
+import Products from '@/components/Products/Products';
 
 const Landing: React.FC = () => {
 
@@ -31,11 +32,11 @@ const Landing: React.FC = () => {
                 <span className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded-full text-xs font-medium uppercase">
                   New
                 </span>
-                <span className="text-gray-300">
-                  v0 Enterprise and Team plans are now available.
+                <span className="text-white-800">
+                  ✨ DevBots are available and ready to assist you!
                 </span>
-                <Button variant="link" size="sm" className="text-white font-normal inline-flex items-center">
-                  Get Started
+                <Button variant="link" size="sm" className="text-white-800 font-normal inline-flex items-center">
+                  🎉 Get Started
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </div>
@@ -58,9 +59,34 @@ const Landing: React.FC = () => {
             </div>
           </div>
         </div>
+        <div className="py-2 mt-16">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <span className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded-full text-xs font-medium uppercase">
+                FEATURES
+              </span>
+              <span className="text-white-800">
+                What we provide ?
+              </span>
+            </div>
+          </div>
+        </div>
         <div className='mt-10 p-10 flex justify-center' id='features'>
           <Hero />
         </div>
+        <div className="py-2 mt-16">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <span className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded-full text-xs font-medium uppercase">
+                PRODUCTS
+              </span>
+              <span className="text-white-800">
+                Everything you need.
+              </span>
+            </div>
+          </div>
+        </div>
+        <Products />
       </div>
       <Footer />
     </>
