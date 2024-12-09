@@ -10,6 +10,7 @@ from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
 from api.handlers.posts.posts import create_post, update_post, delete_post, vote_post, add_comment, delete_comment, get_posts, get_posts_by_author, get_post_by_id
 from api.handlers.suggestions.usersuggestions import get_user_suggestions
+from api.handlers.feedback.feedback import save_feedback_message
 
 def register_routes(app):
     # Authentication routes
@@ -64,7 +65,6 @@ def register_routes(app):
     app.add_url_rule('/chatted_users/<username>', 'get_chatted_users', get_chatted_users, methods=['GET'])
     app.add_url_rule('/chat_history/<user1>/<user2>', 'get_chat_history', get_chat_history, methods=['GET'])
 
-
     # Visualization route
     app.add_url_rule('/profile/relations','get_user_relations',get_user_relations, methods=['GET'])
     
@@ -86,6 +86,9 @@ def register_routes(app):
     
     # Suggestions routes
     app.add_url_rule('/suggestions/<username>', 'get_user_suggestions', get_user_suggestions, methods=['GET'])
+    
+    # Feedback routes
+    app.add_url_rule('/feedback', 'save_feedback_message', save_feedback_message, methods=['POST'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)

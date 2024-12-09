@@ -3,25 +3,21 @@ import Footer from '@/components/Footer/Footer';
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Hero } from '@/components/Hero/Hero';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Github } from 'lucide-react'
 import Products from '@/components/Products/Products';
 
 const Landing: React.FC = () => {
 
-  const navigate = useNavigate();
+  const username = localStorage.getItem('devhub_username');
 
   useEffect(() => {
-    const username = localStorage.getItem('devhub_username');
-    if (username) {
-      navigate('/home');
-    }
-  }, [navigate]);
+  }, [username]);
+  
   return (
     <>
-      <div className="rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-zinc-900 bg-white dark:bg-dot-white/[0.2] bg-dot-black/[0.5] items-center justify-center bg-fixed">
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_bottom,transparent_40%,black)]"></div>
+      <div className="rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-zinc-900 bg-white dark:bg-dot-white/[0.2] bg-dot-black/[0.7] items-center justify-center bg-fixed">
+        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_bottom,transparent_60%,black)]"></div>
         <div className="fixed top-0 left-0 w-full z-50">
           <Navbar />
         </div>
@@ -50,16 +46,16 @@ const Landing: React.FC = () => {
           </p>
           <div className='mt-8 flex space-x-4'>
             <div className="flex items-center gap-4">
-              <Button>Get Started</Button>
+              <Button className='rounded-[12px]' onClick={() => {
+                window.location.href = '/login';
+              }}>Get Started</Button>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant='outline' onClick={() => {
-                window.location.href = '/login';
-              }}>Sign in</Button>
+              <Button variant='outline' className='rounded-[12px]'>Sign in with <Github/></Button>
             </div>
           </div>
         </div>
-        <div className="py-2 mt-16">
+        <div className="py-2 mt-16" id="features">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-center gap-2 text-sm">
               <span className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded-full text-xs font-medium uppercase">
@@ -74,7 +70,7 @@ const Landing: React.FC = () => {
         <div className='mt-10 p-10 flex justify-center' id='features'>
           <Hero />
         </div>
-        <div className="py-2 mt-16">
+        <div className="py-2 mt-16" id="products">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-center gap-2 text-sm">
               <span className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded-full text-xs font-medium uppercase">
@@ -86,7 +82,9 @@ const Landing: React.FC = () => {
             </div>
           </div>
         </div>
-        <Products />
+        <div className='mt-10 p-10 flex justify-center' id='features'>
+          <Products />
+        </div>
       </div>
       <Footer />
     </>

@@ -1,5 +1,14 @@
 import { Link } from "react-router-dom"
 import { ModeToggle } from "../Theme/mode-toggle"
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import { FeedbackForm } from "@/components/Feedback/FeedbackForm"
 
 const Footer = () => {
     return (
@@ -15,36 +24,47 @@ const Footer = () => {
                         <div>
                             <h3 className="font-semibold mb-3">Resources</h3>
                             <ul className="space-y-2">
-                                <li><Link to="/docs" className="text-white-400 ">Docs</Link></li>
-                                <li><Link to="/cookbook" className="text-white-400 ">Cookbook</Link></li>
-                                <li><Link to="/providers" className="text-white-400 ">Providers</Link></li>
-                                <li><Link to="/showcase" className="text-white-400 ">Showcase</Link></li>
-                                <li><Link to="/github" className="text-white-400 ">GitHub</Link></li>
-                                <li><Link to="/discussions" className="text-white-400 ">Discussions</Link></li>
+                                <li><Link to="/docs" className="text-white-400 text-sm">Docs</Link></li>
+                                <li><Link to="#features" className="text-white-400 text-sm">Features</Link></li>
+                                <li><Link to="/feed" className="text-white-400 text-sm">Feed</Link></li>
+                                <li><Link to="/directory" className="text-white-400 text-sm">Directory</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-3">More</h3>
                             <ul className="space-y-2">
-                                <li><Link to="/playground" className="text-white-400 ">Playground</Link></li>
-                                <li><Link to="/v0" className="text-white-400 ">v0</Link></li>
-                                <li><Link to="/contact" className="text-white-400 ">Contact Sales</Link></li>
-                                <li><Link to="/x" className="text-white-400 ">X</Link></li>
+                                <li>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger>
+                                            Feedback
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <div className='flex items-center'>
+                                                <AlertDialogHeader className='text-2xl'>Feedback Form</AlertDialogHeader>
+                                                <div className='flex-grow'></div>
+                                                <AlertDialogCancel className="ml-6"><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
+                                            </div>
+                                            <FeedbackForm />
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </li>
+                                <li><Link to="/playground" className="text-white-400 text-sm">DevBots</Link></li>
+                                <li><Link to="/v0" className="text-white-400 text-sm">DevMap</Link></li>
                             </ul>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-3">About Vercel</h3>
+                            <h3 className="font-semibold mb-3">Contact</h3>
                             <ul className="space-y-2">
-                                <li><Link to="/nextjs" className="text-white-400 ">Next.js + Vercel</Link></li>
-                                <li><Link to="/open-source" className="text-white-400 ">Open Source Software</Link></li>
-                                <li><Link to="/github" className="text-white-400 ">GitHub</Link></li>
-                                <li><Link to="/x" className="text-white-400 ">X</Link></li>
+                                <li><Link to="https://github.com/devhub-ai/devhub" className="text-white-400 text-sm">GitHub</Link></li>
+                                <li><Link to="/github" className="text-white-400 text-sm">Linkedin</Link></li>
+                                <li><Link to="/x" className="text-white-400 text-sm">X</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-3">Legal</h3>
                             <ul className="space-y-2">
-                                <li><Link to="/privacy" className="text-white-400 ">Privacy Policy</Link></li>
+                                <li><Link to="/privacy-policy" className="text-white-400 text-sm">Privacy Policy</Link></li>
+                                <li><Link to="/terms-and-conditions" className="text-white-400 text-sm">Terms & Conditions</Link></li>
                             </ul>
                         </div>
                     </div>
