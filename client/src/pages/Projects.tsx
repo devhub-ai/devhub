@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { SidebarLeft } from "@/components/Sidebar/Sidebar";
 import { ProjectCard } from "@/components/Projects/ProjectCard";
-import AddProject from "@/components/Projects/AddProject";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from 'react-router-dom';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
@@ -23,6 +23,16 @@ const Projects = () => {
     const [loading, setLoading] = useState(true);
     const [refresh, setRefresh] = useState(false); // Refresh trigger
     const { username } = useParams<{ username: string }>();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const devhub_username = localStorage.getItem('devhub_username');
+
+        if (!devhub_username) {
+            navigate('/login');
+        }
+    }, [navigate]);
 
     useEffect(() => {
         // Fetch user projects
@@ -56,7 +66,6 @@ const Projects = () => {
                 </header>
                 <main className="flex flex-col flex-grow p-4 overflow-hidden">
                     <h1 className="ml-5 text-5xl mt-2">Projects</h1>
-                    <AddProject onProjectChange={handleRefresh} />
                     <div className="flex flex-1 flex-col gap-4 p-4">
                         {!projects ? (
                             <div className="flex flex-col justify-center items-center">

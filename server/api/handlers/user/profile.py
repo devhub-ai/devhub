@@ -61,7 +61,6 @@ def upload_image_to_cloudinary(image):
         return None
     
 def update_banner(username):
-    data = request.form
     profile_banner = request.files.get('profile_banner') 
     query = "MATCH (u:User {username: $username}) SET u += $properties RETURN u"
     properties = {}

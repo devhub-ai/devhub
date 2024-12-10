@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref, Session
 from datetime import datetime
-from extensions import posts_collection, comments_collection, chat_collection
+from extensions import posts_collection, comments_collection, chat_collection, feedback_collection
 from bson import ObjectId
 
 Base = declarative_base()
@@ -254,3 +254,15 @@ class Comment:
     def delete_comment(comment_id):
         result = comments_collection.delete_one({"_id": ObjectId(comment_id)})
         return result.deleted_count > 0
+    
+class Feedback:
+    @staticmethod
+    def save_feedback(data):
+        feedback_data = {
+            "username": data['username'],
+            "rating": data['rating'],
+            "message": data['message']
+        }
+        result = feedback_collection.insert_one(feedback_data)
+        feedback_data["_id"] = str(result.inserted_id)
+        return feedback_data

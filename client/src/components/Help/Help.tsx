@@ -5,10 +5,10 @@ const Help = () => {
   return (
     <>
       <div className="p-2 mt-4 h-full overflow-auto">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <p className="text-muted-foreground mb-8">Welcome to the DevHub Help ! Here, we aim to support you in making the most of our platform. If you have any questions or encounter issues, please refer to the sections below.</p>
 
-          <ScrollArea className="h-[45vh] rounded-md border p-4 ">
+          <ScrollArea className="h-[300px] rounded-md border p-4 ">
             <div className="pr-4 space-y-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="getting-started">

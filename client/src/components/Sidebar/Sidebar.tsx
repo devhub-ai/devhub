@@ -9,7 +9,9 @@ import {
     ChartNetwork,
     SquarePlus,
     GalleryVerticalEnd,
-    House
+    House,
+    BookText,
+    BookUser
 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -35,7 +37,8 @@ import {
     AlertDialogCancel,
     AlertDialogHeader,
     AlertDialogContent,
-    AlertDialogTrigger
+    AlertDialogTrigger,
+    AlertDialogDescription
 } from "@/components/ui/alert-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import Setting from "@/components/Settings/Settings";
@@ -43,6 +46,9 @@ import Help from "../Help/Help";
 import AddPosts from "../Posts/AddPosts";
 import { useContext } from 'react';
 import React from 'react'
+import AddProject from "@/components/Projects/AddProject";
+import { useState } from "react";
+import {toast} from "sonner"
 
 const username = localStorage.getItem('devhub_username');
 
@@ -73,9 +79,15 @@ export default function DevhubSidebar() {
 export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const navigate = useNavigate();
     const { refreshPosts } = useContext(PostContext);
+    const [refresh, setRefresh] = useState(false);
+    
+    const handleRefresh = () => {
+        console.log(refresh)
+        setRefresh((prev) => !prev);
+    };
 
     const handlePostCreated = () => {
-        refreshPosts(); // This will trigger the posts refresh
+        refreshPosts();
     };
 
     const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -84,10 +96,30 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
         navigate('/login');
     };
 
+    const handleTriggerClick = () => {
+        if (!username) {
+            toast.error('Please login to add a project');
+        }
+    };
+
+    const handleAddPostClick = () => {
+        if (!username) {
+            toast.error('Please login to create a post');
+        }
+    };
+
+
     return (
         <Sidebar className="border-r-0" {...props}>
             <SidebarHeader>
-                <h1 className="ml-2 text-4xl mt-4">DevHub</h1>
+                <SidebarMenu>
+                    <SidebarMenuButton asChild>
+                        <a href={'/'} className="flex flex-row items-center">
+                            <span>dh</span>
+                            <h1 className="text-2xl">DevHub</h1>
+                        </a>
+                    </SidebarMenuButton>
+                </SidebarMenu>
             </SidebarHeader>
             <SidebarHeader>
                 <SidebarMenu>
@@ -114,6 +146,36 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                 <span>Projects</span>
                             </a>
                         </SidebarMenuButton>
+                        <SidebarMenuSub>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <SidebarMenuSubItem>
+                                        <SidebarMenuSubButton asChild onClick={handleTriggerClick}>
+                                            <div>
+                                                <SquarePlus />
+                                                <span>Add Project</span>
+                                            </div>
+                                        </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                </AlertDialogTrigger>
+
+                                {username && (
+                                    <AlertDialogContent>
+                                        <div className="flex items-center">
+                                            <AlertDialogHeader className="text-2xl">Add New Project</AlertDialogHeader>
+                                            <div className="flex-grow"></div>
+                                            <AlertDialogCancel>
+                                                <Cross1Icon className="h-3 w-3" />
+                                            </AlertDialogCancel>
+                                        </div>
+                                        <AlertDialogDescription>
+                                            <AddProject onProjectChange={handleRefresh} />
+                                        </AlertDialogDescription>
+                                    </AlertDialogContent>
+                                )}
+                            </AlertDialog>
+
+                        </SidebarMenuSub>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild>
@@ -140,9 +202,9 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                 </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                             <AlertDialog>
-                                <AlertDialogTrigger>
+                                <AlertDialogTrigger asChild>
                                     <SidebarMenuSubItem>
-                                        <SidebarMenuSubButton asChild>
+                                        <SidebarMenuSubButton asChild onClick={handleAddPostClick}>
                                             <div>
                                                 <SquarePlus />
                                                 <span>Add Post</span>
@@ -150,16 +212,30 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                         </SidebarMenuSubButton>
                                     </SidebarMenuSubItem>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <div className='flex items-center'>
-                                        <AlertDialogHeader className='text-2xl'>Create Post</AlertDialogHeader>
-                                        <div className='flex-grow'></div>
-                                        <AlertDialogCancel><Cross1Icon className='h-3 w-3' /></AlertDialogCancel>
-                                    </div>
-                                    <AddPosts onPostCreated={handlePostCreated} />
-                                </AlertDialogContent>
+
+                                {username && (
+                                    <AlertDialogContent>
+                                        <div className="flex items-center">
+                                            <AlertDialogHeader className="text-2xl">Create Post</AlertDialogHeader>
+                                            <div className="flex-grow"></div>
+                                            <AlertDialogCancel>
+                                                <Cross1Icon className="h-3 w-3" />
+                                            </AlertDialogCancel>
+                                        </div>
+                                        <AddPosts onPostCreated={handlePostCreated} />
+                                    </AlertDialogContent>
+                                )}
                             </AlertDialog>
+
                         </SidebarMenuSub>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem >
+                        <SidebarMenuButton asChild>
+                            <a href="/directory">
+                                <BookUser />
+                                <span>Directory</span>
+                            </a>
+                        </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
@@ -167,6 +243,14 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 <SidebarGroup className="mt-auto">
                     <SidebarGroupContent>
                         <SidebarMenu>
+                            <SidebarMenuItem >
+                                <SidebarMenuButton asChild>
+                                    <a href="/docs">
+                                        <BookText />
+                                        <span>Docs</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                             <AlertDialog>
                                 <AlertDialogTrigger>
                                     <SidebarMenuItem >
