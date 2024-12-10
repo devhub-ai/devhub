@@ -26,18 +26,34 @@ def get_posts():
     
 def get_post_by_id(post_id):
     try:
+        # Check ObjectId validity
         if ObjectId.is_valid(post_id):
             post_id = ObjectId(post_id)
         else:
-            return {"error": "Invalid post_id format"}
-
+            return jsonify({"error": "Invalid post_id format"}), 400
+        
+        # Query the database
+        print(f"Querying for post_id: {post_id}")  # Debugging
         post = posts_collection.find_one({"_id": post_id})
+        
+        # Post found
         if post:
-            return post
-        else:
-            return {"error": "Post not found"}
+            post['_id'] = str(post['_id'])
+            if 'comments' in post:
+                for comment in post['comments']:
+                    comment['_id'] = str(comment['_id'])
+                    comment['post_id'] = str(comment['post_id'])
+                    comment['user_username'] = str(comment['user_username'])
+            return jsonify(post), 200
+        
+        # Post not found
+        return jsonify({"error": "Post not found"}), 404
+    
     except Exception as e:
-        return {"error": str(e)}
+        # General exception handling
+        print(f"Error: {str(e)}")  # Debugging
+        return jsonify({"error": str(e)}), 500
+
 
 def get_posts_by_author(author_username):
     try:
