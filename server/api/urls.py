@@ -5,6 +5,7 @@ from api.handlers.analyze.githubdata import github_data, top_languages, streak_s
 from api.handlers.analyze.leetcodedata import leetcode_data, leetcode_card
 from api.handlers.query.querymodel import chat,chat_history
 from api.handlers.user.friends import add_friend, remove_friend, get_friends
+from api.handlers.user.directory import directory
 from api.handlers.message.message import search_users, send_message, get_messages, get_chatted_users, get_chat_history
 from api.handlers.visualization.visualization import get_user_relations
 from api.handlers.neo4jconnect.connect import connect_to_neo4j, execute_cypher, schema
@@ -89,6 +90,9 @@ def register_routes(app):
     
     # Feedback routes
     app.add_url_rule('/feedback', 'save_feedback_message', save_feedback_message, methods=['POST'])
+    
+    # Directory routes
+    app.add_url_rule('/directory', 'directory', directory, methods=['GET'])
     
     # Landing page route
     app.add_url_rule('/', 'index', index)

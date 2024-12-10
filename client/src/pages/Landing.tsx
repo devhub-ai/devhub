@@ -4,8 +4,9 @@ import { Navbar } from "@/components/Navbar/Navbar";
 import { Hero } from '@/components/Hero/Hero';
 import { useEffect } from 'react';
 import { Button } from "@/components/ui/button"
-import { ChevronRight, Github } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import Products from '@/components/Products/Products';
+
 
 const Landing: React.FC = () => {
 
@@ -49,9 +50,6 @@ const Landing: React.FC = () => {
               <Button className='rounded-[12px]' onClick={() => {
                 window.location.href = '/login';
               }}>Get Started</Button>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant='outline' className='rounded-[12px]'>Sign in with <Github/></Button>
             </div>
           </div>
         </div>

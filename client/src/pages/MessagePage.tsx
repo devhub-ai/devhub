@@ -5,8 +5,19 @@ import {
 } from "@/components/ui/sidebar"
 import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 import { Message } from "../components/Messages/Message";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const MessagePage: React.FC = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const username = localStorage.getItem('devhub_username');
+
+        if (!username) {
+            navigate('/login');
+        }
+    }, [navigate]);
     return (
         <SidebarProvider>
             <SidebarLeft />

@@ -13,8 +13,19 @@ import {
 } from "@/components/ui/tabs"
 import CypherQueryExecutor from "@/components/ConnectNeo4j/ConnectNeo4j"
 import { useParams } from "react-router-dom"
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Visualization = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const devhub_username = localStorage.getItem('devhub_username');
+
+        if (!devhub_username) {
+            navigate('/login');
+        }
+    }, [navigate]);
     const { username: paramsUsername } = useParams<{ username: string }>();
     return (
         <SidebarProvider>

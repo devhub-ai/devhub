@@ -11,6 +11,13 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { FeedbackForm } from "@/components/Feedback/FeedbackForm"
 
 const Footer = () => {
+    const scrollToFeatures = () => {
+        const item = document.getElementById('features');
+        if (item) {
+            item.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <div>
             <footer className="border-t border-zinc-800">
@@ -25,7 +32,7 @@ const Footer = () => {
                             <h3 className="font-semibold mb-3">Resources</h3>
                             <ul className="space-y-2">
                                 <li><Link to="/docs" className="text-white-400 text-sm">Docs</Link></li>
-                                <li><Link to="#features" className="text-white-400 text-sm">Features</Link></li>
+                                <li><Link to="" onClick={scrollToFeatures} className="text-white-400 text-sm">Features</Link></li>
                                 <li><Link to="/feed" className="text-white-400 text-sm">Feed</Link></li>
                                 <li><Link to="/directory" className="text-white-400 text-sm">Directory</Link></li>
                             </ul>
@@ -56,8 +63,7 @@ const Footer = () => {
                             <h3 className="font-semibold mb-3">Contact</h3>
                             <ul className="space-y-2">
                                 <li><Link to="https://github.com/devhub-ai/devhub" className="text-white-400 text-sm">GitHub</Link></li>
-                                <li><Link to="/github" className="text-white-400 text-sm">Linkedin</Link></li>
-                                <li><Link to="/x" className="text-white-400 text-sm">X</Link></li>
+                                <li><Link to="https://www.linkedin.com/in/deepraj-bera-b64996231" className="text-white-400 text-sm">Linkedin</Link></li>
                             </ul>
                         </div>
                         <div>

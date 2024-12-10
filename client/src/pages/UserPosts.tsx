@@ -5,8 +5,19 @@ import {
 } from "@/components/ui/sidebar"
 import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 import ShowUserPosts from "@/components/Posts/ShowUserPosts"
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserPosts = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const devhub_username = localStorage.getItem('devhub_username');
+
+        if (!devhub_username) {
+            navigate('/login');
+        }
+    }, [navigate]);
   return (
       <SidebarProvider>
           <SidebarLeft />
