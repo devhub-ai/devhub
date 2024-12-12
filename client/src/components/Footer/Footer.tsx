@@ -56,7 +56,7 @@ const Footer = () => {
                                     </AlertDialog>
                                 </li>
                                 <li><Link to="/playground" className="text-white-400 text-sm">DevBots</Link></li>
-                                <li><Link to="/v0" className="text-white-400 text-sm">DevMap</Link></li>
+                                <li><Link to="https://universal-box.dev" className="text-white-400 text-sm">Universal-Box</Link></li>
                             </ul>
                         </div>
                         <div>
@@ -64,6 +64,7 @@ const Footer = () => {
                             <ul className="space-y-2">
                                 <li><Link to="https://github.com/devhub-ai/devhub" className="text-white-400 text-sm">GitHub</Link></li>
                                 <li><Link to="https://www.linkedin.com/in/deepraj-bera-b64996231" className="text-white-400 text-sm">Linkedin</Link></li>
+                                <li><Link to="https://discord.com/invite/u86Gy2qFHm" className="text-white-400 text-sm">Discord</Link></li>
                             </ul>
                         </div>
                         <div>
@@ -76,7 +77,7 @@ const Footer = () => {
                     </div>
                     <div className="flex items-center justify-between mt-16 pt-8 border-t border-zinc-800">
                         <div className="text-sm text-white-400">
-                            © 2024 DevHub
+                           Copyright © 2024 DevHub
                         </div>
                         <div className="flex items-center gap-2">
                             <ModeToggle />

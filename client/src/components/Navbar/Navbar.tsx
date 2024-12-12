@@ -59,7 +59,8 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <span className="text-[25px]">dh</span><span>|</span><span className="text-[25px]">DevHub</span>
+                <span className="text-[25px] md:hidden">dh</span>
+                <span className="text-[25px] hidden md:inline">DevHub</span>
             </Link>
             <div className="hidden md:flex items-center gap-6">
               <Link to="/docs" className="text-sm text-white-800 dark:text-gray-400 hover:text-white">
