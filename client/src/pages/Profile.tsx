@@ -10,22 +10,23 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar"
-import {
-	AlertDialog,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogHeader,
-	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Cross1Icon } from "@radix-ui/react-icons";
+// import {
+// 	AlertDialog,
+// 	AlertDialogCancel,
+// 	AlertDialogContent,
+// 	AlertDialogDescription,
+// 	AlertDialogHeader,
+// 	AlertDialogTrigger,
+// } from "@/components/ui/alert-dialog";
+// import { Cross1Icon } from "@radix-ui/react-icons";
 import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Copy, Check,Github, Code, Mail, Eye, MessageSquare, PenLine, Plus, Search, Verified } from 'lucide-react'
-import BannerUpdate from '@/components/Settings/BannerUpdate';
+import { MapPin, Copy, Check,Github, Code, Mail, Eye, MessageSquare,  Search,  } from 'lucide-react'
+// import { PenLine, Plus, Verified } from 'lucide-react'
+// import BannerUpdate from '@/components/Settings/BannerUpdate';
 import { FaExternalLinkAlt, FaStar, FaCodeBranch } from 'react-icons/fa';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -258,12 +259,12 @@ const Dashboard = () => {
 											<AvatarFallback>{profileData?.username}</AvatarFallback>
 										</Avatar>
 									)}
-									<Button size="icon" variant="secondary" className="absolute bottom-0 right-0 rounded-full">
+									{/* <Button size="icon" variant="secondary" className="absolute bottom-0 right-0 rounded-full">
 										<Plus className="h-4 w-4" />
-									</Button>
+									</Button> */}
 								</div>
 							</div>
-							<AlertDialog>
+							{/* <AlertDialog>
 								<AlertDialogTrigger className="w-[120px] ml-5 ">
 									<Button size="icon" variant="ghost" className="absolute top-4 right-4">
 										<PenLine className="h-4 w-4" />
@@ -279,18 +280,17 @@ const Dashboard = () => {
 										<BannerUpdate />
 									</AlertDialogDescription>
 								</AlertDialogContent>
-							</AlertDialog>
-
+							</AlertDialog> */}
 						</div>
 						<div className="pt-16 space-y-4 p-4">
 							<div className="flex items-center gap-2">
 								<span className="text-sm text-muted-foreground">
 									{profileData ? `@${profileData.username}` : <Skeleton className="h-4 w-24" />}
 								</span>
-								<Button variant="outline" size="sm" className="gap-1">
+								{/* <Button variant="outline" size="sm" className="gap-1">
 									<Verified className="h-4 w-4" />
 									Add verification badge
-								</Button>
+								</Button> */}
 								<div className='flex-grow'>
 								</div>
 								{!isOwnProfile && (

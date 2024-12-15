@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronUp, ChevronDown, MessageCircle, Send } from "lucide-react";
+import { ChevronUp, ChevronDown, MessageCircle, Send, Share } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -11,7 +11,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import {toast} from 'sonner';
+import { toast } from 'sonner';
 import { PostContext } from '../Sidebar/Sidebar';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -66,14 +66,14 @@ export default function ShowPosts() {
             );
 
             if (response.status === 200) {
-                setPosts(prevPosts => 
-                    prevPosts.map(post => 
-                        post._id === postId 
+                setPosts(prevPosts =>
+                    prevPosts.map(post =>
+                        post._id === postId
                             ? {
                                 ...post,
                                 upvotes: voteType === 'upvote' ? post.upvotes + 1 : post.upvotes,
                                 downvotes: voteType === 'downvote' ? post.downvotes + 1 : post.downvotes
-                              }
+                            }
                             : post
                     )
                 );
@@ -120,6 +120,19 @@ export default function ShowPosts() {
             });
     };
 
+    const handleCopyUrl = (postId: string) => {
+        const url = `https://devhub.page/post/${postId}`;
+        navigator.clipboard
+            .writeText(url)
+            .then(() => {
+                toast.success('URL copied to clipboard');
+            })
+            .catch(err => {
+                console.error('Failed to copy URL:', err);
+                toast.error('Failed to copy URL');
+            });
+    };
+
     useEffect(() => {
     }, [posts, selectedPost]); // This will re-run whenever `posts` or `selectedPost` changes
 
@@ -128,7 +141,7 @@ export default function ShowPosts() {
             <div className="max-w-2xl mx-auto space-y-0 md:space-y-8">
                 {posts.map((post) => (
                     <div key={post._id} className="bg-background shadow-lg md:rounded-lg overflow-hidden border">
-                        <div className="flex items-center border-b p-4">
+                        <div className="flex items-center p-4">
                             <div className='h-8 w-8 rounded-full overflow-hidden'>
                                 <img src={`https://api.dicebear.com/6.x/initials/svg?seed=${post.author_username}`} />
                             </div>
@@ -138,12 +151,18 @@ export default function ShowPosts() {
                                     Posted {new Date(post.created_at).toLocaleDateString()}
                                 </p>
                             </div>
+                            <div className='flex-grow'></div>
+                            <div>
+                                <Button variant="outline" className="w-10 h-10" onClick={() => handleCopyUrl(post._id)}>
+                                    <Share className="w-2 h-2" />
+                                </Button>
+                            </div>
                         </div>
                         {post.image_link && (
                             <img
                                 src={post.image_link}
                                 alt="Post image"
-                                className="w-full h-96 object-cover mb-1 border-b"
+                                className="w-full h-96 object-cover p-2"
                             />
                         )}
                         <div className="flex items-center gap-4 ml-1">
@@ -243,6 +262,6 @@ export default function ShowPosts() {
                 ))}
             </div>
         </PostContext.Provider>
-        
+
     );
 }

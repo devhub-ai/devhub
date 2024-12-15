@@ -9,14 +9,13 @@ import { SidebarLeft } from '@/components/Sidebar/Sidebar'
 
 const Home = () => {
   const navigate = useNavigate();
+  const username = localStorage.getItem('devhub_username');
 
   useEffect(() => {
-    const username = localStorage.getItem('devhub_username');
-
     if (!username) {
       navigate('/login');
     }
-  }, [navigate]);
+  }, [navigate, username]);
 
   return (
     <SidebarProvider>

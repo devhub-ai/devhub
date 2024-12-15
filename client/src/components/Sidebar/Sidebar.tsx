@@ -108,6 +108,12 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
         }
     };
 
+    const handleSettingsClick = () => {
+        if (!username) {
+            toast.error('Please login to access settings');
+        }
+    };
+
 
     return (
         <Sidebar className="border-r-0" {...props}>
@@ -276,9 +282,9 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                 </AlertDialogContent>
                             </AlertDialog>
                             <AlertDialog>
-                                <AlertDialogTrigger>
-                                    <SidebarMenuItem >
-                                        <SidebarMenuButton asChild>
+                                <AlertDialogTrigger asChild>
+                                    <SidebarMenuItem>
+                                        <SidebarMenuButton asChild onClick={handleSettingsClick}>
                                             <div>
                                                 <Settings />
                                                 <span>Settings</span>
@@ -286,20 +292,21 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <div className="flex">
-                                        <AlertDialogHeader className="text-2xl mt-1.5">
-                                            Settings
-                                        </AlertDialogHeader>
-                                        <div className="flex-grow"></div>
-                                        <AlertDialogCancel>
-                                            <Cross1Icon className="h-3 w-3" />
-                                        </AlertDialogCancel>
-                                    </div>
-                                    <Setting />
 
-                                </AlertDialogContent>
+                                {username && (
+                                    <AlertDialogContent>
+                                        <div className="flex">
+                                            <AlertDialogHeader className="text-2xl mt-1.5">Settings</AlertDialogHeader>
+                                            <div className="flex-grow"></div>
+                                            <AlertDialogCancel>
+                                                <Cross1Icon className="h-3 w-3" />
+                                            </AlertDialogCancel>
+                                        </div>
+                                        <Setting />
+                                    </AlertDialogContent>
+                                )}
                             </AlertDialog>
+
                             <SidebarMenuItem >
                                 <SidebarMenuButton asChild>
                                     <a href={username ? `/user/${username}` : "/login"}>

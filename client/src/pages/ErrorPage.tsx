@@ -18,11 +18,6 @@ const ErrorPage = () => {
                             Go back home
                         </Link>
                     </Button>
-                    <Button variant="link" asChild>
-                        <Link to="/support" className="text-sm font-semibold">
-                            Contact support <span aria-hidden="true">→</span>
-                        </Link>
-                    </Button>
                 </div>
             </div>
         </main>

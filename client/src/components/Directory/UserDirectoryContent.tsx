@@ -5,8 +5,10 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent } from "@/components/ui/card"
 import { groupUsersByFirstLetter, User } from './directoryUtils'
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 async function getUsers() {
-  const res = await fetch('http://127.0.0.1:5000/directory')
+  const res = await fetch(`${backendUrl}/directory`)
   if (!res.ok) {
     throw new Error('Failed to fetch users')
   }

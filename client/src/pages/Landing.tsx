@@ -17,7 +17,7 @@ const Landing: React.FC = () => {
   
   return (
     <>
-      <div className="rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-zinc-900 bg-white dark:bg-dot-white/[0.2] bg-dot-black/[0.7] items-center justify-center bg-fixed">
+      <div className="rounded-md md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden w-full dark:bg-zinc-900 bg-white dark:bg-dot-white/[0.2] bg-dot-black/[0.3] items-center justify-center bg-fixed">
         <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_bottom,transparent_60%,black)]"></div>
         <div className="fixed top-0 left-0 w-full z-50">
           <Navbar />
@@ -43,7 +43,7 @@ const Landing: React.FC = () => {
             Build amazing connections
           </h1>
           <p className="mt-2 font-normal text-base text-neutral-300 max-w-[650px] text-center mx-auto bg-clip-text text-transparent dark:bg-white bg-black from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
-            The platform offers intelligent matchmaking and personalized recommendations to form effective teams and engage in meaningful collaborations.
+            Intelligent matchmaking and personalized recommendations
           </p>
           <div className='mt-8 flex space-x-4'>
             <div className="flex items-center gap-4">
