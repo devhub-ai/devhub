@@ -55,7 +55,7 @@ const Footer = () => {
                                         </AlertDialogContent>
                                     </AlertDialog>
                                 </li>
-                                <li><Link to="/playground" className="text-white-400 text-sm">DevBots</Link></li>
+                                <li><Link to="https://devbots.vercel.app" className="text-white-400 text-sm">DevBots</Link></li>
                                 <li><Link to="https://universal-box.dev" className="text-white-400 text-sm">Universal-Box</Link></li>
                             </ul>
                         </div>

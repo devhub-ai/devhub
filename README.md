@@ -13,22 +13,32 @@ DevHub is an innovative platform designed to connect developers who share simila
 
 ## Features ✨
 
-- [x] **OTP Based Authentication**
+- [x] **OTP Based Authentication** (Email Verification)
 - [x] **Signin/Signup** (Unique Username check and follows NIST Guidlines Validation) 
-- [x] **Create Profile**
-- [x] **Add/update/delete projects** (Supports Banner image,Markdown in Desc)
-- [x] **Add Github and Leetcode profiles** (Data in profile will be populated from the given handles)
+- [x] **Sharable Profiles** (Share your profile with others)
+- [x] **Add/Remove Friends** (Follow others to make friends)
+- [x] **Add/update/delete projects** (Supports Banner image,Markdown in Desc and tech-stack tag selection)
+- [x] **Add Github and Leetcode profiles** (Data in profile will be populated from the given coding accounts)
 - [x] **Convert Profile into Knowledge Graphs** 
+- [x] **Recomendation Engine** (Graph Traversal techniques)
 - [x] **Use langchain to Chat with KGs**
-- [x] **Save Chat history**
+- [x] **Saved Chat history**
 - [x] **Typing animation and Markdown response**  
 - [x] **Share projects with unique projectID**
 - [x] **Star your and other user's project**
 - [x] **Visualize your Relation in Graph using d3**
 - [x] **Add Neo4j account, get graph Schema and Execute your query**
 - [x] **Save image as png of graph and also share it with others using shareable link**
-- [x] **Users can post images with description and tags**
+- [x] **Feed Section** (Common section where Users can post images with description and tags)
 - [x] **Users can see and share particular post**
+- [x] **Upvote and Downvote Posts**
+- [x] **comment on posts**
+- [x] **Developer Directory to find registered developers**
+- [x] **Chat with other developers** (Find and message others)
+- [X] **Settings** (Update profile details and webapp theme and much more)
+- [x] **Help, Docs, Feedback and Contact for support**
+- [x] **Responsive Design**
+- [x] **Supports Dark Mode**
  
 ## Local Installation 🧑🏻‍💻
 
