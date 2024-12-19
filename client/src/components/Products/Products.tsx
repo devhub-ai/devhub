@@ -62,7 +62,7 @@ const Products = () => {
                   <div className="lg:w-1/2 items-center justify-center flex flex-col">
                       <img
                           alt="Product screenshot"
-                          src="https://tailwindui.com/plus/img/component-images/dark-project-app-screenshot.png"
+                          src="https://i.ibb.co/fpc1dCL/Screenshot-2024-12-19-081803.png"
                           width={2432}
                           height={1442}
                           className="w-full max-w-lg rounded-xl shadow-xl ring-1 ring-gray-400/10"

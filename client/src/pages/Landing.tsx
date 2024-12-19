@@ -7,9 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronRight } from 'lucide-react'
 import Products from '@/components/Products/Products';
 
-
 const Landing: React.FC = () => {
-
   const username = localStorage.getItem('devhub_username');
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const Landing: React.FC = () => {
                 <span className="text-white-800">
                   ✨ DevBots are available and ready to assist you!
                 </span>
-                <Button variant="link" size="sm" className="text-white-800 font-normal inline-flex items-center">
+                <Button variant="link" size="sm" className="text-white-800 font-normal inline-flex items-center" onClick={() => { window.location.href = 'https://devbots.vercel.app'; }}>
                   🎉 Get Started
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
